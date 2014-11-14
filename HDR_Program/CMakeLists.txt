@@ -33,13 +33,14 @@ add_definitions(-DHDR_DIR="${PROJECT_SOURCE_DIR}")
 add_definitions(-DEIGEN_DONT_ALIGN_STATICALLY)
 
 # the list of source files
-set(HDR_SRCS src/cpp/main.cpp src/headers/DisplayManager.h src/cpp/DisplayManager.cpp 
-	     src/headers/DisplayDevice.h src/cpp/DisplayDevice.cpp src/headers/HDRProcess.h 
-	     src/cpp/HDRProcess.cpp src/headers/FrontPanel.h src/cpp/FrontPanel.cpp 
-	     src/headers/BackPanel.h src/cpp/BackPanel.cpp src/headers/ImageManager.h 
-	     src/cpp/ImageManager.cpp src/headers/Correction.h src/cpp/Correction.cpp 
-	     src/headers/Window.h src/cpp/Window.cpp src/headers/GLRender.h src/cpp/GLRender.cpp 
-             src/headers/ImageIO.h src/cpp/ImageIO.cpp src/headers/Image.h src/cpp/Image.cpp
+set(HDR_SRCS src/main.cpp src/DisplayManager.h src/DisplayManager.cpp
+             src/DisplayDevice.h src/DisplayDevice.cpp src/HDRProcess.h
+             src/HDRProcess.cpp src/FrontPanel.h src/FrontPanel.cpp
+             src/BackPanel.h src/BackPanel.cpp src/ImageManager.h
+             src/ImageManager.cpp src/Correction.h src/Correction.cpp
+             src/Window.h src/Window.cpp src/GLRender.h src/GLRender.cpp
+             src/ImageIO.h src/ImageIO.cpp src/Image.h src/Image.cpp
+             src/Includes.h
               ${APPLE_WORKAROUND_SRCS})
 
 #qt4_automoc(${sire_SRCS})

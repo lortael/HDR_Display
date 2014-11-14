@@ -7,6 +7,8 @@ public :
 
 private:
 
+    std::vector<float> img;
+
 protected:
 
 };
