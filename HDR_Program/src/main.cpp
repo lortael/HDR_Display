@@ -1,6 +1,10 @@
 #include "Includes.h"
 
+#include "Image.h"
+#include "ImageIO.h"
+
 main()
 {
-    std::cout << "Hello" << std::endl;
+    Image test;
+    ImageIO loader;
 }
