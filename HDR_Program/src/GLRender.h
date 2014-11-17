@@ -1,5 +1,5 @@
-#ifndef GLRENDER_H
-#define GLRENDER_H
+#ifndef GLRENDER_H_INCLUDED
+#define GLRENDER_H_INCLUDED
 
 class GLRender
 {
@@ -11,4 +11,4 @@ protected:
 
 };
 
-#endif GLRENDER_H
+#endif GLRENDER_H_INCLUDED

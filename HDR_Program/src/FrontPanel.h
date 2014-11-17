@@ -1,5 +1,5 @@
-#ifndef FRONTPANEL_H
-#define FRONTPANEL_H
+#ifndef FRONTPANEL_H_INCLUDED
+#define FRONTPANEL_H_INCLUDED
 
 #include "HDRProcess.h"
 
@@ -13,4 +13,4 @@ protected:
 
 };
 
-#endif FRONTPANEL_H
+#endif FRONTPANEL_H_INCLUDED

@@ -1,5 +1,5 @@
-#ifndef DISPLAYMANAGER_H
-#define DISPLAYMANAGER_H
+#ifndef DISPLAYMANAGER_H_INCLUDED
+#define DISPLAYMANAGER_H_INCLUDED
 
 #include "DisplayDevice.h"
 
@@ -13,4 +13,4 @@ protected:
 
 };
 
-#endif DISPLAYMANAGER_H
+#endif DISPLAYMANAGER_H_INCLUDED

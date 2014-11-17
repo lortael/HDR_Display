@@ -1,5 +1,5 @@
-#ifndef HDRPROCESS_H
-#define HDRPROCESS_H
+#ifndef HDRPROCESS_H_INCLUDED
+#define HDRPROCESS_H_INCLUDED
 
 class HDRProcess
 {
@@ -11,4 +11,4 @@ protected:
 
 };
 
-#endif HDRPROCESS_H
+#endif HDRPROCESS_H_INCLUDED

@@ -1,5 +1,5 @@
-#ifndef IMAGEMANAGER_H
-#define IMAGEMANAGER_H
+#ifndef IMAGEMANAGER_H_INCLUDED
+#define IMAGEMANAGER_H_INCLUDED
 
 #include "Correction.h"
 
@@ -13,4 +13,4 @@ protected:
 
 };
 
-#endif IMAGEMANAGER_H
+#endif IMAGEMANAGER_H_INCLUDED

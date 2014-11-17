@@ -1,5 +1,5 @@
-#ifndef BACKPANEL_H
-#define BACKPANEL_H
+#ifndef BACKPANEL_H_INCLUDED
+#define BACKPANEL_H_INCLUDED
 
 #include "HDRProcess.h"
 
@@ -13,4 +13,4 @@ protected:
 
 };
 
-#endif BACKPANEL_H
+#endif BACKPANEL_H_INCLUDED

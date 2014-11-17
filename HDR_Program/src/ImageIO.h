@@ -1,14 +1,28 @@
-#ifndef IMAGEIO_H
-#define IMAGEIO_H
+#ifndef IMAGEIO_H_INCLUDED
+#define IMAGEIO_H_INCLUDED
 
 #include "Image.h"
+#include <string>
+#include <QString>
+#include <string>
+
 
 class ImageIO
 {
 public :
 
-    static void loadImg(Image& dst, std::string const filePath);
-    static void saveImg(Image const src, std::string const filePath) const;
+    ImageIO();
+
+    ~ImageIO();
+
+//    /*static */bool loadHDRImg(Image &img, QString filename);
+    void imgSave(Image const &src, const std::string filename);
+
+    void imgLoad(Image& img, QString filename);
+
+    void loadPng(Image& png_img, const std::string filename);
+
+    void savePng(Image const & img, const std::string filename);
 
     Image toneMapping(Image const src);
 
@@ -18,4 +32,4 @@ protected:
 
 };
 
-#endif IMAGEIO_H
+#endif //IMAGEIO_H_INCLUDED

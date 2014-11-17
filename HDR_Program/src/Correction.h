@@ -1,5 +1,5 @@
-#ifndef CORRECTION_H
-#define CORRECTION_H
+#ifndef CORRECTION_H_INCLUDED
+#define CORRECTION_H_INCLUDED
 
 class Correction
 {
@@ -11,4 +11,4 @@ protected:
 
 };
 
-#endif CORRECTION_H
+#endif CORRECTION_H_INCLUDED

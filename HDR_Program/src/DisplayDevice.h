@@ -1,5 +1,5 @@
-#ifndef DISPLAYDEVICE_H
-#define DISPLAYDEVICE_H
+#ifndef DISPLAYDEVICE_H_INCLUDED
+#define DISPLAYDEVICE_H_INCLUDED
 
 class DisplayDevice
 {
@@ -11,4 +11,4 @@ protected:
 
 };
 
-#endif DISPLAYDEVICE_H
+#endif DISPLAYDEVICE_H_INCLUDED

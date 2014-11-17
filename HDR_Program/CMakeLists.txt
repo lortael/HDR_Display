@@ -21,10 +21,12 @@ FIND_PACKAGE(Qt5OpenGL REQUIRED)
 
 find_package(OpenGL REQUIRED)
 find_package(Eigen3 "3.0.3" REQUIRED)
+find_package( OpenCV REQUIRED )
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 include_directories( ${QT_INCLUDE_DIR} )
+include_directories( ${OpenCV_INCLUDE_DIRS} )
 include_directories( ${EIGEN3_INCLUDE_DIR} )
 include_directories( ${PROJECT_SOURCE_DIR}/src )
 #include_directories( ${PROJECT_SOURCE_DIR}/lib3ds )
@@ -40,7 +42,7 @@ set(HDR_SRCS src/main.cpp src/DisplayManager.h src/DisplayManager.cpp
              src/ImageManager.cpp src/Correction.h src/Correction.cpp
              src/Window.h src/Window.cpp src/GLRender.h src/GLRender.cpp
              src/ImageIO.h src/ImageIO.cpp src/Image.h src/Image.cpp
-             src/Includes.h
+             extern/rgbe.h extern/rgbe.cpp extern/lodepng.h extern/lodepng.cpp
               ${APPLE_WORKAROUND_SRCS})
 
 #qt4_automoc(${sire_SRCS})
@@ -51,6 +53,6 @@ target_link_libraries(HDR_displaying
     Qt5::Widgets Qt5::Xml Qt5::OpenGL
 #  ${QT_QTCORE_LIBRARY}    ${QT_QTGUI_LIBRARY}  ${QT_QTXML_LIBRARY}
 #  ${QT_QTOPENGL_LIBRARY}
+    ${OpenCV_LIBS}
     ${OPENGL_LIBRARIES}
 )
-

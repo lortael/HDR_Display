@@ -1,5 +1,5 @@
-#ifndef WINDOW_H
-#define WINDOW_H
+#ifndef WINDOW_H_INCLUDED
+#define WINDOW_H_INCLUDED
 
 #include "GLRender.h"
 
@@ -13,4 +13,4 @@ protected:
 
 };
 
-#endif WINDOW_H
+#endif WINDOW_H_INCLUDED
