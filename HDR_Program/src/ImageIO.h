@@ -24,7 +24,7 @@ public :
 
     void savePng(Image const & img, const std::string filename);
 
-    Image toneMapping(Image const src);
+    void toneMapping(Image &src);
 
 private:
 

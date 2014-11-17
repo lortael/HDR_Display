@@ -9,6 +9,10 @@
 #include "../extern/lodepng.h"
 #include "../extern/rgbe.h"
 
+#include "opencv2/opencv.hpp"
+#include "opencv2/imgproc/imgproc.hpp"
+#include "opencv2/highgui/highgui.hpp"
+
 using namespace std;
 
 ImageIO::ImageIO()
@@ -39,7 +43,20 @@ void ImageIO::imgLoad(Image& img, QString filename)
         pixels = new float[sizeof(float)*3*height*width];
         // Read image data
         RGBE_ReadPixels_RLE(f, reinterpret_cast<float*>(pixels), width, height);
+
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                float r = pixels[(x + width*y)*3];
+                float g = pixels[(x + width*y)*3 + 1];
+                float b = pixels[(x + width*y)*3 + 2];
+                img.setPixel(x, y, Eigen::Vector4f(r, g, b, 1.f));
+            }
+        }
+
         cout << "HDR image loaded" << endl;
+
     }
     else if (filename.endsWith(".png"))
     {
@@ -100,7 +117,7 @@ void ImageIO::loadPng(Image& png_img, const string filename)
                 rgb[col] = rgb_pixel[(x+y*width)*3 + col]/255.f;
             }
             png_img.setPixel(x, y, Eigen::Vector4f(rgb[0], rgb[1], rgb[2], 1.f*alpha_value[x+y*width]/255.f));
-            delete rgb;
+//            delete rgb;
         }
     }
     rgb_pixel.clear();
@@ -123,7 +140,7 @@ void ImageIO::imgSave(Image const & src, const std::string filename)
 //    }
 //    else if (formatS == ".png")
 //    {
-        savePng(src, filename);
+    savePng(src, filename);
 //    }
 }
 
@@ -141,17 +158,17 @@ void ImageIO::savePng(Image const & img, const std::string filename)
     {
         raw_png.push_back(0);
     }
-    for (int y = 0; y < height; y++)
+    for (int y = 0; y < height; ++y)
     {
-        for (int x = 0; x < width; x++)
+        for (int x = 0; x < width; ++x)
         {
-            for (int col = 0; col < 3; col++)
+            for (int col = 0; col < 3; ++col)
             {
-                raw_data[(x+y*width)*4 + col] = static_cast<int>(img.pixel(x, y)(col)*255);
+                raw_data[(x+y*width)*4 + col] = static_cast<int>(img.pixel(x, y)[col]*255);
 
             }
 
-            raw_data[(x+y*width)*4 + 3] = static_cast<int>(img.pixel(x, y)(3)*255);// On stocke l'image dans un format � 4 canaux
+            raw_data[(x+y*width)*4 + 3] = static_cast<int>(img.pixel(x, y)[3]*255);// On stocke l'image dans un format � 4 canaux
         }
     }
 
@@ -175,4 +192,43 @@ void ImageIO::savePng(Image const & img, const std::string filename)
     if(error_save) std::cout << "encoder error " << error_save << ": "<< lodepng_error_text(error_save) << std::endl;
 
     cout << "png image saved" << endl;
+}
+
+void ImageIO::toneMapping(Image &src)
+{
+    using namespace Eigen;
+    Vector4f min(50.f, 50.f, 50.f, 1.f), max(0.f, 0.f, 0.f, 1.f);
+    for (int y = 0; y < src.height(); ++y)
+        for (int x = 0; x < src.width(); ++x)
+        {
+            float r = src.pixel(x, y)(0);
+            float g = src.pixel(x, y)(1);
+            float b = src.pixel(x, y)(2);
+            if (r > max(0) && g > max(1) && b > max(2))
+                max = Vector4f(r, g, b, 1.f);
+            else if (r < min(0) && g < min(1) && b < min(2))
+                min = Vector4f(r, g, b, 1.f);
+        }
+
+    float r_min = min(0);
+    float g_min = min(1);
+    float b_min = min(2);
+
+    float r_max = max(0);
+    float g_max = max(1);
+    float b_max = max(2);
+
+    for (int y = 0; y < src.height(); ++y)
+        for (int x = 0; x < src.width(); ++x)
+        {
+            float r = src.pixel(x, y)(0);
+            float g = src.pixel(x, y)(1);
+            float b = src.pixel(x, y)(2);
+
+            r = (r - r_min)/(r_max - r_min);
+            g = (g - g_min)/(g_max - g_min);
+            b = (b - b_min)/(b_max - b_min);
+
+            src.setPixel(x, y, Vector4f(r, g, b, 1.f));
+        }
 }

@@ -13,7 +13,8 @@ main()
     std::cout << "hello world" << std::endl;
     Image test;
     ImageIO testIO;
-    testIO.imgLoad(test, HDR_DIR"/data/grace_cross.hdr");
+    testIO.imgLoad(test, HDR_DIR"/data/Lake.hdr");
+    testIO.toneMapping(test);
     testIO.imgSave(test, HDR_DIR"/output/test.png");
 
     return 0;
