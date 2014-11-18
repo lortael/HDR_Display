@@ -15,6 +15,8 @@ main()
     ImageIO testIO;
     testIO.imgLoad(test, HDR_DIR"/data/Lake.hdr");
     testIO.toneMapping(test);
+    test.rgb2hsv();
+//    test.hsv2rgb();
     testIO.imgSave(test, HDR_DIR"/output/test.png");
 
     return 0;
