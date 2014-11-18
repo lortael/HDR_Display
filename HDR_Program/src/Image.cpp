@@ -56,24 +56,27 @@ void Image::rgb2hsv()
             for (int x = 0 ; x < m_Width ; x++)
             {
                 Vec3f rgb = Vec3f(m_Pixel[x + m_Width*y](0), m_Pixel[x + m_Width*y](1), m_Pixel[x + m_Width*y](2));
-                rgbImg.at<Vec3f>(x, y) = rgb;
+                rgbImg.at<Vec3f>(y, x) = rgb; //Inversion of x and y, as opencv deals with image this way.
             }
         }
+
         Mat hsvImg(m_Height, m_Width, DataType<Vec3f>::type), nrgbImg(m_Height, m_Width, DataType<Vec3f>::type);
         cvtColor(rgbImg, hsvImg, CV_RGB2HSV);
-//        cvtColor(hsvImg, nrgbImg, CV_HSV2RGB);
+
+
 
         for (int y = 0; y < m_Height; y++)
         {
             for (int x = 0; x < m_Width; x++)
             {
-                float h = hsvImg.at<Vec3f>(x, y)(0);
-                float s = hsvImg.at<Vec3f>(x, y)(1);
-                float v = hsvImg.at<Vec3f>(x, y)(2);
+                float h = hsvImg.at<Vec3f>(y, x)(0);
+                float s = hsvImg.at<Vec3f>(y, x)(1);
+                float v = hsvImg.at<Vec3f>(y, x)(2);
                 m_Pixel[x + m_Width*y] = Eigen::Vector4f(h, s, v, 1.f);
             }
         }
-//        m_currentFormat = HSV;
+        waitKey(0);
+        m_currentFormat = HSV;
     }
 }
 
@@ -87,20 +90,28 @@ void Image::hsv2rgb()
         {
             for (int x = 0 ; x < m_Width ; x++)
             {
-                Vec3f hsv = Vec3f(pixel(x, y)(0), pixel(x, y)(1), pixel(x, y)(2));
-                hsvImg.at<Vec3f>(x, y) = hsv;
+                Vec3f hsv = Vec3f(m_Pixel[x + m_Width*y](0), m_Pixel[x + m_Width*y](1), m_Pixel[x + m_Width*y](2));
+                hsvImg.at<Vec3f>(y, x) = hsv;
             }
         }
         Mat rgbImg;
         cvtColor(hsvImg, rgbImg, CV_HSV2RGB);
 
+        //To display an image
+//        cv::namedWindow("win2", CV_WINDOW_NORMAL);
+//        cv::resizeWindow("win2", m_Width, m_Height);
+//        Mat bgrImg;
+//        cvtColor(rgbImg, bgrImg, CV_RGB2BGR);
+//        cv::imshow("win2", bgrImg);
+//        waitKey(0);
+
         for (int y = 0; y < m_Height; y++)
         {
             for (int x = 0; x < m_Width; x++)
             {
-                float r = hsvImg.at<Vec3f>(x, y)(0);
-                float g = hsvImg.at<Vec3f>(x, y)(1);
-                float b = hsvImg.at<Vec3f>(x, y)(2);
+                float r = rgbImg.at<Vec3f>(y, x)(0);
+                float g = rgbImg.at<Vec3f>(y, x)(1);
+                float b = rgbImg.at<Vec3f>(y, x)(2);
                 setPixel(x, y, Eigen::Vector4f(r, g, b, 1.f));
             }
         }
