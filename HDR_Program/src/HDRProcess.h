@@ -11,4 +11,4 @@ protected:
 
 };
 
-#endif HDRPROCESS_H_INCLUDED
+#endif //HDRPROCESS_H_INCLUDED

@@ -1,0 +1,8 @@
+set(GLRENDERING_SRCS
+   ${CMAKE_CURRENT_SOURCE_DIR}/camera.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/GLRender.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/camera.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/GLRender.h
+)
+
+add_library(glrendering ${GLRENDERING_SRCS})

@@ -15,33 +15,39 @@ public :
 
     ~Image();
 
-    void initImage(){m_Pixel.reserve(m_Height*m_Width);}
+    void initImage();
 
-    Eigen::Vector4f pixel(int x, int y) const {return m_Pixel[x + m_Width*y];}
-    int height() const {return m_Height;}
-    int width() const {return m_Width;}
-    float min() const {return m_Min;}
-    float max() const {return m_Max;}
+    std::vector<Eigen::Vector4f> pixels() {return m_Pixel;}
 
-    void setPixel(int x, int y, Eigen::Vector4f pixel) {m_Pixel[x + m_Width*y] = pixel;}
+    Eigen::Vector4f pixel(unsigned int x, unsigned int y) const {return m_Pixel[x + m_Width*y];}
+    unsigned int height() const {return m_Height;}
+    unsigned int width() const {return m_Width;}
+    Eigen::Vector3f min() const {return m_Min;}
+    Eigen::Vector3f max() const {return m_Max;}
+
+    void setPixel(unsigned int x, unsigned int y, Eigen::Vector4f pixel) {m_Pixel[x + m_Width*y] = pixel;}
     void setHeight(int height) {m_Height = height;}
     void setWidth(int width) {m_Width = width;}
-    void setMax(float max) {m_Max = max;}
-    void setMin(float min) {m_Min = min;}
+    void setMax(Eigen::Vector3f max) {m_Max = max;}
+    void setMin(Eigen::Vector3f min) {m_Min = min;}
 
     void rgb2hsv();
     void hsv2rgb();
 
     Image& operator=(Image const &img);
 
+    void changeNULLStatus(bool status) {imageIsNULL = status;}
+    bool isNULL() {return imageIsNULL;}
+
 private:
 
     IMG_FORMAT m_currentFormat;
     std::vector<Eigen::Vector4f> m_Pixel;
-    int m_Height;
-    int m_Width;
-    int m_Min;
-    int m_Max;
+    unsigned int m_Height;
+    unsigned int m_Width;
+    Eigen::Vector3f m_Min;
+    Eigen::Vector3f m_Max;
+    bool imageIsNULL;
 
 protected:
 

@@ -1,15 +1,9 @@
-//#include <cstdlib>
+
 #include <iostream>
-//#include <vector>
-//#include <string>
 
 #include "Image.h"
 #include "ImageIO.h"
-
-//#include <opencv2/opencv.hpp>
-//#include <opencv2/core/core.hpp>
-//#include <opencv2/highgui/highgui.hpp>
-//#include <opencv2/imgproc/imgproc.hpp>
+#include "DisplayManager.h"
 
 //#define DATA_DIR HDR_DIR"/data"
 
@@ -21,10 +15,20 @@ main()
     testIO.imgLoad(test, HDR_DIR"/data/Lake.hdr");
     testIO.toneMapping(test);
 
-    test.rgb2hsv();
+    Image test2;
+    test2 = test;
 
-    test.hsv2rgb();
-    testIO.imgSave(test, HDR_DIR"/output/test.png");
+//    DisplayManager multipleMonitor;
+//    DisplayDevice* mainWindow;
+////    mainWindow = new DisplayDevice(test.height(), test.width(), test, 0);
+//    multipleMonitor.addDisplay(mainWindow);
+//    multipleMonitor.accessDevice(0)->importImage(test);
+//    multipleMonitor.accessDevice(0)->displayImage();
+
+//    test.rgb2hsv();
+
+//    test.hsv2rgb();
+    testIO.imgSave(test2, HDR_DIR"/output/test.png");
 
     return 0;
 }

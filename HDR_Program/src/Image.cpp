@@ -9,8 +9,14 @@ using namespace std;
 
 
 Image::Image()
+    : m_Width(0),
+      m_Height(0),
+      m_currentFormat(RGB),
+      imageIsNULL(true),
+      m_Max(0.f, 0.f, 0.f),
+      m_Min(50.f, 50.f ,50.f)
 {
-    m_currentFormat = RGB;
+    initImage();
 }
 
 Image::Image(Image const &img)
@@ -20,6 +26,7 @@ Image::Image(Image const &img)
     m_Min = img.m_Min;
     m_Max = img.m_Max;
     m_currentFormat = img.m_currentFormat;
+    imageIsNULL = img.imageIsNULL;
 
     initImage();
 
@@ -38,11 +45,28 @@ Image& Image::operator=(Image const & img)
     m_Min = img.m_Min;
     m_Max = img.m_Max;
     m_currentFormat = img.m_currentFormat;
+    imageIsNULL = img.imageIsNULL;
 
+    m_Pixel.clear();
     initImage();
-    m_Pixel = img.m_Pixel;
+
+    for (unsigned int i = 0; i < img.m_Pixel.size(); ++i)
+    {
+        cout << img.m_Pixel[i] << endl;
+        cout << m_Pixel[i] << endl;
+        m_Pixel[i] = img.m_Pixel[i];
+    }
 
     return *this;
+}
+
+void Image::initImage()
+{
+    if (m_Pixel.size() != 0)
+    {
+        m_Pixel.clear();
+    }
+    m_Pixel.reserve(m_Height*m_Width);
 }
 
 void Image::rgb2hsv()
@@ -96,14 +120,6 @@ void Image::hsv2rgb()
         }
         Mat rgbImg;
         cvtColor(hsvImg, rgbImg, CV_HSV2RGB);
-
-        //To display an image
-//        cv::namedWindow("win2", CV_WINDOW_NORMAL);
-//        cv::resizeWindow("win2", m_Width, m_Height);
-//        Mat bgrImg;
-//        cvtColor(rgbImg, bgrImg, CV_RGB2BGR);
-//        cv::imshow("win2", bgrImg);
-//        waitKey(0);
 
         for (int y = 0; y < m_Height; y++)
         {

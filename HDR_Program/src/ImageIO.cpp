@@ -48,11 +48,12 @@ void ImageIO::imgLoad(Image& img, QString filename)
                 float g = pixels[(x + width*y)*3 + 1];
                 float b = pixels[(x + width*y)*3 + 2];
                 img.setPixel(x, y, Eigen::Vector4f(r, g, b, 1.f));
+
             }
         }
 
         cout << "HDR image loaded" << endl;
-
+        img.changeNULLStatus(false);
     }
     else if (filename.endsWith(".png"))
     {

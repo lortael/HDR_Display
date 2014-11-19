@@ -40,10 +40,12 @@ set(HDR_SRCS src/main.cpp src/DisplayManager.h src/DisplayManager.cpp
              src/HDRProcess.cpp src/FrontPanel.h src/FrontPanel.cpp
              src/BackPanel.h src/BackPanel.cpp src/ImageManager.h
              src/ImageManager.cpp src/Correction.h src/Correction.cpp
-             src/Window.h src/Window.cpp src/GLRender.h src/GLRender.cpp
-             src/ImageIO.h src/ImageIO.cpp src/Image.h src/Image.cpp
-             extern/rgbe.h extern/rgbe.cpp extern/lodepng.h extern/lodepng.cpp
+             src/Window.h src/Window.cpp src/ImageIO.h src/ImageIO.cpp
+             src/Image.h src/Image.cpp
               ${APPLE_WORKAROUND_SRCS})
+
+add_subdirectory( ${PROJECT_SOURCE_DIR}/extern )
+add_subdirectory( ${PROJECT_SOURCE_DIR}/glrendering )
 
 #qt4_automoc(${sire_SRCS})
 
@@ -55,4 +57,5 @@ target_link_libraries(HDR_displaying
 #  ${QT_QTOPENGL_LIBRARY}
     ${OpenCV_LIBS}
     ${OPENGL_LIBRARIES}
+    extern glrendering
 )
