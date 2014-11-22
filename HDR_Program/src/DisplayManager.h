@@ -8,9 +8,11 @@ class DisplayManager
 {
 public :
 
-    void addDisplay(DisplayDevice* device) {m_DisplayList.push_back(device);}
+    void addDisplay(DisplayDevice* device);
 
     DisplayDevice* accessDevice(unsigned int index) {if (index < m_DisplayList.size()) return m_DisplayList[index];}
+
+    void multipleDisplay();
 
 private:
 
@@ -20,4 +22,4 @@ protected:
 
 };
 
-#endif DISPLAYMANAGER_H_INCLUDED
+#endif //DISPLAYMANAGER_H_INCLUDED

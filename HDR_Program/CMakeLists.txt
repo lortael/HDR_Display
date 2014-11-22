@@ -8,28 +8,27 @@ endif()
 
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
-#find_package(Qt4 REQUIRED)
-#SET(QT_USE_QTXML TRUE)
-#include(${QT_USE_FILE})
-
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 
-FIND_PACKAGE(Qt5Widgets REQUIRED)
-FIND_PACKAGE(Qt5Xml REQUIRED)
-FIND_PACKAGE(Qt5OpenGL REQUIRED)
-
+#FIND_PACKAGE(Qt5Widgets REQUIRED)
+#FIND_PACKAGE(Qt5Xml REQUIRED)
+#FIND_PACKAGE(Qt5OpenGL REQUIRED)
+find_package(Qt4 REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(Eigen3 "3.0.3" REQUIRED)
-find_package( OpenCV REQUIRED )
+find_package(OpenCV REQUIRED )
+
+set(QT_USE_QTOPENGL TRUE)
+include(${QT_USE_FILE})
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 include_directories( ${QT_INCLUDE_DIR} )
 include_directories( ${OpenCV_INCLUDE_DIRS} )
 include_directories( ${EIGEN3_INCLUDE_DIR} )
+include_directories( ${GLEW_INCLUDE_DIR} )
 include_directories( ${PROJECT_SOURCE_DIR}/src )
-#include_directories( ${PROJECT_SOURCE_DIR}/lib3ds )
 
 add_definitions(-DHDR_DIR="${PROJECT_SOURCE_DIR}")
 add_definitions(-DEIGEN_DONT_ALIGN_STATICALLY)
@@ -52,10 +51,10 @@ add_subdirectory( ${PROJECT_SOURCE_DIR}/glrendering )
 add_executable(HDR_displaying ${HDR_SRCS})
 
 target_link_libraries(HDR_displaying
-    Qt5::Widgets Qt5::Xml Qt5::OpenGL
-#  ${QT_QTCORE_LIBRARY}    ${QT_QTGUI_LIBRARY}  ${QT_QTXML_LIBRARY}
-#  ${QT_QTOPENGL_LIBRARY}
+#    Qt5::Widgets Qt5::Xml Qt5::OpenGL
+    extern glrendering
+    ${QT_QTCORE_LIBRARY}    ${QT_QTGUI_LIBRARY}
+    ${QT_QTOPENGL_LIBRARY}
     ${OpenCV_LIBS}
     ${OPENGL_LIBRARIES}
-    extern glrendering
 )

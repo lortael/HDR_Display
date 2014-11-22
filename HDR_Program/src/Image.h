@@ -4,7 +4,7 @@
 #include <vector>
 #include <Eigen/Core>
 
-enum IMG_FORMAT {RGB = 0, HSV = 1};
+enum IMG_FORMAT {RGB = 0, HSV = 1, GRAY = 10};
 
 class Image
 {
@@ -33,11 +33,14 @@ public :
 
     void rgb2hsv();
     void hsv2rgb();
+    void color2gray();
 
     Image& operator=(Image const &img);
 
     void changeNULLStatus(bool status) {imageIsNULL = status;}
     bool isNULL() {return imageIsNULL;}
+
+    IMG_FORMAT format() {return m_currentFormat;}
 
 private:
 
