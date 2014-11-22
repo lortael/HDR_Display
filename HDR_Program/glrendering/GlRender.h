@@ -2,44 +2,23 @@
 #define GLRENDER_H_INCLUDED
 
 #include "OpenGL.h"
-#include <QGLWidget>
-#include <QApplication>
-#include <QTimer>
 
-#include "../src/Image.h"
-#include "Mesh.h"
-#include "Shader.h"
-
-class GlRender : public QGLWidget
+class GlRender
 {
-    Q_OBJECT
 
 public :
 
     GlRender();
-    ~GlRender();
 
-    virtual void initializeGL();
+    void glEnable2D();
 
-    virtual void resizeGL(int width, int height);
+    void glDisable2D();
 
-    virtual void paintGL();
-
-    virtual void createScene();
-
-    void createTexture(Image const & img);
-
-    void keyPressEvent(QKeyEvent * e);
-
+    void RenderScene();
 
 private:
 
 protected:
-
-    Mesh m_Mesh;
-    Mesh m_QuadMesh;
-    Shader m_Program;
-    QTimer* m_Timer;
 
 };
 

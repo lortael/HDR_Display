@@ -21,7 +21,7 @@ void DisplayManager::addDisplay(DisplayDevice* device)
 void DisplayManager::multipleDisplay()
 {
     for (unsigned int i = 0; i < m_DisplayList.size(); ++i)
-        m_DisplayList[i]->displayImage();
+        m_DisplayList[i]->displayImageCV();
 
     cv::waitKey(0);
 }

@@ -35,7 +35,7 @@ void DisplayDevice::initDisplay()
 
 }
 
-void DisplayDevice::displayImage()
+void DisplayDevice::displayImageCV()
 {
     Mat img;
     IMG_FORMAT initialFormat = m_Image.format();
@@ -59,7 +59,7 @@ void DisplayDevice::displayImage()
     else if (m_Image.format() != GRAY && m_Image.format() == HSV)
     {
         m_Image.hsv2rgb();
-        displayImage();
+        displayImageCV();
         initialFormat = HSV;
     }
     else

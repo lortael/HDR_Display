@@ -26,7 +26,7 @@ public :
     void setHeight(unsigned int height) {m_Height = height;}
     void setWidth(unsigned int width) {m_Width = width;}
 
-    void displayImage();
+    void displayImageCV();
 
     void setId(unsigned int id) {m_DisplayId = id;}
     unsigned int id() {return m_DisplayId;}
