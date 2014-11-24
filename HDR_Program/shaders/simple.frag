@@ -1,18 +1,19 @@
-#version 330 core
+#version 330
 
-uniform sampler2D colorMap;
-uniform sampler2D sampler;
-
-in vec4 position_obj;
-in vec4 position_view;
+uniform sampler2D imageTex;
 
 in vec2 texcoord;
 
-out vec4 out_color;
+out vec4 outputColor;
 
 void main()
 {
-    //out_color = vec4(position_obj.xyz*.5 + vec3(.5), 1.);
-    //out_color = vec4(texcoord.xy, 0.0, 1.);
-    out_color = texture(colorMap, texcoord);
+//   outputColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+    vec4 img = texture(imageTex, texcoord);
+
+//    img.r = (img.r == 0)? 1.0 : 0.0;
+
+    img.a = 1.0;
+
+    outputColor = img;
 }

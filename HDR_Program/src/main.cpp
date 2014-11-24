@@ -46,6 +46,7 @@ int main(int argc, char *argv[])
     else
     {
         GlRender test;
-        test.RenderScene();
+//        test.resize(800,600);
+        test.initRender(argc, argv);
     }
 }

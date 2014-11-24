@@ -16,6 +16,7 @@ set(CMAKE_AUTOMOC ON)
 #FIND_PACKAGE(Qt5OpenGL REQUIRED)
 find_package(Qt4 REQUIRED)
 find_package(OpenGL REQUIRED)
+find_package(GLUT REQUIRED)
 find_package(Eigen3 "3.0.3" REQUIRED)
 find_package(OpenCV REQUIRED )
 
@@ -27,6 +28,8 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 include_directories( ${QT_INCLUDE_DIR} )
 include_directories( ${OpenCV_INCLUDE_DIRS} )
 include_directories( ${EIGEN3_INCLUDE_DIR} )
+include_directories( ${GLFW_INCLUDE_DIR} )
+include_directories( ${GLUT_INCLUDE_DIR} )
 include_directories( ${GLEW_INCLUDE_DIR} )
 include_directories( ${PROJECT_SOURCE_DIR}/src )
 
@@ -46,8 +49,6 @@ set(HDR_SRCS src/main.cpp src/DisplayManager.h src/DisplayManager.cpp
 add_subdirectory( ${PROJECT_SOURCE_DIR}/extern )
 add_subdirectory( ${PROJECT_SOURCE_DIR}/glrendering )
 
-#qt4_automoc(${sire_SRCS})
-
 add_executable(HDR_displaying ${HDR_SRCS})
 
 target_link_libraries(HDR_displaying
@@ -56,5 +57,6 @@ target_link_libraries(HDR_displaying
     ${QT_QTCORE_LIBRARY}    ${QT_QTGUI_LIBRARY}
     ${QT_QTOPENGL_LIBRARY}
     ${OpenCV_LIBS}
+    ${GLUT_LIBRARY}
     ${OPENGL_LIBRARIES}
 )

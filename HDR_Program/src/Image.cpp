@@ -70,9 +70,9 @@ void Image::rgb2hsv()
     {
         Mat rgbImg(m_Height, m_Width, DataType<Vec3f>::type);
 
-        for (int y = 0 ; y < m_Height ; y++)
+        for (unsigned int y = 0 ; y < m_Height ; ++y)
         {
-            for (int x = 0 ; x < m_Width ; x++)
+            for (unsigned int x = 0 ; x < m_Width ; ++x)
             {
                 Vec3f rgb = Vec3f(m_Pixel[x + m_Width*y](0), m_Pixel[x + m_Width*y](1), m_Pixel[x + m_Width*y](2));
                 rgbImg.at<Vec3f>(y, x) = rgb; //Inversion of x and y, as opencv deals with image this way.
@@ -84,9 +84,9 @@ void Image::rgb2hsv()
 
 
 
-        for (int y = 0; y < m_Height; y++)
+        for (unsigned int y = 0 ; y < m_Height ; ++y)
         {
-            for (int x = 0; x < m_Width; x++)
+            for (unsigned int x = 0 ; x < m_Width ; ++x)
             {
                 float h = hsvImg.at<Vec3f>(y, x)(0);
                 float s = hsvImg.at<Vec3f>(y, x)(1);
@@ -105,9 +105,9 @@ void Image::hsv2rgb()
     {
         Mat hsvImg(m_Height, m_Width, DataType<Vec3f>::type);
 
-        for (int y = 0 ; y < m_Height ; y++)
+        for (unsigned int y = 0 ; y < m_Height ; ++y)
         {
-            for (int x = 0 ; x < m_Width ; x++)
+            for (unsigned int x = 0 ; x < m_Width ; ++x)
             {
                 Vec3f hsv = Vec3f(m_Pixel[x + m_Width*y](0), m_Pixel[x + m_Width*y](1), m_Pixel[x + m_Width*y](2));
                 hsvImg.at<Vec3f>(y, x) = hsv;
@@ -116,9 +116,9 @@ void Image::hsv2rgb()
         Mat rgbImg;
         cvtColor(hsvImg, rgbImg, CV_HSV2RGB);
 
-        for (int y = 0; y < m_Height; y++)
+        for (unsigned int y = 0 ; y < m_Height ; ++y)
         {
-            for (int x = 0; x < m_Width; x++)
+            for (unsigned int x = 0 ; x < m_Width ; ++x)
             {
                 float r = rgbImg.at<Vec3f>(y, x)(0);
                 float g = rgbImg.at<Vec3f>(y, x)(1);
@@ -136,9 +136,9 @@ void Image::color2gray()
     {
         Mat rgbImg(m_Height, m_Width, DataType<Vec3f>::type);
 
-        for (int y = 0 ; y < m_Height ; y++)
+        for (unsigned int y = 0 ; y < m_Height ; ++y)
         {
-            for (int x = 0 ; x < m_Width ; x++)
+            for (unsigned int x = 0 ; x < m_Width ; ++x)
             {
                 Vec3f rgb = Vec3f(m_Pixel[x + m_Width*y](0), m_Pixel[x + m_Width*y](1), m_Pixel[x + m_Width*y](2));
                 rgbImg.at<Vec3f>(y, x) = rgb;
@@ -147,9 +147,9 @@ void Image::color2gray()
         Mat grayImg;
         cvtColor(rgbImg, grayImg, CV_RGB2GRAY);
 
-        for (int y = 0; y < m_Height; y++)
+        for (unsigned int y = 0 ; y < m_Height ; ++y)
         {
-            for (int x = 0; x < m_Width; x++)
+            for (unsigned int x = 0 ; x < m_Width ; ++x)
             {
                 float r = rgbImg.at<Vec3f>(y, x)(0);
                 float g = rgbImg.at<Vec3f>(y, x)(1);

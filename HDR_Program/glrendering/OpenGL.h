@@ -11,6 +11,7 @@
 
 #define GL_GLEXT_PROTOTYPES
 //#include <GL/glew.h>
+#include <GL/freeglut.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
 
@@ -19,7 +20,7 @@
 
 /** A macro to track OpenGL errors
   */
-#ifndef PGHP_NO_GLDEBUG
+#ifndef HDR_NO_GLDEBUG
   #define GL_TEST_ERR\
     do {\
       GLenum eCode;\
