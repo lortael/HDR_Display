@@ -46,6 +46,8 @@ set(HDR_SRCS src/main.cpp src/DisplayManager.h src/DisplayManager.cpp
              src/Image.h src/Image.cpp
               ${APPLE_WORKAROUND_SRCS})
 
+qt4_automoc(${HDR_SRCS})
+
 add_subdirectory( ${PROJECT_SOURCE_DIR}/extern )
 add_subdirectory( ${PROJECT_SOURCE_DIR}/glrendering )
 

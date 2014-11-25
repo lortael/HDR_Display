@@ -3,36 +3,36 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-#include <cassert>
+#include <assert.h>
 
 std::string loadSourceFromFile(const std::string& filename)
 {
-  std::string source = "";
+    std::string source = "";
 
-  std::ifstream in(filename.c_str(),std::ios::in);
-  if(!in)
-  {
-    std::cerr << "File not found " << filename << std::endl;
+    std::ifstream in(filename.c_str(),std::ios::in);
+    if(!in)
+    {
+        std::cerr << "File not found " << filename << std::endl;
+        return source;
+    }
+
+
+    const int maxBuffersize = 2048;
+    char buffer[maxBuffersize];
+    while(in.getline(buffer, maxBuffersize))
+    {
+        source += std::string(buffer) + "\n";
+    }
+
     return source;
-  }
-
-
-  const int maxBuffersize = 2048;
-  char buffer[maxBuffersize];
-  while(in.getline(buffer, maxBuffersize))
-  {
-    source += std::string(buffer) + "\n";
-  }
-
-  return source;
 }
 
 //--------------------------------------------------------------------------------
 bool Shader::loadFromFiles(const std::string& fileV, const std::string& fileF)
 {
-  std::string vsrc = loadSourceFromFile(fileV);
-  std::string fsrc = loadSourceFromFile(fileF);
-  return loadSources(vsrc,fsrc);
+    std::string vsrc = loadSourceFromFile(fileV);
+    std::string fsrc = loadSourceFromFile(fileF);
+    return loadSources(vsrc,fsrc);
 }
 //--------------------------------------------------------------------------------
 bool Shader::loadSources(const std::string& vsrc, const std::string& fsrc)
@@ -57,7 +57,7 @@ bool Shader::loadSources(const std::string& vsrc, const std::string& fsrc)
         printShaderInfoLog(shaderID);
 
         if(compiled)
-          glAttachShader(mProgramID, shaderID);
+            glAttachShader(mProgramID, shaderID);
     }
 
     // fragment shader
@@ -76,7 +76,7 @@ bool Shader::loadSources(const std::string& vsrc, const std::string& fsrc)
         printShaderInfoLog(shaderID);
 
         if(compiled)
-          glAttachShader(mProgramID, shaderID);
+            glAttachShader(mProgramID, shaderID);
     }
 
     glLinkProgram(mProgramID);
@@ -86,7 +86,7 @@ bool Shader::loadSources(const std::string& vsrc, const std::string& fsrc)
     allIsOk = allIsOk && isLinked;
     mIsValid = isLinked == GL_TRUE;
     printProgramInfoLog(mProgramID);
-
+    
     return allIsOk;
 }
 //--------------------------------------------------------------------------------
@@ -115,16 +115,16 @@ int Shader::getAttribLocation(const char* name) const
 }
 //--------------------------------------------------------------------------------
 void Shader::dumpInfos() const {
-  GLint nbAttrs;
-  glGetProgramiv(mProgramID, GL_ACTIVE_ATTRIBUTES, &nbAttrs);
+    GLint nbAttrs;
+    glGetProgramiv(mProgramID, GL_ACTIVE_ATTRIBUTES, &nbAttrs);
 
-  GLchar name[128];
-  GLint size;
-  GLenum type;
-  for(GLint i=0; i<nbAttrs; ++i) {
-    glGetActiveAttrib(mProgramID, i, 128, NULL, &size, &type, name);
-    std::cout << "Attrib " << glGetAttribLocation(mProgramID, name) << ": " << name << ", " << size << ", " << type << "\n";
-  }
+    GLchar name[128];
+    GLint size;
+    GLenum type;
+    for(GLint i=0; i<nbAttrs; ++i) {
+        glGetActiveAttrib(mProgramID, i, 128, NULL, &size, &type, name);
+        std::cout << "Attrib " << glGetAttribLocation(mProgramID, name) << ": " << name << ", " << size << ", " << type << "\n";
+    }
 }
 //--------------------------------------------------------------------------------
 void Shader::printProgramInfoLog(GLuint objectID)
@@ -137,12 +137,12 @@ void Shader::printProgramInfoLog(GLuint objectID)
         infoLog = new GLchar[infologLength];
         glGetProgramInfoLog(objectID, infologLength, &charsWritten, infoLog);
         if (charsWritten>0)
-          std::cerr << "program info : \n" << infoLog << std::endl;
+            std::cerr << "program info : \n" << infoLog << std::endl;
         delete[] infoLog;
     }
     else
     {
-      std::cerr << "Shader linking: success" << std::endl;
+        std::cerr << "Shader linking: success" << std::endl;
     }
 }
 //--------------------------------------------------------------------------------
@@ -156,11 +156,11 @@ void Shader::printShaderInfoLog(GLuint objectID)
         infoLog = new GLchar[infologLength];
         glGetShaderInfoLog(objectID, infologLength, &charsWritten, infoLog);
         if (charsWritten>0)
-          std::cerr << "Shader info : \n" << infoLog << std::endl;
+            std::cerr << "Shader info : \n" << infoLog << std::endl;
         delete[] infoLog;
     }
     else
     {
-      std::cerr << "Shader compilation: success" << std::endl;
+        std::cerr << "Shader compilation: success" << std::endl;
     }
 }

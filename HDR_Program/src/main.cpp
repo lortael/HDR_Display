@@ -4,7 +4,8 @@
 #include "ImageIO.h"
 #include "DisplayManager.h"
 
-#include "../glrendering/GlRender.h"
+//#include "../glrendering/GlRender.h"
+#include "../glrendering/RenderingWidget.h"
 
 //#define DATA_DIR HDR_DIR"/data"
 
@@ -45,8 +46,23 @@ int main(int argc, char *argv[])
     }
     else
     {
-        GlRender test;
+//        GlRender test;
 //        test.resize(800,600);
-        test.initRender(argc, argv);
+//        test.initRender(argc, argv);
+
+        QApplication app(argc, argv);
+        std::locale::global(std::locale("C"));
+
+        QGLFormat gl_profile(QGL::DoubleBuffer | QGL::Rgba | QGL::AlphaChannel);
+        gl_profile.setVersion(3, 3);
+        gl_profile.setProfile(QGLFormat::CoreProfile);
+        QGLFormat::setDefaultFormat(gl_profile);
+
+        RenderingWidget simple_gl;
+        simple_gl.loadImage(test);
+        simple_gl.resize(1920,1080);
+        simple_gl.show();
+
+        return app.exec();
     }
 }

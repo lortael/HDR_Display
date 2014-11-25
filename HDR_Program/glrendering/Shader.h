@@ -29,7 +29,7 @@ class Shader
 {
 public:
     Shader()
-      : mIsValid(false)
+        : mIsValid(false)
     {}
 
     /** Compiles and links the shader from 2 source files
@@ -73,7 +73,7 @@ public:
 
     /** \returns the OpenGL object id of the GLSL program */
     int id() const { return mProgramID; }
-
+    
     bool valid() const { return mIsValid; }
 
     void dumpInfos() const;

@@ -1,5 +1,6 @@
-#ifndef OPENGL_H
-#define OPENGL_H
+
+#ifndef _PGHP_OPENGL_H_
+#define _PGHP_OPENGL_H_
 
 #ifdef __APPLE__
 
@@ -9,23 +10,25 @@
 
 #else
 
-#define GL_GLEXT_PROTOTYPES
-//#include <GL/glew.h>
-#include <GL/freeglut.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
+// Include function prototypes, and not only function pointers. May not link on every architectures...
+#define GLCOREARB_PROTOTYPES
+#include "GL/glcorearb.h"
 
+// Disable the old gl.h include.
+#define __gl_h_
+
+#include <GL/glu.h>
 
 #endif
 
 /** A macro to track OpenGL errors
   */
-#ifndef HDR_NO_GLDEBUG
+#ifndef PGHP_NO_GLDEBUG
   #define GL_TEST_ERR\
     do {\
       GLenum eCode;\
       if((eCode=glGetError())!=GL_NO_ERROR)\
-          std::cerr << "OpenGL error : " <<  gluErrorString(eCode) << " in " <<  __FILE__ << " : " << __LINE__ << std::endl;\
+        std::cerr << "OpenGL error : " <<  gluErrorString(eCode) << " in " <<  __FILE__ << " : " << __LINE__ << std::endl;\
   } while(0)
 #else
   #define GL_TEST_ERR
@@ -50,4 +53,5 @@ struct Core3_2_context : public QGLContext
 };
 #endif // __APPLE__
 
-#endif // OPENGL_H
+
+#endif // _PGHP_OPENGL_H_
