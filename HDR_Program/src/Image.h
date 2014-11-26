@@ -4,7 +4,7 @@
 #include <vector>
 #include <Eigen/Core>
 
-enum IMG_FORMAT {RGB = 0, HSV = 1, GRAY = 10};
+enum IMG_FORMAT {RGB = 1, HSV = 2, GRAY = 0};
 
 class Image
 {

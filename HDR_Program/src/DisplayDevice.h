@@ -2,7 +2,8 @@
 #define DISPLAYDEVICE_H_INCLUDED
 
 #include "Image.h"
-#include "Window.h"
+
+#include "../glrendering/RenderingWidget.h"
 
 class DisplayDevice
 {
@@ -28,10 +29,10 @@ public :
 
     void displayImageCV();
 
+    void displayImageGL();
+
     void setId(unsigned int id) {m_DisplayId = id;}
     unsigned int id() {return m_DisplayId;}
-
-    Window window() {return m_displayWindow;}
 
 
 private:
@@ -45,7 +46,7 @@ protected:
 
     Image m_Image;
 
-    Window m_displayWindow;
+    RenderingWidget m_Widget;
 
 };
 

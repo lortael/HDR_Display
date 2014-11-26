@@ -9,9 +9,9 @@ using namespace Eigen;
 
 RenderingWidget::RenderingWidget()
     :
-      #ifdef __APPLE__
-      QGLWidget(new Core3_2_context(QGLFormat::defaultFormat())),
-      #endif
+//      #ifdef __APPLE__
+//      QGLWidget(new Core3_2_context(QGLFormat::defaultFormat())),
+//      #endif
       mCamera(),
       mCamPhy(0),
       mCamTheta(0),
@@ -50,19 +50,14 @@ void RenderingWidget::paintGL()
 
     mProgram.activate();
 
-    Eigen::Matrix4f S;
-    S << 1, 0, 0, 0,
-         0, 1, 0, 0,
-         0, 0, 1, 0,
-         0, 0, 0, 1;
-
-    mObject->setTransformation(S);
-
     GL_TEST_ERR;
 
     glBindTexture(GL_TEXTURE_2D, mTextureId);
     GLint textureLoc = glGetUniformLocation(mProgram.id(), "colorMap");
     glUniform1f(textureLoc, 1);
+
+    GLint formatLoc = glGetUniformLocation(mProgram.id(), "formatImage");
+    glUniform1i(formatLoc, mImage.format());
 
     GL_TEST_ERR;
 
@@ -120,9 +115,10 @@ void RenderingWidget::createScene()
 
     int dimY = mImage.height();
     int dimX = mImage.width();
+    int channel = (mImage.format() == GRAY)? 4 : 4;
 
     float* test;
-    test = new float[dimX*dimY*4];
+    test = new float[dimX*dimY*channel];
 
     int i(0);
     for (int y = 0 ; y < dimY ; ++y)
@@ -130,7 +126,7 @@ void RenderingWidget::createScene()
         for (int x = 0 ; x < dimX ; ++x)
         {
             Eigen::Vector4f rgba = mImage.pixel(x, y);
-            for (int z = 0; z < 4; ++z)
+            for (int z = 0; z < channel; ++z)
             {
                 test[i] = rgba(z);
                 ++i;
@@ -140,7 +136,16 @@ void RenderingWidget::createScene()
 
     glGenTextures(1,&mTextureId);
     glBindTexture(GL_TEXTURE_2D, mTextureId);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, dimX, dimY, 0,  GL_RGBA, GL_FLOAT, test);
+
+    if (mImage.format() == GRAY)
+    {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, dimX, dimY, 0,  GL_RGBA, GL_FLOAT, test);
+    }
+    else
+    {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, dimX, dimY, 0,  GL_RGBA, GL_FLOAT, test);
+    }
+
     delete test;
 
     glGenerateMipmap(GL_TEXTURE_2D);

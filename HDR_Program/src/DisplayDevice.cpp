@@ -11,7 +11,8 @@ DisplayDevice::DisplayDevice()
     : m_Image(),
       m_Height(0),
       m_Width(0),
-      m_DisplayId(0)
+      m_DisplayId(0),
+      m_Widget()
 {
 
 }
@@ -92,6 +93,18 @@ void DisplayDevice::displayImageCV()
 
         cv::imshow(name, img);
     }
+}
+
+void DisplayDevice::displayImageGL()
+{
+//    RenderingWidget simple_gl;
+//    simple_gl.loadImage(m_Image);
+//    simple_gl.resize(1920,1080);
+//    simple_gl.show();
+
+    m_Widget.loadImage(m_Image);
+    m_Widget.resize(1920,1080);
+    m_Widget.show();
 }
 
 void DisplayDevice::resize(unsigned int height, unsigned int width)

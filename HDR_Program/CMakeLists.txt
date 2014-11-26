@@ -42,7 +42,7 @@ set(HDR_SRCS src/main.cpp src/DisplayManager.h src/DisplayManager.cpp
              src/HDRProcess.cpp src/FrontPanel.h src/FrontPanel.cpp
              src/BackPanel.h src/BackPanel.cpp src/ImageManager.h
              src/ImageManager.cpp src/Correction.h src/Correction.cpp
-             src/Window.h src/Window.cpp src/ImageIO.h src/ImageIO.cpp
+             src/ImageIO.h src/ImageIO.cpp
              src/Image.h src/Image.cpp
               ${APPLE_WORKAROUND_SRCS})
 

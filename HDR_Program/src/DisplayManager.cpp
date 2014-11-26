@@ -9,6 +9,12 @@
 
 using namespace std;
 
+DisplayManager::DisplayManager()
+    : m_CurrentMode(GL)
+{
+
+}
+
 void DisplayManager::addDisplay(DisplayDevice* device)
 {
     m_DisplayList.push_back(device);
@@ -20,8 +26,13 @@ void DisplayManager::addDisplay(DisplayDevice* device)
 
 void DisplayManager::multipleDisplay()
 {
-    for (unsigned int i = 0; i < m_DisplayList.size(); ++i)
-        m_DisplayList[i]->displayImageCV();
-
-    cv::waitKey(0);
+    if (m_CurrentMode == CV)
+    {
+        for (unsigned int i = 0; i < m_DisplayList.size(); ++i)
+            m_DisplayList[i]->displayImageCV();
+        cv::waitKey(0);
+    }
+    else
+        for (unsigned int i = 0; i < m_DisplayList.size(); ++i)
+            m_DisplayList[i]->displayImageGL();
 }

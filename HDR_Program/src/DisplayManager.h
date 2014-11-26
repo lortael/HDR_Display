@@ -4,9 +4,13 @@
 #include <vector>
 #include "DisplayDevice.h"
 
+enum DISPLAYMODE {CV = 0, GL = 1};
+
 class DisplayManager
 {
 public :
+
+    DisplayManager();
 
     void addDisplay(DisplayDevice* device);
 
@@ -14,9 +18,14 @@ public :
 
     void multipleDisplay();
 
+    DISPLAYMODE mode() {return m_CurrentMode;}
+    void setMode(DISPLAYMODE mode) {m_CurrentMode = mode;}
+
 private:
 
 protected:
+
+    DISPLAYMODE m_CurrentMode;
 
     std::vector<DisplayDevice*> m_DisplayList;
 

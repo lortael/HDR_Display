@@ -134,29 +134,16 @@ void Image::color2gray()
 {
     if (m_currentFormat == RGB)
     {
-        Mat rgbImg(m_Height, m_Width, DataType<Vec3f>::type);
-
         for (unsigned int y = 0 ; y < m_Height ; ++y)
         {
             for (unsigned int x = 0 ; x < m_Width ; ++x)
             {
                 Vec3f rgb = Vec3f(m_Pixel[x + m_Width*y](0), m_Pixel[x + m_Width*y](1), m_Pixel[x + m_Width*y](2));
-                rgbImg.at<Vec3f>(y, x) = rgb;
+                float l = 0.2126*rgb(0) + 0.7152*rgb(1) + 0.0722*rgb(2);
+                m_Pixel[x + m_Width*y] = Eigen::Vector4f(l, l, l, 1.f);
             }
         }
-        Mat grayImg;
-        cvtColor(rgbImg, grayImg, CV_RGB2GRAY);
 
-        for (unsigned int y = 0 ; y < m_Height ; ++y)
-        {
-            for (unsigned int x = 0 ; x < m_Width ; ++x)
-            {
-                float r = rgbImg.at<Vec3f>(y, x)(0);
-                float g = rgbImg.at<Vec3f>(y, x)(1);
-                float b = rgbImg.at<Vec3f>(y, x)(2);
-                m_Pixel[x + m_Width*y] = Eigen::Vector4f(r, g, b, 1.f);
-            }
-        }
         m_currentFormat = GRAY;
     }
     else if (m_currentFormat == HSV)
