@@ -11,4 +11,4 @@ protected:
 
 };
 
-#endif CORRECTION_H_INCLUDED
+#endif //CORRECTION_H_INCLUDED

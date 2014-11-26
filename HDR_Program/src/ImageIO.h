@@ -15,7 +15,6 @@ public :
 
     ~ImageIO();
 
-//    /*static */bool loadHDRImg(Image &img, QString filename);
     void imgSave(Image const &src, const std::string filename);
 
     void imgLoad(Image& img, QString filename);
@@ -24,6 +23,7 @@ public :
 
     void savePng(Image const & img, const std::string filename);
 
+    //CPU tone-mapping in order to save an image
     void toneMapping(Image &src);
 
 private:

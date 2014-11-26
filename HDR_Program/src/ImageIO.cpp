@@ -123,22 +123,7 @@ void ImageIO::loadPng(Image& png_img, const string filename)
 
 void ImageIO::imgSave(Image const & src, const std::string filename)
 {
-//    string formatS;
-//    size_t pos = nom_s.find(".");
-//    formatS = nom_s.substr(pos, pos+4);
-
-//    if (formatS == ".ppm")
-//    {
-//        Save_ppm(img, nom_s);
-//    }
-//    else if (formatS == ".pgm")
-//    {
-//        Save_pgm(img, nom_s);
-//    }
-//    else if (formatS == ".png")
-//    {
     savePng(src, filename);
-//    }
 }
 
 void ImageIO::savePng(Image const & img, const std::string filename)

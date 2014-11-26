@@ -2,6 +2,8 @@
 #define DISPLAYDEVICE_H_INCLUDED
 
 #include "Image.h"
+#include "HDRProcess.h"
+#include "Correction.h"
 
 #include "../glrendering/RenderingWidget.h"
 
@@ -11,29 +13,28 @@ public :
 
     DisplayDevice();
 
-    DisplayDevice(unsigned int height, unsigned int width, Image const &img, unsigned int id);
+    DisplayDevice(unsigned int height, unsigned int width, unsigned int id);
 
-    ~DisplayDevice();
+    virtual ~DisplayDevice();
 
-    void initDisplay();
+    virtual void initDisplay();
 
-    void importImage(Image const &img) {m_Image = img;}
+    virtual unsigned int height() const {return m_Height;}
+    virtual unsigned int width() const {return m_Width;}
 
-    unsigned int height() const {return m_Height;}
-    unsigned int width() const {return m_Width;}
+    virtual void resize(unsigned int height, unsigned int width);
 
-    void resize(unsigned int height, unsigned int width);
+    virtual void setHeight(unsigned int height) {m_Height = height;}
+    virtual void setWidth(unsigned int width) {m_Width = width;}
 
-    void setHeight(unsigned int height) {m_Height = height;}
-    void setWidth(unsigned int width) {m_Width = width;}
+    virtual void displayImageCV(Image &img) = 0;
 
-    void displayImageCV();
+    virtual void displayImageGL(Image &img) = 0;
 
-    void displayImageGL();
+    virtual void setId(unsigned int id) {m_DisplayId = id;}
+    virtual unsigned int id() {return m_DisplayId;}
 
-    void setId(unsigned int id) {m_DisplayId = id;}
-    unsigned int id() {return m_DisplayId;}
-
+    virtual void setName(QString name) {m_DisplayName = name;}
 
 private:
 
@@ -43,11 +44,11 @@ protected:
     unsigned int m_Width;
 
     unsigned int m_DisplayId;
+    QString m_DisplayName;
 
-    Image m_Image;
+    RenderingWidget m_GlWidget;
 
-    RenderingWidget m_Widget;
-
+    Correction m_Correction;
 };
 
 #endif //DISPLAYDEVICE_H_INCLUDED

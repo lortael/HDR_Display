@@ -27,8 +27,6 @@ Image::Image(Image const &img)
     m_currentFormat = img.m_currentFormat;
     imageIsNULL = img.imageIsNULL;
 
-//    initImage();
-
     m_Pixel = img.m_Pixel;
 
     cout << "init" << endl;
@@ -47,8 +45,6 @@ Image& Image::operator=(Image const & img)
     m_Max = img.m_Max;
     m_currentFormat = img.m_currentFormat;
     imageIsNULL = img.imageIsNULL;
-
-//    initImage();
 
     m_Pixel = img.m_Pixel;
 

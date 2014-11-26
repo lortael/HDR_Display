@@ -50,12 +50,13 @@ qt4_automoc(${HDR_SRCS})
 
 add_subdirectory( ${PROJECT_SOURCE_DIR}/extern )
 add_subdirectory( ${PROJECT_SOURCE_DIR}/glrendering )
+#add_subdirectory( ${PROJECT_SOURCE_DIR}/qtRendering )
 
 add_executable(HDR_displaying ${HDR_SRCS})
 
 target_link_libraries(HDR_displaying
 #    Qt5::Widgets Qt5::Xml Qt5::OpenGL
-    extern glrendering
+    extern glrendering #qtRendering
     ${QT_QTCORE_LIBRARY}    ${QT_QTGUI_LIBRARY}
     ${QT_QTOPENGL_LIBRARY}
     ${OpenCV_LIBS}

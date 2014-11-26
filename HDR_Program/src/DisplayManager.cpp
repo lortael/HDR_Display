@@ -15,6 +15,44 @@ DisplayManager::DisplayManager()
 
 }
 
+void DisplayManager::initManager(Image const& img, unsigned int nbDevices)
+{
+    m_Image = img;
+    if (nbDevices != 2)
+    {
+
+    }
+    else
+    {
+        DisplayDevice* front = new FrontPanel();
+        addDisplay(front);
+
+        DisplayDevice* back = new BackPanel();
+        addDisplay(back);
+    }
+}
+
+void DisplayManager::initManager(QString filepath, unsigned int nbDevices)
+{
+    Image img;
+    ImageIO testIO;
+    testIO.imgLoad(img, filepath);
+    m_Image = img;
+    if (nbDevices != 2)
+    {
+
+    }
+    else
+    {
+        DisplayDevice* front = new FrontPanel();
+        addDisplay(front);
+
+        DisplayDevice* back = new BackPanel();
+        addDisplay(back);
+    }
+}
+
+
 void DisplayManager::addDisplay(DisplayDevice* device)
 {
     m_DisplayList.push_back(device);
@@ -29,10 +67,10 @@ void DisplayManager::multipleDisplay()
     if (m_CurrentMode == CV)
     {
         for (unsigned int i = 0; i < m_DisplayList.size(); ++i)
-            m_DisplayList[i]->displayImageCV();
+            m_DisplayList[i]->displayImageCV(m_Image);
         cv::waitKey(0);
     }
     else
         for (unsigned int i = 0; i < m_DisplayList.size(); ++i)
-            m_DisplayList[i]->displayImageGL();
+            m_DisplayList[i]->displayImageGL(m_Image);
 }

@@ -12,14 +12,6 @@
 
 int main(int argc, char *argv[])
 {
-    Image test;
-    ImageIO testIO;
-    testIO.imgLoad(test, HDR_DIR"/data/Lake.hdr");
-//    testIO.toneMapping(test);
-
-    DisplayManager multipleMonitor;
-    DISPLAYMODE current = multipleMonitor.mode();
-
     QApplication app(argc, argv);
     std::locale::global(std::locale("C"));
 
@@ -28,22 +20,14 @@ int main(int argc, char *argv[])
     gl_profile.setProfile(QGLFormat::CoreProfile);
     QGLFormat::setDefaultFormat(gl_profile);
 
-    DisplayDevice* mainWindow;
-    mainWindow = new DisplayDevice;
-    multipleMonitor.addDisplay(mainWindow);
-    multipleMonitor.accessDevice(0)->importImage(test);
+    DisplayManager multipleMonitor;
 
-    test.color2gray();
-
-    DisplayDevice* secondaryWindow;
-    secondaryWindow = new DisplayDevice;
-    multipleMonitor.addDisplay(secondaryWindow);
-    multipleMonitor.accessDevice(1)->importImage(test);
+    Image test;
+    ImageIO testIO;
+    testIO.imgLoad(test, HDR_DIR"/data/Lake.hdr");
+    multipleMonitor.initManager(test);
 
     multipleMonitor.multipleDisplay();
 
-    if (current == GL)
-        return app.exec();
-    else
-        return 0;
+    return app.exec();
 }
