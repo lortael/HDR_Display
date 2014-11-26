@@ -8,22 +8,9 @@
 using namespace cv;
 
 BackPanel::BackPanel()
-//    : m_Height(0),
-//      m_Width(0),
-//      m_DisplayId(0),
-//      m_GlWidget()
 {
 
 }
-
-//BackPanel::BackPanel(unsigned int height, unsigned int width, Image const &img, unsigned int id)
-//    : m_Height(height),
-//      m_Width(width),
-//      m_DisplayId(id),
-//      m_GlWidget()
-//{
-
-//}
 
 void BackPanel::displayImageCV(Image &img) ////DEPRECATED : see displayImageGL()
 {

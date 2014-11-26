@@ -54,7 +54,10 @@ void RenderingWidget::paintGL()
 
     glBindTexture(GL_TEXTURE_2D, mTextureId);
     GLint textureLoc = glGetUniformLocation(mProgram.id(), "colorMap");
-    glUniform1f(textureLoc, 1);
+//    glUniform1f(textureLoc, 1);
+    textureLoc = GL_TEXTURE_2D;
+
+    GL_TEST_ERR;
 
     GLint formatLoc = glGetUniformLocation(mProgram.id(), "formatImage");
 //    glUniform1i(formatLoc, mImage.format());
