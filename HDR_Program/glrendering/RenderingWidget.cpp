@@ -24,7 +24,8 @@ RenderingWidget::RenderingWidget()
       mProgram(),
       mLastMousePos(),
       mTimer(new QTimer(this)),
-      mMove(DISABLED)
+      mMove(DISABLED),
+      mFullscreen(WINDOW)
 {
 }
 
@@ -54,7 +55,6 @@ void RenderingWidget::paintGL()
 
     glBindTexture(GL_TEXTURE_2D, mTextureId);
     GLint textureLoc = glGetUniformLocation(mProgram.id(), "colorMap");
-//    glUniform1f(textureLoc, 1);
     textureLoc = GL_TEXTURE_2D;
 
     GL_TEST_ERR;
@@ -178,8 +178,11 @@ void RenderingWidget::keyPressEvent(QKeyEvent * e)
         mMove = (mMove == DISABLED)? ENABLED : DISABLED;
         break;
     }
-    case Qt::Key_Down:
+    case Qt::Key_F:
+    {
+        mFullscreen = (mFullscreen != FULLSCREEN)? FULLSCREEN : WINDOW;
         break;
+    }
     case Qt::Key_Left:
         break;
     case Qt::Key_Right:

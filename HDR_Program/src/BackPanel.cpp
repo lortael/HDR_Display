@@ -32,8 +32,30 @@ void BackPanel::displayImageCV(Image &img) ////DEPRECATED : see displayImageGL()
 
 void BackPanel::displayImageGL(Image &img)
 {
+    m_GlWidget.setWindowTitle("Back Panel");
+
     img.color2gray();
     m_GlWidget.loadImage(img);
-    m_GlWidget.resize(1920,1080);
-    m_GlWidget.show();
+    if (m_GlWidget.screenmode() == FULLSCREEN)
+        m_GlWidget.showFullScreen();
+    else
+    {
+        m_GlWidget.resize(1920,1080);
+        m_GlWidget.show();
+    }
+}
+
+Eigen::Vector4f BackPanel::processPixel(Eigen::Vector4f pixel)
+{
+    return pixel;
+}
+
+void BackPanel::computeShaderParameters()
+{
+
+}
+
+void BackPanel::computeShader()
+{
+
 }

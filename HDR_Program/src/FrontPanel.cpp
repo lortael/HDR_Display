@@ -8,22 +8,9 @@
 using namespace cv;
 
 FrontPanel::FrontPanel()
-//    : m_Height(0),
-//      m_Width(0),
-//      m_DisplayId(0),
-//      m_GlWidget()
 {
 
 }
-
-//FrontPanel::FrontPanel(unsigned int height, unsigned int width, Image const &img, unsigned int id)
-//    : m_Height(height),
-//      m_Width(width),
-//      m_DisplayId(id),
-//      m_GlWidget()
-//{
-
-//}
 
 void FrontPanel::displayImageCV(Image &img) ////DEPRECATED : see displayImageGL()
 {
@@ -70,7 +57,14 @@ void FrontPanel::displayImageCV(Image &img) ////DEPRECATED : see displayImageGL(
 
 void FrontPanel::displayImageGL(Image &img)
 {
+    m_GlWidget.setWindowTitle("Front Panel");
+
     m_GlWidget.loadImage(img);
-    m_GlWidget.resize(1920,1080);
-    m_GlWidget.show();
+    if (m_GlWidget.screenmode() == FULLSCREEN)
+        m_GlWidget.showFullScreen();
+    else
+    {
+        m_GlWidget.resize(1920,1080);
+        m_GlWidget.show();
+    }
 }

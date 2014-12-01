@@ -5,6 +5,7 @@
 #include "DisplayManager.h"
 
 #include "../glrendering/RenderingWidget.h"
+#include <QDesktopWidget>
 
 int main(int argc, char *argv[])
 {
@@ -21,6 +22,8 @@ int main(int argc, char *argv[])
     multipleMonitor.initManager(HDR_DIR"/data/Lake.hdr");
 
     multipleMonitor.multipleDisplay();
+
+    std::cout << QApplication::desktop()->screenCount() << std::endl;
 
     return app.exec();
 }

@@ -1,8 +1,5 @@
 #include "HDRProcess.h"
 
-
-
-
 Image HDRProcess::CPUprocess(const Image &img)
 {
     Image temp(img);
@@ -18,11 +15,6 @@ Image HDRProcess::CPUprocess(const Image &img)
 }
 
 void HDRProcess::GPUprocess(const Image &img)
-{
-
-}
-
-Eigen::Vector4f HDRProcess::processPixel(Eigen::Vector4f pixel)
 {
 
 }

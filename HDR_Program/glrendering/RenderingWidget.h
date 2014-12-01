@@ -18,6 +18,8 @@
 
 enum MOVEMENT {ENABLED = 0, DISABLED = 1};
 
+enum SCREENMODE {FULLSCREEN = 0, WINDOW = 1};
+
 class RenderingWidget : public QGLWidget
 {
   Q_OBJECT
@@ -52,6 +54,7 @@ class RenderingWidget : public QGLWidget
   Image mImage;
 
   MOVEMENT mMove;
+  SCREENMODE mFullscreen;
 
 protected:
 
@@ -91,6 +94,7 @@ public:
   RenderingWidget();
   ~RenderingWidget();
   void loadImage(Image const &image) {mImage = image;}
+  SCREENMODE screenmode() {return mFullscreen;}
 
 };
 

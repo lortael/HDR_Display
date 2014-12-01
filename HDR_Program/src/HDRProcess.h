@@ -9,13 +9,13 @@ public :
 
     Image CPUprocess(Image const &img);
 
-    Eigen::Vector4f processPixel(Eigen::Vector4f pixel);
+    virtual Eigen::Vector4f processPixel(Eigen::Vector4f pixel) = 0;
 
-    void GPUprocess(Image const &img);
+    virtual void GPUprocess(Image const &img);
 
-    void computeShaderParameters();
+    virtual void computeShaderParameters() = 0;
 
-    void computeShader();
+    virtual void computeShader() = 0;
 
 private:
 

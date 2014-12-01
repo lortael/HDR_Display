@@ -2,8 +2,9 @@
 #define BACKPANEL_H_INCLUDED
 
 #include "DisplayDevice.h"
+#include "HDRProcess.h"
 
-class BackPanel : public DisplayDevice
+class BackPanel : public DisplayDevice, public HDRProcess
 {
 public :
 
@@ -14,6 +15,12 @@ public :
     void displayImageCV(Image &img);
 
     void displayImageGL(Image &img);
+
+    Eigen::Vector4f processPixel(Eigen::Vector4f pixel);
+
+    void computeShaderParameters();
+
+    void computeShader();
 
 private:
 
