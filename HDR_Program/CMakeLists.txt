@@ -16,7 +16,7 @@ set(CMAKE_AUTOMOC ON)
 #FIND_PACKAGE(Qt5OpenGL REQUIRED)
 find_package(Qt4 REQUIRED)
 find_package(OpenGL REQUIRED)
-find_package(GLUT REQUIRED)
+#find_package(GLUT REQUIRED)
 find_package(Eigen3 "3.0.3" REQUIRED)
 find_package(OpenCV REQUIRED )
 
