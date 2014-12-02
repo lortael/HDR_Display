@@ -37,10 +37,22 @@ void BackPanel::displayImageGL(Image &img)
 
     QDesktopWidget *backDesktop = QApplication::desktop();
     QRect screenGeo = backDesktop->availableGeometry();
-    std::cout << screenGeo.top() << std::endl;
     m_GlWidget.move(screenGeo.topLeft());
 
     img.color2gray();
+
+    m_Linearisation.setCourbe(Courbe(std::string(HDR_DIR"/data/fitcurve.cfg")));
+
+    std::cout << img.pixel(1000,500) << std::endl;
+
+    for(int i=0;i<img.width();i++)
+    {
+        for(int j=0;j<img.height();j++)
+        {
+            img.setPixel(i, j, m_Linearisation.processPixel(img.pixel(i,j)));
+        }
+    }
+
     m_GlWidget.loadImage(img);
     if (m_GlWidget.screenmode() == FULLSCREEN)
         m_GlWidget.showFullScreen();

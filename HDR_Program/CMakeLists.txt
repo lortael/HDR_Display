@@ -41,9 +41,12 @@ set(HDR_SRCS src/main.cpp src/DisplayManager.h src/DisplayManager.cpp
              src/DisplayDevice.h src/DisplayDevice.cpp src/HDRProcess.h
              src/HDRProcess.cpp src/FrontPanel.h src/FrontPanel.cpp
              src/BackPanel.h src/BackPanel.cpp src/ImageManager.h
-             src/ImageManager.cpp src/Correction.h src/Correction.cpp
+             src/ImageManager.cpp
              src/ImageIO.h src/ImageIO.cpp
              src/Image.h src/Image.cpp
+	     src/correction/Correction.h src/correction/Correction.cpp
+	     src/correction/courbe.h src/correction/courbe.cpp
+	     src/correction/Linearisation.h src/correction/Linearisation.cpp
               ${APPLE_WORKAROUND_SRCS})
 
 qt4_automoc(${HDR_SRCS})

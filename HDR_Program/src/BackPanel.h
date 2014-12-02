@@ -3,6 +3,7 @@
 
 #include "DisplayDevice.h"
 #include "HDRProcess.h"
+#include "correction/Linearisation.h"
 
 class BackPanel : public DisplayDevice, public HDRProcess
 {
@@ -23,6 +24,8 @@ public :
     void computeShader();
 
 private:
+
+    Linearisation m_Linearisation;
 
 protected:
 

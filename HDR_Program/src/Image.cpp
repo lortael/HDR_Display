@@ -13,8 +13,8 @@ Image::Image()
       m_Height(0),
       m_currentFormat(RGB),
       imageIsNULL(true),
-      m_Max(0.f, 0.f, 0.f),
-      m_Min(50.f, 50.f ,50.f)
+      m_Max(0.f),
+      m_Min(250.f)
 {
 }
 
@@ -77,8 +77,6 @@ void Image::rgb2hsv()
 
         Mat hsvImg(m_Height, m_Width, DataType<Vec3f>::type), nrgbImg(m_Height, m_Width, DataType<Vec3f>::type);
         cvtColor(rgbImg, hsvImg, CV_RGB2HSV);
-
-
 
         for (unsigned int y = 0 ; y < m_Height ; ++y)
         {
@@ -146,5 +144,33 @@ void Image::color2gray()
     {
         hsv2rgb();
         color2gray();
+    }
+}
+
+void Image::computeMinMax()
+{
+    for (unsigned int y = 0 ; y < m_Height ; ++y)
+    {
+        for (unsigned int x = 0 ; x < m_Width ; ++x)
+        {
+            for (unsigned int z = 0; z < 3; ++z)
+            {
+                float pixel = m_Pixel[x + m_Width*y](z);
+                m_Max = (pixel > m_Max)? pixel : m_Max;
+                m_Min = (pixel < m_Min)? pixel : m_Min;
+            }
+        }
+    }
+}
+
+void Image::normalize()
+{
+    for (unsigned int y = 0 ; y < m_Height ; ++y)
+    {
+        for (unsigned int x = 0 ; x < m_Width ; ++x)
+        {
+            for (int col = 0; col < 3; ++col)
+                m_Pixel[x + m_Width*y](col) = m_Pixel[x + m_Width*y](col)/m_Max;
+        }
     }
 }
