@@ -29,6 +29,8 @@ public :
     DISPLAYMODE mode() {return m_CurrentMode;}
     void setMode(DISPLAYMODE mode) {m_CurrentMode = mode;}
 
+    void loadImg(Image const &img) {m_Image = img;}
+
 private:
 
 protected:

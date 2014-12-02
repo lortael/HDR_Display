@@ -60,8 +60,8 @@ void RenderingWidget::paintGL()
     GL_TEST_ERR;
 
     GLint formatLoc = glGetUniformLocation(mProgram.id(), "formatImage");
-//    glUniform1i(formatLoc, mImage.format());
-    glUniform1i(formatLoc, 2);
+    glUniform1i(formatLoc, mImage.format());
+//    glUniform1i(formatLoc, 2);
 
     GL_TEST_ERR;
 
@@ -180,11 +180,25 @@ void RenderingWidget::keyPressEvent(QKeyEvent * e)
     }
     case Qt::Key_F:
     {
-        mFullscreen = (mFullscreen != FULLSCREEN)? FULLSCREEN : WINDOW;
+        if (mFullscreen != FULLSCREEN)
+        {
+            mFullscreen = FULLSCREEN;
+            close();
+            showFullScreen();
+        }
+        else if (mFullscreen == FULLSCREEN)
+        {
+            mFullscreen = WINDOW;
+            close();
+            show();
+        }
         break;
     }
-    case Qt::Key_Left:
+    case Qt::Key_C:
+    {
+        close();
         break;
+    }
     case Qt::Key_Right:
         break;
     default:

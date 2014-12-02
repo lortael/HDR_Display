@@ -3,6 +3,7 @@
 #include "Image.h"
 #include "ImageIO.h"
 #include "DisplayManager.h"
+#include "../gui/mainwindow.h"
 
 #include "../glrendering/RenderingWidget.h"
 #include <QDesktopWidget>
@@ -23,7 +24,10 @@ int main(int argc, char *argv[])
 
     multipleMonitor.multipleDisplay();
 
-    std::cout << QApplication::desktop()->screenCount() << std::endl;
+//    std::cout << QApplication::desktop()->screenCount() << std::endl;
+
+//    MainWindow controlWindow;
+//    controlWindow.show();
 
     return app.exec();
 }

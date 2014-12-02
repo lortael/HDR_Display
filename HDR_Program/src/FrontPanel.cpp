@@ -1,6 +1,7 @@
 #include "FrontPanel.h"
 
 #include <sstream>
+#include <QDesktopWidget>
 
 #include "opencv2/opencv.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
@@ -57,6 +58,9 @@ void FrontPanel::displayImageCV(Image &img) ////DEPRECATED : see displayImageGL(
 
 void FrontPanel::displayImageGL(Image &img)
 {
+    QDesktopWidget screen;
+
+
     m_GlWidget.setWindowTitle("Front Panel");
 
     m_GlWidget.loadImage(img);

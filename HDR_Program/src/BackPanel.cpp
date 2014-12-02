@@ -1,6 +1,7 @@
 #include "BackPanel.h"
 
 #include <sstream>
+#include <QDesktopWidget>
 
 #include "opencv2/opencv.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
@@ -33,6 +34,11 @@ void BackPanel::displayImageCV(Image &img) ////DEPRECATED : see displayImageGL()
 void BackPanel::displayImageGL(Image &img)
 {
     m_GlWidget.setWindowTitle("Back Panel");
+
+    QDesktopWidget *backDesktop = QApplication::desktop();
+    QRect screenGeo = backDesktop->availableGeometry();
+    std::cout << screenGeo.top() << std::endl;
+    m_GlWidget.move(screenGeo.topLeft());
 
     img.color2gray();
     m_GlWidget.loadImage(img);
