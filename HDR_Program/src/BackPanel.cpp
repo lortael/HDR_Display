@@ -38,6 +38,7 @@ void BackPanel::displayImageGL(Image &img)
     QDesktopWidget *backDesktop = QApplication::desktop();
     QRect screenGeo = backDesktop->availableGeometry();
     std::cout << screenGeo.top() << std::endl;
+
     m_GlWidget.move(screenGeo.topLeft());
 
     img.color2gray();
