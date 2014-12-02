@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
     std::locale::global(std::locale("C"));
 
     QGLFormat gl_profile(QGL::DoubleBuffer | QGL::Rgba | QGL::AlphaChannel);
-    gl_profile.setVersion(4, 4);
+    gl_profile.setVersion(3, 0);
     gl_profile.setProfile(QGLFormat::CompatibilityProfile);
     QGLFormat::setDefaultFormat(gl_profile);
 
