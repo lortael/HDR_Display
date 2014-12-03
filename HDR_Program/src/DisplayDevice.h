@@ -17,24 +17,29 @@ public :
 
     virtual ~DisplayDevice();
 
-    virtual void initDisplay();
+    void initDisplay();
 
-    virtual unsigned int height() const {return m_Height;}
-    virtual unsigned int width() const {return m_Width;}
+    unsigned int height() const {return m_Height;}
+    unsigned int width() const {return m_Width;}
 
-    virtual void resize(unsigned int height, unsigned int width);
+    void resize(unsigned int height, unsigned int width);
 
-    virtual void setHeight(unsigned int height) {m_Height = height;}
-    virtual void setWidth(unsigned int width) {m_Width = width;}
+    void setHeight(unsigned int height) {m_Height = height;}
+    void setWidth(unsigned int width) {m_Width = width;}
 
     virtual void displayImageCV(Image &img) = 0;
 
     virtual void displayImageGL(Image &img) = 0;
 
-    virtual void setId(unsigned int id) {m_DisplayId = id;}
-    virtual unsigned int id() {return m_DisplayId;}
+    void setId(unsigned int id) {m_DisplayId = id;}
+    unsigned int id() {return m_DisplayId;}
 
-    virtual void setName(QString name) {m_DisplayName = name;}
+    void setName(QString name) {m_DisplayName = name;}
+
+    void closeWindow();
+
+    void toggleFullscreen();
+    void toggleWindow();
 
 private:
 

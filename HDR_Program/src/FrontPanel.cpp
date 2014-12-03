@@ -10,7 +10,7 @@ using namespace cv;
 
 FrontPanel::FrontPanel()
 {
-
+    m_DisplayId = QApplication::desktop()->primaryScreen();
 }
 
 void FrontPanel::displayImageCV(Image &img) ////DEPRECATED : see displayImageGL()
@@ -58,9 +58,6 @@ void FrontPanel::displayImageCV(Image &img) ////DEPRECATED : see displayImageGL(
 
 void FrontPanel::displayImageGL(Image &img)
 {
-    QDesktopWidget screen;
-
-
     m_GlWidget.setWindowTitle("Front Panel");
 
     m_GlWidget.loadImage(img);
@@ -71,4 +68,19 @@ void FrontPanel::displayImageGL(Image &img)
         m_GlWidget.resize(1920,1080);
         m_GlWidget.show();
     }
+}
+
+Eigen::Vector4f FrontPanel::processPixel(Eigen::Vector4f pixel)
+{
+    return pixel;
+}
+
+void FrontPanel::computeShaderParameters()
+{
+
+}
+
+void FrontPanel::computeShader()
+{
+
 }

@@ -26,10 +26,15 @@ public :
 
     void multipleDisplay();
 
+    void endDisplay();
+
     DISPLAYMODE mode() {return m_CurrentMode;}
+
     void setMode(DISPLAYMODE mode) {m_CurrentMode = mode;}
 
     void loadImg(Image const &img) {m_Image = img;}
+
+    unsigned int nbDevice() {return m_nbDevice;}
 
 private:
 
@@ -38,6 +43,8 @@ protected:
     DISPLAYMODE m_CurrentMode;
 
     std::vector<DisplayDevice*> m_DisplayList;
+
+    unsigned int m_nbDevice;
 
     Image m_Image;
 

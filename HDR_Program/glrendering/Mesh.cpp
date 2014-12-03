@@ -114,7 +114,6 @@ void Mesh::loadOBJ(const std::string& filename)
 
     if(pObjMesh->normals.empty())
     {
-        std::cout << "compute normals\n";
         computeNormals();
     }
 }

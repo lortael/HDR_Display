@@ -15,6 +15,7 @@ public :
 
     ~ImageIO();
 
+    //Save an image according to the desired format (.ppm, .pgm, .png)
     void imgSave(Image const &src, const std::string filename);
 
     void imgLoad(Image& img, QString filename);

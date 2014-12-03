@@ -27,9 +27,10 @@ void DisplayManager::initManager(Image const& img, unsigned int nbDevices)
         DisplayDevice* front = new FrontPanel();
         addDisplay(front);
 
-//        DisplayDevice* back = new BackPanel();
-//        addDisplay(back);
+        DisplayDevice* back = new BackPanel();
+        addDisplay(back);
     }
+    m_nbDevice = m_DisplayList.size();
 }
 
 void DisplayManager::initManager(QString filepath, unsigned int nbDevices)
@@ -50,6 +51,7 @@ void DisplayManager::initManager(QString filepath, unsigned int nbDevices)
         DisplayDevice* back = new BackPanel();
         addDisplay(back);
     }
+    m_nbDevice = m_DisplayList.size();
 }
 
 
@@ -73,4 +75,13 @@ void DisplayManager::multipleDisplay()
     else
         for (unsigned int i = 0; i < m_DisplayList.size(); ++i)
             m_DisplayList[i]->displayImageGL(m_Image);
+}
+
+void DisplayManager::endDisplay()
+{
+    if (m_CurrentMode == GL)
+    {
+        for (unsigned int i = 0; i < m_DisplayList.size(); ++i)
+            m_DisplayList[i]->closeWindow();
+    }
 }

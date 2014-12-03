@@ -60,8 +60,8 @@ void RenderingWidget::paintGL()
     GL_TEST_ERR;
 
     GLint formatLoc = glGetUniformLocation(mProgram.id(), "formatImage");
-    glUniform1i(formatLoc, mImage.format());
-//    glUniform1i(formatLoc, 2);
+//    glUniform1i(formatLoc, mImage.format());
+    glUniform1i(formatLoc, 2);
 
     GL_TEST_ERR;
 

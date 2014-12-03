@@ -30,15 +30,20 @@ void ImageIO::imgLoad(Image& img, QString filename)
     {
         FILE* f = fopen(filename.toStdString().c_str(), "rb");
 
+        if (!f)
+        {
+            std::cout << "Could not open the image." << std::endl;
+            exit(EXIT_FAILURE);
+        }
+
+        // Read image data
         RGBE_ReadHeader(f, &width, &height, 0);
+        pixels = new float[sizeof(float)*3*height*width];        
+        RGBE_ReadPixels_RLE(f, reinterpret_cast<float*>(pixels), width, height);
 
         img.setHeight(height);
         img.setWidth(width);
         img.initImage();
-
-        pixels = new float[sizeof(float)*3*height*width];
-        // Read image data
-        RGBE_ReadPixels_RLE(f, reinterpret_cast<float*>(pixels), width, height);
 
         for (int y = 0; y < height; y++)
         {
@@ -48,9 +53,11 @@ void ImageIO::imgLoad(Image& img, QString filename)
                 float g = pixels[(x + width*y)*3 + 1];
                 float b = pixels[(x + width*y)*3 + 2];
                 img.setPixel(x, y, Eigen::Vector4f(r, g, b, 1.f));
-
             }
         }
+
+        img.computeMinMax();
+        img.normalize();
 
         cout << "HDR image loaded" << endl;
         img.changeNULLStatus(false);
@@ -179,26 +186,7 @@ void ImageIO::savePng(Image const & img, const std::string filename)
 void ImageIO::toneMapping(Image &src)
 {
     using namespace Eigen;
-    Vector4f min(50.f, 50.f, 50.f, 1.f), max(0.f, 0.f, 0.f, 1.f);
-    for (int y = 0; y < src.height(); ++y)
-        for (int x = 0; x < src.width(); ++x)
-        {
-            float r = src.pixel(x, y)(0);
-            float g = src.pixel(x, y)(1);
-            float b = src.pixel(x, y)(2);
-            if (r > max(0) && g > max(1) && b > max(2))
-                max = Vector4f(r, g, b, 1.f);
-            else if (r < min(0) && g < min(1) && b < min(2))
-                min = Vector4f(r, g, b, 1.f);
-        }
-
-    float r_min = min(0);
-    float g_min = min(1);
-    float b_min = min(2);
-
-    float r_max = max(0);
-    float g_max = max(1);
-    float b_max = max(2);
+    Eigen::Vector3f min(src.min()), max(src.max());
 
     for (int y = 0; y < src.height(); ++y)
         for (int x = 0; x < src.width(); ++x)
@@ -207,9 +195,14 @@ void ImageIO::toneMapping(Image &src)
             float g = src.pixel(x, y)(1);
             float b = src.pixel(x, y)(2);
 
-            r = (r - r_min)/(r_max - r_min);
-            g = (g - g_min)/(g_max - g_min);
-            b = (b - b_min)/(b_max - b_min);
+            r = (r - min(0))/(max(0) - min(0));
+            r = (r < 0.f)? 0.f : (r > 1.f )? 1.f : r;
+
+            g = (g - min(1))/(max(1) - min(1));
+            g = (g < 0.f)? 0.f : (g > 1.f )? 1.f : g;
+
+            b = (b - min(2))/(max(2) - min(2));
+            b = (b < 0.f)? 0.f : (b > 1.f )? 1.f : b;
 
             src.setPixel(x, y, Vector4f(r, g, b, 1.f));
         }

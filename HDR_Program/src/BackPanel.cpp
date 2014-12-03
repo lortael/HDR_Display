@@ -10,7 +10,7 @@ using namespace cv;
 
 BackPanel::BackPanel()
 {
-
+    m_DisplayId = QApplication::desktop()->primaryScreen() + 1;
 }
 
 void BackPanel::displayImageCV(Image &img) ////DEPRECATED : see displayImageGL()
@@ -36,8 +36,7 @@ void BackPanel::displayImageGL(Image &img)
     m_GlWidget.setWindowTitle("Back Panel");
 
     QDesktopWidget *backDesktop = QApplication::desktop();
-    QRect screenGeo = backDesktop->availableGeometry();
-    std::cout << screenGeo.top() << std::endl;
+    QRect screenGeo = backDesktop->availableGeometry(m_DisplayId);
 
     m_GlWidget.move(screenGeo.topLeft());
 

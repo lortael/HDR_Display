@@ -3,17 +3,21 @@
 
 #include "DisplayDevice.h"
 
-class FrontPanel : public DisplayDevice
+class FrontPanel : public DisplayDevice, public HDRProcess
 {
 public :
 
     FrontPanel();
 
-//    FrontPanel(unsigned int height, unsigned int width, unsigned int id);
-
     void displayImageCV(Image &img);
 
     void displayImageGL(Image &img);
+
+    Eigen::Vector4f processPixel(Eigen::Vector4f pixel);
+
+    void computeShaderParameters();
+
+    void computeShader();
 
 private:
 

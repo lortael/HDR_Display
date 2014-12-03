@@ -1,9 +1,10 @@
 #include <iostream>
+#include <ctime>
 
 #include "Image.h"
 #include "ImageIO.h"
 #include "DisplayManager.h"
-#include "../gui/mainwindow.h"
+#include "../gui/gui.h"
 
 #include "../glrendering/RenderingWidget.h"
 #include <QDesktopWidget>
@@ -18,16 +19,14 @@ int main(int argc, char *argv[])
     gl_profile.setProfile(QGLFormat::CompatibilityProfile);
     QGLFormat::setDefaultFormat(gl_profile);
 
-    DisplayManager multipleMonitor;
+//    DisplayManager multipleMonitor;
 
-    multipleMonitor.initManager(HDR_DIR"/data/Lake.hdr");
+//    multipleMonitor.initManager(HDR_DIR"/data/Lake.hdr");
 
-    multipleMonitor.multipleDisplay();
+//    multipleMonitor.multipleDisplay();
 
-//    std::cout << QApplication::desktop()->screenCount() << std::endl;
-
-//    MainWindow controlWindow;
-//    controlWindow.show();
+    Gui controlWindow;
+    controlWindow.show();
 
     return app.exec();
 }

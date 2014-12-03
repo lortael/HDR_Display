@@ -95,6 +95,7 @@ public:
   ~RenderingWidget();
   void loadImage(Image const &image) {mImage = image;}
   SCREENMODE screenmode() {return mFullscreen;}
+  void changeScreenMode(SCREENMODE mode) {mFullscreen = mode;}
 
 };
 

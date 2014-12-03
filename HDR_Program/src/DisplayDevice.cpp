@@ -34,3 +34,22 @@ void DisplayDevice::resize(unsigned int height, unsigned int width)
     m_Height = height;
     m_Width = width;
 }
+
+void DisplayDevice::closeWindow()
+{
+    m_GlWidget.close();
+}
+
+void DisplayDevice::toggleFullscreen()
+{
+    m_GlWidget.changeScreenMode(FULLSCREEN);
+//    closeWindow();
+//    displayImageGL();
+}
+
+void DisplayDevice::toggleWindow()
+{
+    m_GlWidget.changeScreenMode(WINDOW);
+//    closeWindow();
+//    displayImageGL();
+}
