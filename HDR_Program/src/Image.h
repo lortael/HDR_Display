@@ -46,7 +46,7 @@ public :
     void changeNULLStatus(bool status) {imageIsNULL = status;}
     bool isNULL() {return imageIsNULL;}
 
-    IMG_FORMAT format() {return m_currentFormat;}
+    IMG_FORMAT format() const {return m_currentFormat;}
 
 private:
 

@@ -37,12 +37,7 @@ class RenderingWidget : public QGLWidget
   Object* mObject;
   Mesh* mMesh;
   GLuint mTextureId;
-
-  /* TODO 1.4: Sampler object */
-
-  GLuint mSamplerId;
-  GLenum mMinFilter;
-  GLenum mMagFilter;
+  GLuint mCorrectionId;
 
   // a shader program
   Shader mProgram;
@@ -86,6 +81,8 @@ protected:
 
   /** Internal function to setup the 3D scene */
   virtual void createScene();
+
+  void loadCurve();
 
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
