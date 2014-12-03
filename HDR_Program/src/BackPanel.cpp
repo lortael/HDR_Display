@@ -41,7 +41,7 @@ void BackPanel::displayImageGL(Image &img)
 
     img.color2gray();
 
-    m_Linearisation.setCourbe(Courbe(std::string(HDR_DIR"/data/fitcurve.cfg")));
+    m_Linearisation.setCourbe(Courbe(std::string(HDR_DIR"/data/fitcurve_standard.cfg")));
 
     std::cout << img.pixel(1000,500) << std::endl;
 
@@ -49,7 +49,7 @@ void BackPanel::displayImageGL(Image &img)
     {
         for(int j=0;j<img.height();j++)
         {
-            img.setPixel(i, j, m_Linearisation.processPixel(img.pixel(i,j)));
+            img.setPixel(i, j, m_Linearisation.processPixel(img.pixel(i,j), img.max()));
         }
     }
 
