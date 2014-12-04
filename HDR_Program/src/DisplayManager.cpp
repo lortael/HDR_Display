@@ -82,6 +82,8 @@ void DisplayManager::endDisplay()
     if (m_CurrentMode == GL)
     {
         for (unsigned int i = 0; i < m_DisplayList.size(); ++i)
-            m_DisplayList[i]->closeWindow();
+            m_DisplayList[i]->closeGlWindow();
     }
+    else
+        cv::destroyAllWindows();
 }

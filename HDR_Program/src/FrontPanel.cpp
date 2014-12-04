@@ -75,12 +75,12 @@ Eigen::Vector4f FrontPanel::processPixel(Eigen::Vector4f pixel)
     return pixel;
 }
 
-void FrontPanel::computeShaderParameters()
-{
+//void FrontPanel::computeShaderParameters()
+//{
 
-}
+//}
 
-void FrontPanel::computeShader()
-{
+//void FrontPanel::computeShader()
+//{
 
-}
+//}

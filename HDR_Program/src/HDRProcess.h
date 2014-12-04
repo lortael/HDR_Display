@@ -13,9 +13,9 @@ public :
 
     virtual void GPUprocess(Image const &img);
 
-    virtual void computeShaderParameters() = 0;
+//    virtual void computeShaderParameters(Image const &img) = 0;
 
-    virtual void computeShader() = 0;
+//    virtual void computeShader(Image const &img) = 0;
 
 private:
 

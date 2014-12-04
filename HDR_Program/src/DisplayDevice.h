@@ -13,8 +13,6 @@ public :
 
     DisplayDevice();
 
-    DisplayDevice(unsigned int height, unsigned int width, unsigned int id);
-
     virtual ~DisplayDevice();
 
     void initDisplay();
@@ -36,7 +34,7 @@ public :
 
     void setName(QString name) {m_DisplayName = name;}
 
-    void closeWindow();
+    void closeGlWindow();
 
     void toggleFullscreen();
     void toggleWindow();

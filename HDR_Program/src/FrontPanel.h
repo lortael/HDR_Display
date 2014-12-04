@@ -15,9 +15,9 @@ public :
 
     Eigen::Vector4f processPixel(Eigen::Vector4f pixel);
 
-    void computeShaderParameters();
+//    void computeShaderParameters();
 
-    void computeShader();
+//    void computeShader();
 
 private:
 
