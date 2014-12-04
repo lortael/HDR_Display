@@ -51,6 +51,7 @@ void BackPanel::displayImageGL(Image &img)
         }
     }*/
 
+    m_GlWidget.loadCurve(m_Linearisation.getLinTable());
     m_GlWidget.loadImage(img);
     if (m_GlWidget.screenmode() == FULLSCREEN)
         m_GlWidget.showFullScreen();

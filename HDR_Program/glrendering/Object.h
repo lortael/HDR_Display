@@ -21,7 +21,7 @@ public:
     void draw(const Camera& camera);
 
     void loadImgTexture(const Image& image);
-    void loadCurveTexture();
+    void loadCurveTexture(float* curve);
 
 protected:
 

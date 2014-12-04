@@ -37,7 +37,9 @@ void main()
     if (formatImage == 0)
     {
         float l = sqrt(color.r);
+        l = clamp(l, 0.0, 1.0);
         color = texture(corTex, vec2(l, 1.0));
+	//color = texture(corTex, texcoord);
     }
     else if (formatImage == 1)
     {
@@ -52,3 +54,4 @@ void main()
 
     out_color = color;
 }
+

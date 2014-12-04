@@ -33,6 +33,7 @@ RenderingWidget::~RenderingWidget()
 {
     delete mObject;
     delete mMesh;
+    delete mCurve;
 }
 
 void RenderingWidget::paintGL()
@@ -50,20 +51,6 @@ void RenderingWidget::paintGL()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     mProgram.activate();
-
-    GL_TEST_ERR;
-
-//    glActiveTexture(GL_TEXTURE0 + 0);
-//    glBindTexture(GL_TEXTURE_2D, mTextureId);
-//    GLint textureLoc = glGetUniformLocation(mProgram.id(), "colorMap");
-////    textureLoc = GL_TEXTURE_2D;
-//    glUniform1i(textureLoc, 0);
-
-//    glActiveTexture(GL_TEXTURE0 + 1);
-//    glBindTexture(GL_TEXTURE_2D, mCorrectionId);
-//    GLint texCorLoc = glGetUniformLocation(mProgram.id(), "texCor");
-////    texCorLoc = GL_TEXTURE_2D;
-//    glUniform1i(texCorLoc, 1);
 
     GL_TEST_ERR;
 
@@ -125,78 +112,14 @@ void RenderingWidget::createScene()
 
     GL_TEST_ERR;
 
-//    int dimY = mImage.height();
-//    int dimX = mImage.width();
-//    int channel = (mImage.format() == GRAY)? 4 : 4;
-
-//    float* test;
-//    test = new float[dimX*dimY*channel];
-
-//    int i(0);
-//    for (int y = 0 ; y < dimY ; ++y)
-//    {
-//        for (int x = 0 ; x < dimX ; ++x)
-//        {
-//            Eigen::Vector4f rgba = mImage.pixel(x, y);
-//            for (int z = 0; z < channel; ++z)
-//            {
-//                test[i] = rgba(z);
-//                ++i;
-//            }
-//        }
-//    }
-
-//    glGenTextures(1,&mTextureId);
-//    glBindTexture(GL_TEXTURE_2D, mTextureId);
-
-//    if (mImage.format() == GRAY)
-//    {
-//        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, dimX, dimY, 0,  GL_RGBA, GL_FLOAT, test);
-//    }
-//    else
-//    {
-//        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, dimX, dimY, 0,  GL_RGBA, GL_FLOAT, test);
-//    }
-
-//    delete test;
-
-//    glGenerateMipmap(GL_TEXTURE_2D);
-
-//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-//    glBindTexture(GL_TEXTURE_2D, 0);
-
-//    float* test2;
-//    test2 = new float[256*4];
-
-//    for (unsigned int i = 0; i < 256; ++i)
-//    {
-//        for (unsigned j = 0; j < 3; ++j)
-//            test2[i*4 + j] = i/255.f;
-//        test2[i*4 + 3] = 1.f;
-//    }
-
-//    glGenTextures(1,&mCorrectionId);
-//    glBindTexture(GL_TEXTURE_2D, mCorrectionId);
-//    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 256, 1, 0,  GL_RGBA, GL_FLOAT, test2);
-
-//    delete test2;
-
-//    glGenerateMipmap(GL_TEXTURE_2D);
-
-//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-//    glBindTexture(GL_TEXTURE_2D, 0);
-
-    GL_TEST_ERR;
-
     mObject = new Object();
     mObject->attachShader(&mProgram);
     mObject->attachMesh(mMesh);
     mObject->loadImgTexture(mImage);
-    mObject->loadCurveTexture();
+    if(mImage.format()==0)
+    {
+        mObject->loadCurveTexture(mCurve);
+    }
     mObject->setTransformation(Matrix4f::Identity());
 
     mObjectList.push_back(mObject);

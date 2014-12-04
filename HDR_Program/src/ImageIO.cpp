@@ -57,7 +57,7 @@ void ImageIO::imgLoad(Image& img, QString filename)
         }
 
         img.computeMinMax();
-        //img.normalize();
+        img.normalize();
 
         cout << "HDR image loaded" << endl;
         img.changeNULLStatus(false);

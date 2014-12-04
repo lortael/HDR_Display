@@ -1,4 +1,3 @@
-
 #include "Object.h"
 
 Object::Object()
@@ -98,36 +97,41 @@ void Object::loadImgTexture(const Image &image)
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_BORDER);
 
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void Object::loadCurveTexture()
+void Object::loadCurveTexture(float* curve)
 {
     Texture tex;
     tex.name("corTex");
-    float* curve;
-    curve = new float[256*4];
+    float* curve2;
+    curve2 = new float[256*4];
 
     for (unsigned int i = 0; i < 256; ++i)
     {
         for (unsigned j = 0; j < 3; ++j)
-            curve[i*4 + j] = i/255.f;
-        curve[i*4 + 3] = 1.f;
+            curve2[i*4 + j] = curve[i];
+        curve2[i*4 + 3] = 1.f;
     }
+
     GLuint tempId;
     glGenTextures(1,&tempId);
     tex.id(tempId);
     mTextures.push_back(tex);
     glBindTexture(GL_TEXTURE_2D, tex.id());;
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 256, 1, 0,  GL_RGBA, GL_FLOAT, curve);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 256, 1, 0,  GL_RGBA, GL_FLOAT, curve2);
 
-    delete curve;
+    delete curve2;
 
     glGenerateMipmap(GL_TEXTURE_2D);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_BORDER);
 
     glBindTexture(GL_TEXTURE_2D, 0);
 }

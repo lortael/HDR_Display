@@ -38,6 +38,7 @@ class RenderingWidget : public QGLWidget
   Mesh* mMesh;
   GLuint mTextureId;
   GLuint mCorrectionId;
+  float* mCurve;
 
   // a shader program
   Shader mProgram;
@@ -82,8 +83,6 @@ protected:
   /** Internal function to setup the 3D scene */
   virtual void createScene();
 
-  void loadCurve();
-
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
@@ -93,6 +92,7 @@ public:
   void loadImage(Image const &image) {mImage = image;}
   SCREENMODE screenmode() {return mFullscreen;}
   void changeScreenMode(SCREENMODE mode) {mFullscreen = mode;}
+  void loadCurve(float* curve) {mCurve = curve;}
 
 };
 
