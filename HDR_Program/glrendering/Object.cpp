@@ -98,6 +98,8 @@ void Object::loadImgTexture(const Image &image)
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_BORDER);
 
     glBindTexture(GL_TEXTURE_2D, 0);
 }
@@ -115,6 +117,7 @@ void Object::loadCurveTexture()
             curve[i*4 + j] = i/255.f;
         curve[i*4 + 3] = 1.f;
     }
+
     GLuint tempId;
     glGenTextures(1,&tempId);
     tex.id(tempId);
@@ -128,6 +131,8 @@ void Object::loadCurveTexture()
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_BORDER);
 
     glBindTexture(GL_TEXTURE_2D, 0);
 }
