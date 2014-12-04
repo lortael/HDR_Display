@@ -43,15 +43,13 @@ void BackPanel::displayImageGL(Image &img)
 
     m_Linearisation.setCourbe(Courbe(std::string(HDR_DIR"/data/fitcurve_standard.cfg")));
 
-    std::cout << img.pixel(1000,500) << std::endl;
-
-    for(int i=0;i<img.width();i++)
+    /*for(int i=0;i<img.width();i++)
     {
         for(int j=0;j<img.height();j++)
         {
             img.setPixel(i, j, m_Linearisation.processPixel(img.pixel(i,j), img.max()));
         }
-    }
+    }*/
 
     m_GlWidget.loadImage(img);
     if (m_GlWidget.screenmode() == FULLSCREEN)
