@@ -8,7 +8,7 @@
 
 #include "Image.h"
 #include "HDRProcess.h"
-#include "Correction.h"
+#include "correction/Correction.h"
 
 #include "../glrendering/RenderingWidget.h"
 
@@ -55,8 +55,6 @@ protected:
     QString m_DisplayName;
 
     RenderingWidget m_GlWidget;
-
-    Correction m_Correction;
 };
 
 #endif //DISPLAYDEVICE_H_INCLUDED

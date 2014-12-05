@@ -1,4 +1,3 @@
-
 #include "Object.h"
 
 Object::Object()
@@ -104,18 +103,18 @@ void Object::loadImgTexture(const Image &image)
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void Object::loadCurveTexture()
+void Object::loadCurveTexture(float* curve)
 {
     Texture tex;
     tex.name("corTex");
-    float* curve;
-    curve = new float[256*4];
+    float* curveTex;
+    curveTex = new float[256*4];
 
     for (unsigned int i = 0; i < 256; ++i)
     {
         for (unsigned j = 0; j < 3; ++j)
-            curve[i*4 + j] = i/255.f;
-        curve[i*4 + 3] = 1.f;
+            curveTex[i*4 + j] = curve[i];
+        curveTex[i*4 + 3] = 1.f;
     }
 
     GLuint tempId;
@@ -123,9 +122,9 @@ void Object::loadCurveTexture()
     tex.id(tempId);
     mTextures.push_back(tex);
     glBindTexture(GL_TEXTURE_2D, tex.id());;
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 256, 1, 0,  GL_RGBA, GL_FLOAT, curve);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 256, 1, 0,  GL_RGBA, GL_FLOAT, curveTex);
 
-    delete curve;
+    delete curveTex;
 
     glGenerateMipmap(GL_TEXTURE_2D);
 

@@ -36,17 +36,14 @@ class RenderingWidget : public QGLWidget
   ObjectList mObjectList;
   Object* mObject;
   Mesh* mMesh;
-  GLuint mTextureId;
-  GLuint mCorrectionId;
+  Image mImage;
+  float* mCurve;
 
   // a shader program
   Shader mProgram;
 
   QPoint mLastMousePos;
   QTimer* mTimer;
-
-
-  Image mImage;
 
   MOVEMENT mMove;
   SCREENMODE mFullscreen;
@@ -94,6 +91,7 @@ public:
   SCREENMODE screenmode() {return mFullscreen;}
   void changeScreenMode(SCREENMODE mode) {mFullscreen = mode;}
 
+  void loadCurve(float* curve) {mCurve = curve;}
 };
 
 #endif // RENDERINGWIDGET_H

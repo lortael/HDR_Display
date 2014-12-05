@@ -186,7 +186,7 @@ void ImageIO::savePng(Image const & img, const std::string filename)
 void ImageIO::toneMapping(Image &src)
 {
     using namespace Eigen;
-    Eigen::Vector3f min(src.min()), max(src.max());
+    float min(src.min()), max(src.max());
 
     for (int y = 0; y < src.height(); ++y)
         for (int x = 0; x < src.width(); ++x)
@@ -195,13 +195,13 @@ void ImageIO::toneMapping(Image &src)
             float g = src.pixel(x, y)(1);
             float b = src.pixel(x, y)(2);
 
-            r = (r - min(0))/(max(0) - min(0));
+            r = (r - min)/(max - min);
             r = (r < 0.f)? 0.f : (r > 1.f )? 1.f : r;
 
-            g = (g - min(1))/(max(1) - min(1));
+            g = (g - min)/(max - min);
             g = (g < 0.f)? 0.f : (g > 1.f )? 1.f : g;
 
-            b = (b - min(2))/(max(2) - min(2));
+            b = (b - min)/(max - min);
             b = (b < 0.f)? 0.f : (b > 1.f )? 1.f : b;
 
             src.setPixel(x, y, Vector4f(r, g, b, 1.f));

@@ -33,6 +33,7 @@ RenderingWidget::~RenderingWidget()
 {
     delete mObject;
     delete mMesh;
+    delete mCurve;
 }
 
 void RenderingWidget::paintGL()
@@ -115,7 +116,12 @@ void RenderingWidget::createScene()
     mObject->attachShader(&mProgram);
     mObject->attachMesh(mMesh);
     mObject->loadImgTexture(mImage);
-    mObject->loadCurveTexture();
+
+    if(mImage.format()==0)
+    {
+        mObject->loadCurveTexture(mCurve);
+    }
+
     mObject->setTransformation(Matrix4f::Identity());
 
     mObjectList.push_back(mObject);
