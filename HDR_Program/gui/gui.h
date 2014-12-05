@@ -1,8 +1,14 @@
+/* Copyright (C) 2014 David Murray <david.murray@institutoptique.fr>
+ *
+ *
+ * */
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
 #include "../src/DisplayManager.h"
 #include <QMainWindow>
+#include <QString>
 
 class Gui : public QMainWindow
 {
@@ -24,6 +30,10 @@ private slots:
 private:
 
     DisplayManager* m_Manager;
+
+    std::vector<QString> m_ImgPath;
+
+    bool m_Running;
 };
 
 #endif // MAINWINDOW_H

@@ -42,9 +42,9 @@ void main()
     }
     else if (formatImage == 1)
     {
-        float r = sqrt(color.r);
-        float g = sqrt(color.g);
-        float b = sqrt(color.b);
+        float r = clamp(sqrt(color.r), 0.0, 1.0);
+        float g = clamp(sqrt(color.g), 0.0, 1.0);
+        float b = clamp(sqrt(color.b), 0.0, 1.0);
 
         color = vec4(r, g, b, 1.0);
     }

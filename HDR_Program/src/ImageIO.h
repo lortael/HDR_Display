@@ -1,3 +1,8 @@
+/* Copyright (C) 2014 David Murray <david.murray@institutoptique.fr>
+ *
+ *
+ * */
+
 #ifndef IMAGEIO_H_INCLUDED
 #define IMAGEIO_H_INCLUDED
 

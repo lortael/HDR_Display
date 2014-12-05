@@ -1,3 +1,8 @@
+/* Copyright (C) 2014 David Murray <david.murray@institutoptique.fr>
+ *
+ *
+ * */
+
 #ifndef DISPLAYDEVICE_H_INCLUDED
 #define DISPLAYDEVICE_H_INCLUDED
 

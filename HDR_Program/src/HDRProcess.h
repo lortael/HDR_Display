@@ -1,3 +1,8 @@
+/* Copyright (C) 2014 David Murray <david.murray@institutoptique.fr>
+ *
+ *
+ * */
+
 #ifndef HDRPROCESS_H_INCLUDED
 #define HDRPROCESS_H_INCLUDED
 

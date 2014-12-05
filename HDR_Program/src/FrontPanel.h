@@ -1,3 +1,8 @@
+/* Copyright (C) 2014 David Murray <david.murray@institutoptique.fr>
+ *
+ *
+ * */
+
 #ifndef FRONTPANEL_H_INCLUDED
 #define FRONTPANEL_H_INCLUDED
 

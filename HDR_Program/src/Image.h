@@ -1,3 +1,8 @@
+/* Copyright (C) 2014 David Murray <david.murray@institutoptique.fr>
+ *
+ *
+ * */
+
 #ifndef IMAGE_H_INCLUDED
 #define IMAGE_H_INCLUDED
 
@@ -31,6 +36,7 @@ public :
     void setMax(float max) {m_Max = max;}
     void setMin(float min) {m_Min = min;}
 
+    //Compute the min and max value based on the highest and lowest of the RGB channels
     void computeMinMax();
 
     //Normalize the image pixels using m_Max.

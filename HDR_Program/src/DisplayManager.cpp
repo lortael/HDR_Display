@@ -20,7 +20,7 @@ void DisplayManager::initManager(Image const& img, unsigned int nbDevices)
     m_Image = img;
     if (nbDevices != 2)
     {
-
+        //Add display devices here
     }
     else
     {
@@ -41,7 +41,7 @@ void DisplayManager::initManager(QString filepath, unsigned int nbDevices)
     m_Image = img;
     if (nbDevices != 2)
     {
-
+        //Add display devices here
     }
     else
     {
