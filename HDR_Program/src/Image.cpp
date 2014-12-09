@@ -1,4 +1,5 @@
 #include "Image.h"
+#include <iostream>
 
 
 #include "opencv2/opencv.hpp"
@@ -28,8 +29,6 @@ Image::Image(Image const &img)
     imageIsNULL = img.imageIsNULL;
 
     m_Pixel = img.m_Pixel;
-
-    cout << "init" << endl;
 }
 
 Image::~Image()
@@ -165,7 +164,13 @@ void Image::computeMinMax()
 void Image::normalize()
 {
     for (unsigned int y = 0 ; y < m_Height ; ++y)
+    {
         for (unsigned int x = 0 ; x < m_Width ; ++x)
+        {
             for (unsigned int z = 0; z < 3; ++z)
-                m_Pixel[x + m_Width*y](z) = m_Pixel[x + m_Width*y](z)/m_Max;
+            {
+//                m_Pixel[x + m_Width*y](z) = m_Pixel[x + m_Width*y](z)/m_Max;
+            }
+        }
+    }
 }

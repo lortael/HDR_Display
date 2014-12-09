@@ -9,27 +9,31 @@
 using namespace cv;
 
 BackPanel::BackPanel()
+    : m_Linearisation()
 {
-    m_DisplayId = QApplication::desktop()->primaryScreen() + 1;
+
 }
 
 void BackPanel::displayImageCV(Image &img) ////DEPRECATED : see displayImageGL()
 {
+    Image grayImg(img);
     Mat imgMat;
-    if (img.format() != GRAY)
-        img.color2gray();
+    if (grayImg.format() != GRAY)
+        grayImg.color2gray();
 
-    Mat grayImg(img.height(), img.width(), DataType<Vec3f>::type);
-    for (int y = 0 ; y < img.height() ; ++y)
+    grayImg = CPUprocess(grayImg);
+
+    Mat grayMatImg(grayImg.height(), grayImg.width(), DataType<Vec3f>::type);
+    for (int y = 0 ; y < grayImg.height() ; ++y)
     {
-        for (int x = 0 ; x < img.width() ; ++x)
+        for (int x = 0 ; x < grayImg.width() ; ++x)
         {
-            Vec3f grayscale = Vec3f(img.pixel(x, y)(0), img.pixel(x, y)(1), img.pixel(x, y)(2));
-            grayImg.at<Vec3f>(y, x) = grayscale;
+            Vec3f grayscale = Vec3f(grayImg.pixel(x, y)(0), grayImg.pixel(x, y)(1), grayImg.pixel(x, y)(2));
+            grayMatImg.at<Vec3f>(y, x) = grayscale;
         }
     }
     Mat bgrImg;
-    cvtColor(grayImg, bgrImg, CV_RGB2BGR);
+    cvtColor(grayMatImg, bgrImg, CV_RGB2BGR);
     imgMat = bgrImg;
 
     std::stringstream ss;
@@ -44,41 +48,81 @@ void BackPanel::displayImageCV(Image &img) ////DEPRECATED : see displayImageGL()
     cv::imshow(name, imgMat);
 }
 
-void BackPanel::displayImageGL(Image &img)
+void BackPanel::displayImageGL(Image const &img)
 {
-    m_GlWidget.setWindowTitle("Back Panel");
+    m_GlWidget->setWindowTitle("Back Panel");
 
     QDesktopWidget *backDesktop = QApplication::desktop();
     QRect screenGeo = backDesktop->availableGeometry(m_DisplayId);
-    m_GlWidget.move(screenGeo.topLeft());
 
-    img.color2gray();
+    Image grayImg(img);
+    grayImg.color2gray();
 
-    m_Linearisation.setCourbe(Courbe(std::string(HDR_DIR"/data/fitcurve_standard.cfg")));
+    m_Linearisation.loadCoeffFromFile(HDR_DIR"/data/fitcurve_standard.cfg");
+    m_Linearisation.computeCurve();
 
-    m_GlWidget.loadCurve(m_Linearisation.getLinTable());
-    m_GlWidget.loadImage(img);
-    if (m_GlWidget.screenmode() == FULLSCREEN)
-        m_GlWidget.showFullScreen();
+    m_GlWidget->loadCurve(m_Linearisation);
+    m_GlWidget->loadImage(grayImg);
+    m_GlWidget->loadShaders(HDR_DIR"/shaders/backPanel.vert", HDR_DIR"/shaders/backPanel.frag");
+    if (m_CurrentMode == FULLSCREEN)
+        m_GlWidget->showFullScreen();
     else
     {
-        m_GlWidget.resize(1920,1080);
-        m_GlWidget.show();
+        m_GlWidget->resize(1920,1080);
+        m_GlWidget->show();
     }
+    m_GlWidget->move(screenGeo.topLeft());
 }
 
 Eigen::Vector4f BackPanel::processPixel(Eigen::Vector4f pixel)
 {
-//    return Eigen::Vector4f(sqrt(pixel(0)), sqrt(pixel(1)), sqrt(pixel(2)), pixel(3));
-    return pixel;
+    float r = pixel(0);
+    float g = pixel(1);
+    float b = pixel(2);
+
+    Eigen::Vector4f outPixel(sqrt(r), sqrt(g), sqrt(b), 1.f);
+    return outPixel;
 }
 
-//void BackPanel::computeShaderParameters()
-//{
+void BackPanel::computeShaderParameters(Image const &img)
+{
 
-//}
+}
 
-//void BackPanel::computeShader()
-//{
+Image BackPanel::computePSFImage(Image const &img, unsigned int psfSize)
+{
+//    Image temp(img);
 
-//}
+
+
+//    for (int y = 0 ; y < temp.height() ; ++y)
+//    {
+//        for (int x = 0 ; x < temp.width() ; ++x)
+//        {
+
+//        }
+//    }
+}
+
+float BackPanel::convolutionKernel(unsigned int x, unsigned int y, Image const &img, unsigned int psfSize)
+{
+//    unsigned int topY;
+//    topY = (y > img.height() - psfSize) ? img.height() - y : psfSize;
+//    unsigned int botY;
+//    botY = (y < psfSize) ? psfSize - y : psfSize;
+//    unsigned int leftX;
+//    leftX = (x < psfSize) ? psfSize - x : psfSize;
+//    unsigned int rightX;
+//    rightX = (x > img.width() - psfSize) ? img.width() - x : psfSize;
+
+//    float sum(0);
+//    int coeff(1);
+//    Eigen::Matrix<unsigned int, psfSize, psfSize> coeffs;
+//    for (unsigned int i = - botY; i < topY; ++i)
+//        for (unsigned int j = -leftX; j < rightX; ++j)
+//        {
+//            sum += coeff
+//        }
+
+//    return value;
+}

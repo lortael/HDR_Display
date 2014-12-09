@@ -15,10 +15,9 @@
 #include "Camera.h"
 #include "Object.h"
 #include "../src/Image.h"
+#include "../src/correction/Linearisation.h"
 
 enum MOVEMENT {ENABLED = 0, DISABLED = 1};
-
-enum SCREENMODE {FULLSCREEN = 0, WINDOW = 1};
 
 class RenderingWidget : public QGLWidget
 {
@@ -37,16 +36,17 @@ class RenderingWidget : public QGLWidget
   Object* mObject;
   Mesh* mMesh;
   Image mImage;
-  float* mCurve;
+  Linearisation mCurve;
 
   // a shader program
   Shader mProgram;
+  std::string mVertFilePath;
+  std::string mFragFilePath;
 
   QPoint mLastMousePos;
   QTimer* mTimer;
 
   MOVEMENT mMove;
-  SCREENMODE mFullscreen;
 
 protected:
 
@@ -79,8 +79,6 @@ protected:
   /** Internal function to setup the 3D scene */
   virtual void createScene();
 
-  void loadCurve();
-
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
@@ -88,10 +86,8 @@ public:
   RenderingWidget();
   ~RenderingWidget();
   void loadImage(Image const &image) {mImage = image;}
-  SCREENMODE screenmode() {return mFullscreen;}
-  void changeScreenMode(SCREENMODE mode) {mFullscreen = mode;}
-
-  void loadCurve(float* curve) {mCurve = curve;}
+  void loadCurve(Linearisation const &curve) {mCurve = curve;}
+  void loadShaders(const std::string& fileV, const std::string& fileF) {mVertFilePath = fileV; mFragFilePath = fileF;}
 };
 
 #endif // RENDERINGWIDGET_H

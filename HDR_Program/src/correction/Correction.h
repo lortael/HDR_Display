@@ -17,4 +17,4 @@ protected:
 
 };
 
-#endif CORRECTION_H
+#endif //CORRECTION_H

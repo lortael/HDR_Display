@@ -6,21 +6,26 @@
 #include <vector>
 #include <Eigen/Core>
 
-class Linearisation : public Correction
+class Linearisation
 {
 public:
     Linearisation();
-    Linearisation(Courbe courbe);
-    void setCourbe(Courbe courbe);
-    Courbe getCourbe();
 
-    Eigen::Vector4f processPixel(Eigen::Vector4f pixel, float maxVal);
-    float evalPixel(float value);
+    float getCoeff(unsigned int index) const {return m_Curve[index];}
 
-    float* getLinTable();
+    void loadCoeffFromFile(std::string filename);
+
+    void computeCurve();
+
 
 private:
-    Courbe _courbe;
+    std::vector<float> m_coeffs;
+    std::vector<float> m_Curve;
+
+    float getValue (float x);
+
+    float dichotomie(float value);
+
 };
 
 #endif // LINEARISATION_H

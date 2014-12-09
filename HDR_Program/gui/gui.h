@@ -9,6 +9,7 @@
 #include "../src/DisplayManager.h"
 #include <QMainWindow>
 #include <QString>
+#include <QTimer>
 
 class Gui : public QMainWindow
 {
@@ -22,18 +23,28 @@ public:
 private slots:
 
     void initProgram_clicked();
-    void loadImg_clicked();
+    void loadNextImg_triggered();
+    void loadLake();
+    void loadMeadow();
     void enableFS_clicked();
     void disableFS_clicked();
+    void startDiaporama_clicked();
+    void endDiaporama_clicked();
     void closeProgram_clicked();
 
 private:
 
     DisplayManager* m_Manager;
 
+    QTimer* m_Timer;
+
     std::vector<QString> m_ImgPath;
 
+    unsigned int m_CurrentImage;
+
     bool m_Running;
+
+    bool m_Diaporama;
 };
 
 #endif // MAINWINDOW_H

@@ -16,17 +16,15 @@ public :
 
     void displayImageCV(Image &img);
 
-    void displayImageGL(Image &img);
+    void displayImageGL(Image const &img);
 
     Eigen::Vector4f processPixel(Eigen::Vector4f pixel);
-
-//    void computeShaderParameters();
-
-//    void computeShader();
 
 private:
 
 protected:
+
+    void computeShaderParameters(Image const &img);
 
 };
 

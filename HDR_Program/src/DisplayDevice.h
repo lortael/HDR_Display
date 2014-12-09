@@ -12,6 +12,8 @@
 
 #include "../glrendering/RenderingWidget.h"
 
+enum SCREENMODE {FULLSCREEN = 0, WINDOW = 1};
+
 class DisplayDevice
 {
 public :
@@ -20,7 +22,7 @@ public :
 
     virtual ~DisplayDevice();
 
-    void initDisplay();
+    void initDevice();
 
     unsigned int height() const {return m_Height;}
     unsigned int width() const {return m_Width;}
@@ -32,7 +34,7 @@ public :
 
     virtual void displayImageCV(Image &img) = 0;
 
-    virtual void displayImageGL(Image &img) = 0;
+    virtual void displayImageGL(Image const &img) = 0;
 
     void setId(unsigned int id) {m_DisplayId = id;}
     unsigned int id() {return m_DisplayId;}
@@ -41,8 +43,8 @@ public :
 
     void closeGlWindow();
 
-    void toggleFullscreen();
-    void toggleWindow();
+    void toggleFullscreen() {m_CurrentMode = FULLSCREEN;}
+    void toggleWindow() {m_CurrentMode = WINDOW;}
 
 private:
 
@@ -54,7 +56,9 @@ protected:
     unsigned int m_DisplayId;
     QString m_DisplayName;
 
-    RenderingWidget m_GlWidget;
+    SCREENMODE m_CurrentMode;
+
+    RenderingWidget* m_GlWidget;
 };
 
 #endif //DISPLAYDEVICE_H_INCLUDED

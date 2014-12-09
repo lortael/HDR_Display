@@ -10,22 +10,24 @@ using namespace cv;
 
 FrontPanel::FrontPanel()
 {
-    m_DisplayId = QApplication::desktop()->primaryScreen();
+
 }
 
 void FrontPanel::displayImageCV(Image &img) ////DEPRECATED : see displayImageGL()
 {
+    Image tempImg;
+    tempImg = CPUprocess(img);
     Mat imgMat;
-    IMG_FORMAT initialFormat = img.format();
-    if (img.format() != GRAY && img.format() == RGB)
+    IMG_FORMAT initialFormat = tempImg.format();
+    if (tempImg.format() != GRAY && tempImg.format() == RGB)
     {
-        Mat colorImg(img.height(), img.width(), DataType<Vec3f>::type);
+        Mat colorImg(tempImg.height(), tempImg.width(), DataType<Vec3f>::type);
 
-        for (int y = 0 ; y < img.height() ; ++y)
+        for (int y = 0 ; y < tempImg.height() ; ++y)
         {
-            for (int x = 0 ; x < img.width() ; ++x)
+            for (int x = 0 ; x < tempImg.width() ; ++x)
             {
-                Vec3f rgb = Vec3f(img.pixel(x, y)(0), img.pixel(x, y)(1), img.pixel(x, y)(2));
+                Vec3f rgb = Vec3f(tempImg.pixel(x, y)(0), tempImg.pixel(x, y)(1), tempImg.pixel(x, y)(2));
                 colorImg.at<Vec3f>(y, x) = rgb;
             }
         }
@@ -34,10 +36,10 @@ void FrontPanel::displayImageCV(Image &img) ////DEPRECATED : see displayImageGL(
         imgMat = bgrImg;
 
     }
-    else if (img.format() != GRAY && img.format() == HSV)
+    else if (tempImg.format() != GRAY && tempImg.format() == HSV)
     {
-        img.hsv2rgb();
-        displayImageCV(img);
+        tempImg.hsv2rgb();
+        displayImageCV(tempImg);
         initialFormat = HSV;
     }
 
@@ -56,31 +58,39 @@ void FrontPanel::displayImageCV(Image &img) ////DEPRECATED : see displayImageGL(
     }
 }
 
-void FrontPanel::displayImageGL(Image &img)
+void FrontPanel::displayImageGL(Image const &img)
 {
-    m_GlWidget.setWindowTitle("Front Panel");
+    m_GlWidget->setWindowTitle("Front Panel");
 
-    m_GlWidget.loadImage(img);
-    if (m_GlWidget.screenmode() == FULLSCREEN)
-        m_GlWidget.showFullScreen();
+    QDesktopWidget *backDesktop = QApplication::desktop();
+    QRect screenGeo = backDesktop->availableGeometry(m_DisplayId);
+
+    m_GlWidget->loadImage(img);
+    m_GlWidget->loadShaders(HDR_DIR"/shaders/frontPanel.vert", HDR_DIR"/shaders/frontPanel.frag");
+    if (m_CurrentMode == FULLSCREEN)
+    {
+        m_GlWidget->showFullScreen();
+        m_GlWidget->move(screenGeo.topLeft());
+    }
     else
     {
-        m_GlWidget.resize(1920,1080);
-        m_GlWidget.show();
+        m_GlWidget->resize(1920,1080);
+        m_GlWidget->show();
     }
 }
 
 Eigen::Vector4f FrontPanel::processPixel(Eigen::Vector4f pixel)
 {
-    return pixel;
+    float r = pixel(0);
+    float g = pixel(1);
+    float b = pixel(2);
+
+    Eigen::Vector4f outPixel(sqrt(r), sqrt(g), sqrt(b), 1.f);
+    return outPixel;
 }
 
-//void FrontPanel::computeShaderParameters()
-//{
+void FrontPanel::computeShaderParameters(Image const &img)
+{
 
-//}
+}
 
-//void FrontPanel::computeShader()
-//{
-
-//}

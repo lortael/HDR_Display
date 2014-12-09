@@ -9,19 +9,21 @@ DisplayDevice::DisplayDevice()
     : m_Height(0),
       m_Width(0),
       m_DisplayId(0),
-      m_GlWidget()
+      m_GlWidget(NULL),
+      m_CurrentMode(WINDOW)
 {
 
 }
 
 DisplayDevice::~DisplayDevice()
 {
-
+    if (m_GlWidget != NULL)
+        delete m_GlWidget;
 }
 
-void DisplayDevice::initDisplay()
+void DisplayDevice::initDevice()
 {
-
+    m_GlWidget = new RenderingWidget();
 }
 
 void DisplayDevice::resize(unsigned int height, unsigned int width)
@@ -32,15 +34,7 @@ void DisplayDevice::resize(unsigned int height, unsigned int width)
 
 void DisplayDevice::closeGlWindow()
 {
-    m_GlWidget.close();
-}
-
-void DisplayDevice::toggleFullscreen()
-{
-    m_GlWidget.changeScreenMode(FULLSCREEN);
-}
-
-void DisplayDevice::toggleWindow()
-{
-    m_GlWidget.changeScreenMode(WINDOW);
+    if (m_GlWidget->isActiveWindow())
+        m_GlWidget->close();
+    delete m_GlWidget;
 }

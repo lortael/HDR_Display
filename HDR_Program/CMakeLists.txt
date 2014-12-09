@@ -44,8 +44,6 @@ set(HDR_SRCS src/main.cpp src/DisplayManager.h src/DisplayManager.cpp
              src/BackPanel.h src/BackPanel.cpp
              src/ImageIO.h src/ImageIO.cpp
              src/Image.h src/Image.cpp
-	     src/correction/Correction.h src/correction/Correction.cpp
-	     src/correction/courbe.h src/correction/courbe.cpp
 	     src/correction/Linearisation.h src/correction/Linearisation.cpp
              ${APPLE_WORKAROUND_SRCS})
 

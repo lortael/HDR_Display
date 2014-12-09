@@ -18,13 +18,9 @@ public :
 
     void displayImageCV(Image &img);
 
-    void displayImageGL(Image &img);
+    void displayImageGL(Image const &img);
 
     Eigen::Vector4f processPixel(Eigen::Vector4f pixel);
-
-//    void computeShaderParameters();
-
-//    void computeShader();
 
 private:
 
@@ -32,6 +28,11 @@ private:
 
 protected:
 
+    void computeShaderParameters(Image const &img);
+
+    Image computePSFImage(Image const &img, unsigned int psfSize);
+
+    float convolutionKernel(unsigned int x, unsigned int y, Image const &img, unsigned int psfSize);
 };
 
 #endif //BACKPANEL_H_INCLUDED

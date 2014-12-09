@@ -6,6 +6,10 @@ Object::Object()
 
 Object::~Object()
 {
+    for (unsigned int i = 0; i < mTextures.size(); ++i)
+    {
+        glDeleteTextures(1, &mTextures[i].textureId);
+    }
 }
 
 void Object::attachMesh(/*const*/ Mesh* mesh)
@@ -52,10 +56,10 @@ void Object::draw(const Camera &camera)
     mGeometry->drawGeometry(mShader->id());
 }
 
-void Object::loadImgTexture(const Image &image)
+void Object::loadImgTexture(const Image &image, std::string texName)
 {
     Texture tex;
-    tex.name("imgTex");
+    tex.name(texName);
     int dimY = image.height();
     int dimX = image.width();
     int channel = (image.format() == GRAY)? 4 : 4;
@@ -103,17 +107,18 @@ void Object::loadImgTexture(const Image &image)
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void Object::loadCurveTexture(float* curve)
+void Object::loadCurveTexture(const Linearisation &curve)
 {
     Texture tex;
     tex.name("corTex");
+
     float* curveTex;
     curveTex = new float[256*4];
 
     for (unsigned int i = 0; i < 256; ++i)
     {
-        for (unsigned j = 0; j < 3; ++j)
-            curveTex[i*4 + j] = curve[i];
+        for (unsigned int j = 0; j < 3; ++j)
+            curveTex[i*4 + j] = curve.getCoeff(i);
         curveTex[i*4 + 3] = 1.f;
     }
 
@@ -134,4 +139,5 @@ void Object::loadCurveTexture(float* curve)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_BORDER);
 
     glBindTexture(GL_TEXTURE_2D, 0);
+
 }

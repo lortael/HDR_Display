@@ -6,6 +6,7 @@
 #include "Shader.h"
 #include "Camera.h"
 #include "Image.h"
+#include "../src/correction/Linearisation.h"
 
 class Object
 {
@@ -20,9 +21,9 @@ public:
 
     void draw(const Camera& camera);
 
-    void loadImgTexture(const Image& image);
+    void loadImgTexture(const Image& image, std::string texName);
 
-    void loadCurveTexture(float* curve);
+    void loadCurveTexture(const Linearisation &curve);
 
 protected:
 

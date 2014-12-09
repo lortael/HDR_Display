@@ -18,14 +18,11 @@ public :
 
     virtual void GPUprocess(Image const &img);
 
-//    virtual void computeShaderParameters(Image const &img) = 0;
-
-//    virtual void computeShader(Image const &img) = 0;
-
 private:
 
 protected:
 
+    virtual void computeShaderParameters(Image const &img) = 0;
 };
 
 #endif //HDRPROCESS_H_INCLUDED

@@ -17,7 +17,7 @@ std::string loadSourceFromFile(const std::string& filename)
     }
 
 
-    const int maxBuffersize = 2048;
+    const int maxBuffersize = 4096;
     char buffer[maxBuffersize];
     while(in.getline(buffer, maxBuffersize))
     {

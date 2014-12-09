@@ -1,11 +1,10 @@
 #include "DisplayManager.h"
 #include <iostream>
+#include <QDesktopWidget>
 
 #include "opencv2/opencv.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/highgui/highgui.hpp"
-
-#include "Window.h"
 
 using namespace std;
 
@@ -61,7 +60,7 @@ void DisplayManager::addDisplay(DisplayDevice* device)
 
     size_t deviceIndex = m_DisplayList.size() - 1;
 
-    m_DisplayList[deviceIndex]->setId(deviceIndex);
+    m_DisplayList[deviceIndex]->setId(QApplication::desktop()->primaryScreen() + deviceIndex);
 }
 
 void DisplayManager::multipleDisplay()
@@ -74,7 +73,10 @@ void DisplayManager::multipleDisplay()
     }
     else
         for (unsigned int i = 0; i < m_DisplayList.size(); ++i)
+        {
+            m_DisplayList[i]->initDevice();
             m_DisplayList[i]->displayImageGL(m_Image);
+        }
 }
 
 void DisplayManager::endDisplay()

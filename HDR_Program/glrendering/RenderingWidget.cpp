@@ -9,9 +9,6 @@ using namespace Eigen;
 
 RenderingWidget::RenderingWidget()
     :
-//      #ifdef __APPLE__
-//      QGLWidget(new Core3_2_context(QGLFormat::defaultFormat())),
-//      #endif
       mCamera(),
       mCamPhy(0),
       mCamTheta(0),
@@ -20,20 +17,18 @@ RenderingWidget::RenderingWidget()
       mCamFov(M_PI_2),
       mObject(NULL),
       mMesh(NULL),
-      mTextureId(0),
       mProgram(),
       mLastMousePos(),
       mTimer(new QTimer(this)),
-      mMove(DISABLED),
-      mFullscreen(WINDOW)
+      mMove(DISABLED)
 {
+
 }
 
 RenderingWidget::~RenderingWidget()
 {
     delete mObject;
     delete mMesh;
-    delete mCurve;
 }
 
 void RenderingWidget::paintGL()
@@ -103,7 +98,7 @@ void RenderingWidget::createScene()
     bool ok;
 
     // load the default shaders
-    ok = mProgram.loadFromFiles(HDR_DIR"/shaders/simple.vert", HDR_DIR"/shaders/simple.frag");
+    ok = mProgram.loadFromFiles(mVertFilePath, mFragFilePath);
     assert(ok);
 
     mMesh = new Mesh(HDR_DIR"/data/box.obj");
@@ -115,13 +110,16 @@ void RenderingWidget::createScene()
     mObject = new Object();
     mObject->attachShader(&mProgram);
     mObject->attachMesh(mMesh);
-    mObject->loadImgTexture(mImage);
-
-    if(mImage.format()==0)
+    if(mImage.format() == 1)
     {
+        mObject->loadImgTexture(mImage, "imgTex");
+//        mObject->loadImgTexture(mImagePSF, "imgTexPSF");
+    }
+    else if(mImage.format() == 0)
+    {
+        mObject->loadImgTexture(mImage, "imgTex");
         mObject->loadCurveTexture(mCurve);
     }
-
     mObject->setTransformation(Matrix4f::Identity());
 
     mObjectList.push_back(mObject);
@@ -136,22 +134,6 @@ void RenderingWidget::keyPressEvent(QKeyEvent * e)
     case Qt::Key_M:
     {
         mMove = (mMove == DISABLED)? ENABLED : DISABLED;
-        break;
-    }
-    case Qt::Key_F:
-    {
-        if (mFullscreen != FULLSCREEN)
-        {
-            mFullscreen = FULLSCREEN;
-            close();
-            showFullScreen();
-        }
-        else if (mFullscreen == FULLSCREEN)
-        {
-            mFullscreen = WINDOW;
-            close();
-            show();
-        }
         break;
     }
     case Qt::Key_C:
