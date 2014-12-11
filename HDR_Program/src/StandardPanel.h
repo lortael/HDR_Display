@@ -3,18 +3,18 @@
  *
  * */
 
-#ifndef BACKPANEL_H_INCLUDED
-#define BACKPANEL_H_INCLUDED
+#ifndef STANDARDPANEL_H_INCLUDED
+#define STANDARDPANEL_H_INCLUDED
 
 #include "DisplayDevice.h"
 #include "HDRProcess.h"
 #include "correction/Linearisation.h"
 
-class BackPanel : public DisplayDevice, public HDRProcess
+class StandardPanel : public DisplayDevice, public HDRProcess
 {
 public :
 
-    BackPanel();
+    StandardPanel();
 
     void displayImageCV(Image &img);
 
@@ -26,8 +26,6 @@ public :
 
 private:
 
-    Linearisation m_Linearisation;
-
 protected:
 
     void computeShaderParameters(Image const &img);
@@ -37,4 +35,4 @@ protected:
     float convolutionKernel(unsigned int x, unsigned int y, Image const &img, unsigned int psfSize);
 };
 
-#endif //BACKPANEL_H_INCLUDED
+#endif //STANDARDPANEL_H_INCLUDED

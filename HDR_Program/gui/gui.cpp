@@ -1,7 +1,7 @@
 #include "gui.h"
-#include <QPushButton>
 #include <QMenu>
 #include <QMenuBar>
+#include <QCheckBox>
 
 #include "ImageIO.h"
 #include"Image.h"
@@ -13,26 +13,33 @@ Gui::Gui()
 {
     m_ImgPath.push_back(HDR_DIR"/data/Lake.hdr");
     m_ImgPath.push_back(HDR_DIR"/data/meadow.hdr");
-    m_ImgPath.push_back(HDR_DIR"/data/image.hdr");
+    m_ImgPath.push_back(HDR_DIR"/data/reno.hdr");
+    m_ImgPath.push_back(HDR_DIR"/data/church.hdr");
+
+    ImageIO loader;
+
+    for (unsigned int i = 0; i < m_ImgPath.size(); ++i)
+    {
+        Image img;
+        loader.imgLoad(img, m_ImgPath[i]);
+        m_Images.push_back(img);
+    }
 
     init();
 }
 
 void Gui::init()
 {
-    m_Manager = new DisplayManager;
-    m_Manager->initManager(m_ImgPath[0]);
     m_CurrentImage = 0;
+    m_Manager = new DisplayManager;
+    m_Manager->initManager(m_ImgPath[m_CurrentImage], 3);
 
-    setFixedSize(200, 440);
     setWindowFlags(Qt::WindowStaysOnTopHint);
 //    setFocusPolicy();
 
     QPushButton* initProgram = new QPushButton("Initiate program", this);
     connect(initProgram, SIGNAL(clicked()), this, SLOT(initProgram_clicked()));
-    initProgram->setGeometry(20, 10, 160, 50);
-    initProgram->setEnabled(true);
-    initProgram->show();
+    addObject(initProgram);
 
     QMenu* imgMenu = menuBar()->addMenu("&Load image");
 
@@ -43,40 +50,43 @@ void Gui::init()
 
     QPushButton* loadImg = new QPushButton("Load image", this);
     loadImg->setMenu(imgMenu);
-    loadImg->setGeometry(20, 70, 160, 50);
-    loadImg->setEnabled(true);
-    loadImg->show();
+    addObject(loadImg);
 
-    QPushButton* enableFS = new QPushButton("Enable fullscreen", this);
-    connect(enableFS, SIGNAL(clicked()), this, SLOT(enableFS_clicked()));
-    enableFS->setGeometry(20, 130, 160, 50);
-    enableFS->setEnabled(true);
-    enableFS->show();
+    QCheckBox* fullscreen = new QCheckBox("Fullscreen", this);
+    connect(fullscreen, SIGNAL(toggled(bool)), this, SLOT(fsIsChecked(bool)));
+    addObject(fullscreen);
 
-    QPushButton* disableFS = new QPushButton("Disable fullscreen", this);
-    connect(disableFS, SIGNAL(clicked()), this, SLOT(disableFS_clicked()));
-    disableFS->setGeometry(20, 190, 160, 50);
-    disableFS->setEnabled(true);
-    disableFS->show();
+    QCheckBox* tonemap = new QCheckBox("Tone mapping", this);
+    connect(tonemap, SIGNAL(toggled(bool)), this, SLOT(tmIsChecked(bool)));
+    addObject(tonemap);
 
     QPushButton* startDiaporama = new QPushButton("Start diaporama", this);
     connect(startDiaporama, SIGNAL(clicked()), this, SLOT(startDiaporama_clicked()));
-    startDiaporama->setGeometry(20, 250, 160, 50);
-    startDiaporama->setEnabled(true);
-    startDiaporama->show();
+    addObject(startDiaporama);
 
     QPushButton* endDiaporama = new QPushButton("End diaporama", this);
     connect(endDiaporama, SIGNAL(clicked()), this, SLOT(endDiaporama_clicked()));
-    endDiaporama->setGeometry(20, 310, 160, 50);
-    endDiaporama->setEnabled(true);
-    endDiaporama->show();
+    addObject(endDiaporama);
 
     QPushButton* closeProgram = new QPushButton("Close Program", this);
     connect(closeProgram, SIGNAL(clicked()), this, SLOT(closeProgram_clicked()));
-    closeProgram->setGeometry(20, 370, 160, 50);
-    closeProgram->setEnabled(true);
-    closeProgram->show();
+    addObject(closeProgram);
+
+    int nbButton(m_ButtonList.size());
+    setFixedSize(200, nbButton*60 + 20);
 }
+
+void Gui::addObject(QAbstractButton *object)
+{
+    m_ButtonList.push_back(object);
+    int nbObject(m_ButtonList.size() - 1);
+
+    m_ButtonList[nbObject]->setGeometry(20, 10 + nbObject*60, 160, 50);
+    m_ButtonList[nbObject]->setEnabled(true);
+    m_ButtonList[nbObject]->show();
+}
+
+
 
 void Gui::initProgram_clicked()
 {
@@ -89,38 +99,40 @@ void Gui::initProgram_clicked()
 
 void Gui::loadLake()
 {
-    if (m_Running == true)
-        m_Manager->endDisplay();
-    else
-        m_Running = true;
-
-    ImageIO loader;
-    Image img;
-    loader.imgLoad(img, m_ImgPath[0]);
     m_CurrentImage = 0;
-    m_Manager->loadImg(img);
-    m_Manager->multipleDisplay();
+
+    m_Manager->loadImg(m_Images[m_CurrentImage]);
+    if (m_Running == true)
+        m_Manager->updateDisplay();
+    else
+    {
+        m_Manager->multipleDisplay();
+        m_Running = true;
+    }
 }
 
 void Gui::loadMeadow()
 {
-    if (m_Running == true)
-        m_Manager->endDisplay();
-    else
-        m_Running = true;
-
-    ImageIO loader;
-    Image img;
-    loader.imgLoad(img, m_ImgPath[1]);
     m_CurrentImage = 1;
-    m_Manager->loadImg(img);
-    m_Manager->multipleDisplay();
+
+    m_Manager->loadImg(m_Images[m_CurrentImage]);
+    if (m_Running == true)
+        m_Manager->updateDisplay();
+    else
+    {
+        m_Manager->multipleDisplay();
+        m_Running = true;
+    }
 }
 
-void Gui::enableFS_clicked()
-{    
-    for (unsigned int i = 0; i < m_Manager->nbDevice(); ++i)
-        m_Manager->accessDevice(i)->toggleFullscreen();
+void Gui::fsIsChecked(bool checked)
+{
+    if (checked)
+        for (unsigned int i = 0; i < m_Manager->nbDevice(); ++i)
+            m_Manager->accessDevice(i)->toggleFullscreen();
+    else
+        for (unsigned int i = 0; i < m_Manager->nbDevice(); ++i)
+            m_Manager->accessDevice(i)->toggleWindow();
 
     if (m_Running == true)
     {
@@ -130,16 +142,16 @@ void Gui::enableFS_clicked()
     }
 }
 
-void Gui::disableFS_clicked()
+void Gui::tmIsChecked(bool checked)
 {
-    for (unsigned int i = 0; i < m_Manager->nbDevice(); ++i)
-        m_Manager->accessDevice(i)->toggleWindow();
-
     if (m_Running == true)
     {
-        m_Manager->endDisplay();
-
-        m_Manager->multipleDisplay();
+        if (checked)
+            for (unsigned int i = 0; i < m_Manager->nbDevice(); ++i)
+                m_Manager->accessDevice(i)->glWidget()->toggleToneMapping();
+        else
+            for (unsigned int i = 0; i < m_Manager->nbDevice(); ++i)
+                m_Manager->accessDevice(i)->glWidget()->toggleHDRDisplay();
     }
 }
 
@@ -159,23 +171,21 @@ void Gui::endDiaporama_clicked()
     {
         m_Timer->start(10000000);
         m_Diaporama = false;
-        std::cout << "end" << std::endl;
     }
 }
 
 void Gui::loadNextImg_triggered()
 {
-    if (m_Running == true)
-        m_Manager->endDisplay();
-    else
-        m_Running = true;
-
     m_CurrentImage = (m_CurrentImage + 1 > m_ImgPath.size() - 1)? 0 : m_CurrentImage + 1;
-    ImageIO loader;
-    Image img;
-    loader.imgLoad(img, m_ImgPath[m_CurrentImage]);
-    m_Manager->loadImg(img);
-    m_Manager->multipleDisplay();
+
+    m_Manager->loadImg(m_Images[m_CurrentImage]);
+    if (m_Running == true)
+        m_Manager->updateDisplay();
+    else
+    {
+        m_Manager->multipleDisplay();
+        m_Running = true;
+    }
 }
 
 

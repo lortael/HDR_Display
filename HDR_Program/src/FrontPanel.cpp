@@ -77,6 +77,13 @@ void FrontPanel::displayImageGL(Image const &img)
         m_GlWidget->resize(1920,1080);
         m_GlWidget->show();
     }
+    m_GlWidget->move(screenGeo.topLeft());
+}
+
+void FrontPanel::updateImageGL(Image const &img)
+{
+    m_GlWidget->loadImage(img);
+    m_GlWidget->updateTexture();
 }
 
 Eigen::Vector4f FrontPanel::processPixel(Eigen::Vector4f pixel)

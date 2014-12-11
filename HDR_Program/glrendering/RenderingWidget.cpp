@@ -20,7 +20,9 @@ RenderingWidget::RenderingWidget()
       mProgram(),
       mLastMousePos(),
       mTimer(new QTimer(this)),
-      mMove(DISABLED)
+      mMove(DISABLED),
+      mIsToneMapped(false),
+      mIsBackPanel(false)
 {
 
 }
@@ -49,16 +51,15 @@ void RenderingWidget::paintGL()
 
     GL_TEST_ERR;
 
-    GLint formatLoc = glGetUniformLocation(mProgram.id(), "formatImage");
-    glUniform1i(formatLoc, mImage.format());
-//    glUniform1i(formatLoc, 2);
-
-    GL_TEST_ERR;
+    GLint formatLoc = glGetUniformLocation(mProgram.id(), "tonemap");
+    glUniform1i(formatLoc, int(mIsToneMapped));
 
     // draw every objects
-    for(ObjectList::const_iterator obj=mObjectList.begin(); obj!=mObjectList.end(); ++obj) {
-        (*obj)->draw(mCamera);
-    }
+//    for(ObjectList::const_iterator obj=mObjectList.begin(); obj!=mObjectList.end(); ++obj) {
+//        (*obj)->draw(mCamera);
+//    }
+
+    mObject->draw(mCamera);
 
     GL_TEST_ERR;
 }
@@ -110,19 +111,19 @@ void RenderingWidget::createScene()
     mObject = new Object();
     mObject->attachShader(&mProgram);
     mObject->attachMesh(mMesh);
-    if(mImage.format() == 1)
+    if(mIsBackPanel == false)
     {
-        mObject->loadImgTexture(mImage, "imgTex");
 //        mObject->loadImgTexture(mImagePSF, "imgTexPSF");
+        mObject->loadImgTexture(mImage, "imgTexFront");
     }
-    else if(mImage.format() == 0)
+    else
     {
-        mObject->loadImgTexture(mImage, "imgTex");
+        mObject->loadImgTexture(mImage, "imgTexBack");
         mObject->loadCurveTexture(mCurve);
     }
     mObject->setTransformation(Matrix4f::Identity());
 
-    mObjectList.push_back(mObject);
+//    mObjectList.push_back(mObject);
 
     GL_TEST_ERR;
 }
@@ -184,6 +185,26 @@ void RenderingWidget::mouseMoveEvent(QMouseEvent * e) {
 void RenderingWidget::wheelEvent(QWheelEvent * e) {
     mCamDist *= (e->delta()>0)? 1./1.1: 1.1;
     e->accept();
+}
+
+void RenderingWidget::updateParameters()
+{
+    GLint formatLoc = glGetUniformLocation(mProgram.id(), "tonemap");
+    glUniform1i(formatLoc, mIsToneMapped);
+}
+
+void RenderingWidget::updateTexture()
+{
+    makeCurrent();
+    if(mIsBackPanel == false)
+    {
+//        mObject->loadImgTexture(mImagePSF, "imgTexPSF");
+        mObject->updateTexture(mImage, "imgTexFront");
+    }
+    else
+    {
+        mObject->updateTexture(mImage, "imgTexBack");
+    }
 }
 
 #include <RenderingWidget.moc>

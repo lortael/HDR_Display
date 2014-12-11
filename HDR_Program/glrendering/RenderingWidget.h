@@ -18,6 +18,7 @@
 #include "../src/correction/Linearisation.h"
 
 enum MOVEMENT {ENABLED = 0, DISABLED = 1};
+enum FORMAT {BACK = 0, FRONT = 1, TONEMAPPED = 2};
 
 class RenderingWidget : public QGLWidget
 {
@@ -47,6 +48,8 @@ class RenderingWidget : public QGLWidget
   QTimer* mTimer;
 
   MOVEMENT mMove;
+  bool mIsToneMapped;
+  bool mIsBackPanel;
 
 protected:
 
@@ -79,6 +82,8 @@ protected:
   /** Internal function to setup the 3D scene */
   virtual void createScene();
 
+  void updateParameters();
+
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
@@ -88,6 +93,13 @@ public:
   void loadImage(Image const &image) {mImage = image;}
   void loadCurve(Linearisation const &curve) {mCurve = curve;}
   void loadShaders(const std::string& fileV, const std::string& fileF) {mVertFilePath = fileV; mFragFilePath = fileF;}
+
+  void toggleToneMapping() {mIsToneMapped = true; updateParameters();}
+  void toggleHDRDisplay() {mIsToneMapped = false; updateParameters();}
+
+  void isBackPanel() {mIsBackPanel = true;}
+
+  void updateTexture();
 };
 
 #endif // RENDERINGWIDGET_H

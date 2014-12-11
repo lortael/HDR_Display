@@ -35,6 +35,7 @@ public :
     void setWidth(int width) {m_Width = width;}
     void setMax(float max) {m_Max = max;}
     void setMin(float min) {m_Min = min;}
+    void setFormat(IMG_FORMAT format) {m_currentFormat = format;}
 
     //Compute the min and max value based on the highest and lowest of the RGB channels
     void computeMinMax();

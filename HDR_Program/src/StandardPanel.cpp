@@ -1,4 +1,4 @@
-#include "BackPanel.h"
+#include "StandardPanel.h"
 
 #include <sstream>
 #include <QDesktopWidget>
@@ -8,13 +8,12 @@
 #include "opencv2/highgui/highgui.hpp"
 using namespace cv;
 
-BackPanel::BackPanel()
-    : m_Linearisation()
+StandardPanel::StandardPanel()
 {
 
 }
 
-void BackPanel::displayImageCV(Image &img) ////DEPRECATED : see displayImageGL()
+void StandardPanel::displayImageCV(Image &img) ////DEPRECATED : see displayImageGL()
 {
     Image grayImg(img);
     Mat imgMat;
@@ -48,22 +47,17 @@ void BackPanel::displayImageCV(Image &img) ////DEPRECATED : see displayImageGL()
     cv::imshow(name, imgMat);
 }
 
-void BackPanel::displayImageGL(Image const &img)
+void StandardPanel::displayImageGL(Image const &img)
 {
     Image cpyImg(img);
     cpyImg.setFormat(GRAY);
-    m_GlWidget->setWindowTitle("Back Panel");
+    m_GlWidget->setWindowTitle("Main Panel");
 
     QDesktopWidget *backDesktop = QApplication::desktop();
     QRect screenGeo = backDesktop->availableGeometry(m_DisplayId);
 
-    m_Linearisation.loadCoeffFromFile(HDR_DIR"/data/fitcurve_standard.cfg");
-    m_Linearisation.computeCurve();
-
-    m_GlWidget->isBackPanel();
-    m_GlWidget->loadCurve(m_Linearisation);
     m_GlWidget->loadImage(cpyImg);
-    m_GlWidget->loadShaders(HDR_DIR"/shaders/backPanel.vert", HDR_DIR"/shaders/backPanel.frag");
+    m_GlWidget->loadShaders(HDR_DIR"/shaders/standardPanel.vert", HDR_DIR"/shaders/standardPanel.frag");
     if (m_CurrentMode == FULLSCREEN)
         m_GlWidget->showFullScreen();
     else
@@ -74,13 +68,13 @@ void BackPanel::displayImageGL(Image const &img)
     m_GlWidget->move(screenGeo.topLeft());
 }
 
-void BackPanel::updateImageGL(Image const &img)
+void StandardPanel::updateImageGL(Image const &img)
 {
     m_GlWidget->loadImage(img);
     m_GlWidget->updateTexture();
 }
 
-Eigen::Vector4f BackPanel::processPixel(Eigen::Vector4f pixel)
+Eigen::Vector4f StandardPanel::processPixel(Eigen::Vector4f pixel)
 {
     float r = pixel(0);
     float g = pixel(1);
@@ -90,12 +84,12 @@ Eigen::Vector4f BackPanel::processPixel(Eigen::Vector4f pixel)
     return outPixel;
 }
 
-void BackPanel::computeShaderParameters(Image const &img)
+void StandardPanel::computeShaderParameters(Image const &img)
 {
 
 }
 
-Image BackPanel::computePSFImage(Image const &img, unsigned int psfSize)
+Image StandardPanel::computePSFImage(Image const &img, unsigned int psfSize)
 {
 //    Image temp(img);
 
@@ -110,7 +104,7 @@ Image BackPanel::computePSFImage(Image const &img, unsigned int psfSize)
 //    }
 }
 
-float BackPanel::convolutionKernel(unsigned int x, unsigned int y, Image const &img, unsigned int psfSize)
+float StandardPanel::convolutionKernel(unsigned int x, unsigned int y, Image const &img, unsigned int psfSize)
 {
 //    unsigned int topY;
 //    topY = (y > img.height() - psfSize) ? img.height() - y : psfSize;

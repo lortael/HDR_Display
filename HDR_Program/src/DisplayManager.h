@@ -10,6 +10,7 @@
 #include "DisplayDevice.h"
 #include "BackPanel.h"
 #include "FrontPanel.h"
+#include "StandardPanel.h"
 #include "Image.h"
 #include "ImageIO.h"
 
@@ -30,6 +31,8 @@ public :
     DisplayDevice* accessDevice(unsigned int index) {if (index < m_DisplayList.size()) return m_DisplayList[index];}
 
     void multipleDisplay();
+
+    void updateDisplay();
 
     void endDisplay();
 

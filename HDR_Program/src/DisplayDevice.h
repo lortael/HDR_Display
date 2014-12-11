@@ -36,6 +36,8 @@ public :
 
     virtual void displayImageGL(Image const &img) = 0;
 
+    virtual void updateImageGL(Image const &img) = 0;
+
     void setId(unsigned int id) {m_DisplayId = id;}
     unsigned int id() {return m_DisplayId;}
 
@@ -45,6 +47,8 @@ public :
 
     void toggleFullscreen() {m_CurrentMode = FULLSCREEN;}
     void toggleWindow() {m_CurrentMode = WINDOW;}
+
+    RenderingWidget* glWidget() {return m_GlWidget;}
 
 private:
 

@@ -23,6 +23,8 @@ public:
 
     void loadImgTexture(const Image& image, std::string texName);
 
+    void updateTexture(const Image& image, std::string texName);
+
     void loadCurveTexture(const Linearisation &curve);
 
 protected:

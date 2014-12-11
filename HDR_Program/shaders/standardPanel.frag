@@ -33,15 +33,8 @@ void main()
     vec4 color;
     color = texture(imgTexFront, texcoord);
 
-    if (tonemap == 1)
+//    if (tonemap == 1)
         color = toneMapping(color);
-    else
-    {
-        float r = clamp(sqrt(color.r), 0.0, 1.0);
-        float g = clamp(sqrt(color.g), 0.0, 1.0);
-        float b = clamp(sqrt(color.b), 0.0, 1.0);
-        color = vec4(r, g, b, 1.0);
-    }
 
     out_color = color;
 }

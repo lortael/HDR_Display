@@ -42,6 +42,7 @@ set(HDR_SRCS src/main.cpp src/DisplayManager.h src/DisplayManager.cpp
              src/HDRProcess.h src/HDRProcess.cpp
              src/FrontPanel.h src/FrontPanel.cpp
              src/BackPanel.h src/BackPanel.cpp
+	     src/StandardPanel.h src/StandardPanel.cpp
              src/ImageIO.h src/ImageIO.cpp
              src/Image.h src/Image.cpp
 	     src/correction/Linearisation.h src/correction/Linearisation.cpp

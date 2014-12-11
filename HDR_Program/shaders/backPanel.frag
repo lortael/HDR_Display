@@ -1,8 +1,8 @@
 #version 130
 
-uniform sampler2D imgTex;
+uniform sampler2D imgTexBack;
 uniform sampler2D corTex;
-uniform int formatImage;
+uniform int tonemap;
 
 in vec4 position_obj;
 in vec4 position_view;
@@ -32,17 +32,14 @@ vec4 toneMapping(vec4 color)
 void main()
 {
     vec4 color;
-    color = texture(imgTex, texcoord);
+    color = texture(imgTexBack, texcoord);
 
-    if (formatImage == 0)
-    {
-//        float l = sqrt(color.r);
-        float l = color.r;
-        l = clamp(l, 0.0, 254.0/255.0);
-        color = texture(corTex, vec2(l, 1.0));
-    }
-    else if (formatImage == 2)
-        color = toneMapping(color);
+    float l = 0.2126*color.r + 0.7152*color.g + 0.0722*color.b;
+    l = clamp(sqrt(l), 0.0, 254.0/255.0);
+    color = texture(corTex, vec2(l, 1.0));
+
+    if (tonemap == 1)
+        color = vec4(1.0, 1.0, 1.0, 1.0);
 
     out_color = color;
 }

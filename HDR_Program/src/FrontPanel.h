@@ -18,6 +18,8 @@ public :
 
     void displayImageGL(Image const &img);
 
+    void updateImageGL(Image const &img);
+
     Eigen::Vector4f processPixel(Eigen::Vector4f pixel);
 
 private:

@@ -10,6 +10,8 @@
 #include <QMainWindow>
 #include <QString>
 #include <QTimer>
+#include <QPushButton>
+#include <QAbstractButton>
 
 class Gui : public QMainWindow
 {
@@ -26,19 +28,24 @@ private slots:
     void loadNextImg_triggered();
     void loadLake();
     void loadMeadow();
-    void enableFS_clicked();
-    void disableFS_clicked();
     void startDiaporama_clicked();
     void endDiaporama_clicked();
     void closeProgram_clicked();
 
+    void fsIsChecked(bool checked);
+    void tmIsChecked(bool checked);
 private:
+
+    void addObject(QAbstractButton* object);
+
+    std::vector<QAbstractButton*> m_ButtonList;
 
     DisplayManager* m_Manager;
 
     QTimer* m_Timer;
 
     std::vector<QString> m_ImgPath;
+    std::vector<Image> m_Images;
 
     unsigned int m_CurrentImage;
 
