@@ -57,7 +57,7 @@ void ImageIO::imgLoad(Image& img, QString filename)
         }
 
         img.computeMinMax();
-        img.normalize();
+//        img.normalize();
 
         cout << "HDR image loaded" << endl;
         img.changeNULLStatus(false);
@@ -121,7 +121,6 @@ void ImageIO::loadPng(Image& png_img, const string filename)
                 rgb[col] = rgb_pixel[(x+y*width)*3 + col]/255.f;
             }
             png_img.setPixel(x, y, Eigen::Vector4f(rgb[0], rgb[1], rgb[2], 1.f*alpha_value[x+y*width]/255.f));
-//            delete rgb;
         }
     }
     rgb_pixel.clear();
@@ -181,29 +180,4 @@ void ImageIO::savePng(Image const & img, const std::string filename)
     if(error_save) std::cout << "encoder error " << error_save << ": "<< lodepng_error_text(error_save) << std::endl;
 
     cout << "png image saved" << endl;
-}
-
-void ImageIO::toneMapping(Image &src)
-{
-    using namespace Eigen;
-    float min(src.min()), max(src.max());
-
-    for (int y = 0; y < src.height(); ++y)
-        for (int x = 0; x < src.width(); ++x)
-        {
-            float r = src.pixel(x, y)(0);
-            float g = src.pixel(x, y)(1);
-            float b = src.pixel(x, y)(2);
-
-            r = (r - min)/(max - min);
-            r = (r < 0.f)? 0.f : (r > 1.f )? 1.f : r;
-
-            g = (g - min)/(max - min);
-            g = (g < 0.f)? 0.f : (g > 1.f )? 1.f : g;
-
-            b = (b - min)/(max - min);
-            b = (b < 0.f)? 0.f : (b > 1.f )? 1.f : b;
-
-            src.setPixel(x, y, Vector4f(r, g, b, 1.f));
-        }
 }

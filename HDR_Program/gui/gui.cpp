@@ -35,7 +35,6 @@ void Gui::init()
     m_Manager->initManager(m_ImgPath[m_CurrentImage], 3);
 
     setWindowFlags(Qt::WindowStaysOnTopHint);
-//    setFocusPolicy();
 
     QPushButton* initProgram = new QPushButton("Initiate program", this);
     connect(initProgram, SIGNAL(clicked()), this, SLOT(initProgram_clicked()));
@@ -47,6 +46,10 @@ void Gui::init()
     connect(loadLake, SIGNAL(triggered()), this, SLOT(loadLake()));
     QAction* loadMeadow = imgMenu->addAction("Load meadow");
     connect(loadMeadow, SIGNAL(triggered()), this, SLOT(loadMeadow()));
+    QAction* loadReno = imgMenu->addAction("Load reno");
+    connect(loadReno, SIGNAL(triggered()), this, SLOT(loadReno()));
+    QAction* loadChurch = imgMenu->addAction("Load church");
+    connect(loadChurch, SIGNAL(triggered()), this, SLOT(loadChurch()));
 
     QPushButton* loadImg = new QPushButton("Load image", this);
     loadImg->setMenu(imgMenu);
@@ -59,6 +62,11 @@ void Gui::init()
     QCheckBox* tonemap = new QCheckBox("Tone mapping", this);
     connect(tonemap, SIGNAL(toggled(bool)), this, SLOT(tmIsChecked(bool)));
     addObject(tonemap);
+
+    QCheckBox* rendering = new QCheckBox("Using OpenGL", this);
+    connect(rendering, SIGNAL(toggled(bool)), this, SLOT(renderIsChecked(bool)));
+    rendering->setChecked(true);
+    addObject(rendering);
 
     QPushButton* startDiaporama = new QPushButton("Start diaporama", this);
     connect(startDiaporama, SIGNAL(clicked()), this, SLOT(startDiaporama_clicked()));
@@ -125,6 +133,34 @@ void Gui::loadMeadow()
     }
 }
 
+void Gui::loadReno()
+{
+    m_CurrentImage = 2;
+
+    m_Manager->loadImg(m_Images[m_CurrentImage]);
+    if (m_Running == true)
+        m_Manager->updateDisplay();
+    else
+    {
+        m_Manager->multipleDisplay();
+        m_Running = true;
+    }
+}
+
+void Gui::loadChurch()
+{
+    m_CurrentImage = 3;
+
+    m_Manager->loadImg(m_Images[m_CurrentImage]);
+    if (m_Running == true)
+        m_Manager->updateDisplay();
+    else
+    {
+        m_Manager->multipleDisplay();
+        m_Running = true;
+    }
+}
+
 void Gui::fsIsChecked(bool checked)
 {
     if (checked)
@@ -152,6 +188,24 @@ void Gui::tmIsChecked(bool checked)
         else
             for (unsigned int i = 0; i < m_Manager->nbDevice(); ++i)
                 m_Manager->accessDevice(i)->glWidget()->toggleHDRDisplay();
+    }
+}
+
+void Gui::renderIsChecked(bool checked)
+{
+    if (m_Running == true)
+    {
+        m_Manager->endDisplay();
+    }
+
+    if (checked == true)
+        m_Manager->setMode(GL);
+    else
+        m_Manager->setMode(CV);
+
+    if (m_Running == true)
+    {
+        m_Manager->multipleDisplay();
     }
 }
 

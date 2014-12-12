@@ -14,13 +14,17 @@ vec4 toneMapping(vec4 color)
 {
     vec4 tm;
 
-    tm.r = color.r/(1.0 + color.r);
+    float r = color.r;
+    float g = color.g;
+    float b = color.b;
+
+    tm.r = r/(1.0 + r);
     tm.r = pow(tm.r, 1/2.2);
 
-    tm.g = color.g/(1.0 + color.g);
+    tm.g = g/(1.0 + g);
     tm.g = pow(tm.g, 1/2.2);
 
-    tm.b = color.b/(1.0 + color.b);
+    tm.b = b/(1.0 + b);
     tm.b = pow(tm.b, 1/2.2);
 
     tm.a = 1.0;

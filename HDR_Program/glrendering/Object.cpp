@@ -56,7 +56,7 @@ void Object::draw(const Camera &camera)
     mGeometry->drawGeometry(mShader->id());
 }
 
-void Object::loadImgTexture(const Image &image, std::string texName)
+void Object::loadImgTexture(Image const& image, std::string texName)
 {
     Texture tex;
     tex.name(texName);
@@ -134,7 +134,7 @@ void Object::loadCurveTexture(const Linearisation &curve)
 
 }
 
-void Object::updateTexture(const Image& image, std::string texName)
+void Object::updateTexture(Image const& image, std::string texName)
 {
     int i(0);
     bool isImg(false);
@@ -166,9 +166,6 @@ void Object::updateTexture(const Image& image, std::string texName)
         }
     }
 
-    GLuint tempId;
-    glGenTextures(1,&tempId);
-    mTextures[i].id(tempId);
     glBindTexture(GL_TEXTURE_2D, mTextures[i].id());
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, dimX, dimY, 0,  GL_RGBA, GL_FLOAT, img);
 

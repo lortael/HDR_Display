@@ -14,19 +14,15 @@ public :
 
     FrontPanel();
 
-    void displayImageCV(Image &img);
+    void displayImageCV(Image const &img);
 
     void displayImageGL(Image const &img);
-
-    void updateImageGL(Image const &img);
 
     Eigen::Vector4f processPixel(Eigen::Vector4f pixel);
 
 private:
 
 protected:
-
-    void computeShaderParameters(Image const &img);
 
 };
 

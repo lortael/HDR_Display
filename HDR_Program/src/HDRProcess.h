@@ -21,8 +21,6 @@ public :
 private:
 
 protected:
-
-    virtual void computeShaderParameters(Image const &img) = 0;
 };
 
 #endif //HDRPROCESS_H_INCLUDED

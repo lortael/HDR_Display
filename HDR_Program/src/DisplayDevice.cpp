@@ -39,8 +39,8 @@ void DisplayDevice::closeGlWindow()
     delete m_GlWidget;
 }
 
-//void DisplayDevice::updateImageGL(Image const &img)
-//{
-//    m_GlWidget->loadImage(img);
-//    m_GlWidget->updateTexture();
-//}
+void DisplayDevice::updateImageGL(Image const &img)
+{
+    m_GlWidget->loadImage(img);
+    m_GlWidget->updateTexture();
+}

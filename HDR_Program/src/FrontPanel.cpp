@@ -13,12 +13,13 @@ FrontPanel::FrontPanel()
 
 }
 
-void FrontPanel::displayImageCV(Image &img) ////DEPRECATED : see displayImageGL()
+IMG_FORMAT initialFrontFormat;
+void FrontPanel::displayImageCV(Image const &img) ////DEPRECATED : see displayImageGL()
 {
     Image tempImg;
     tempImg = CPUprocess(img);
     Mat imgMat;
-    IMG_FORMAT initialFormat = tempImg.format();
+    initialFrontFormat = tempImg.format();
     if (tempImg.format() != GRAY && tempImg.format() == RGB)
     {
         Mat colorImg(tempImg.height(), tempImg.width(), DataType<Vec3f>::type);
@@ -40,16 +41,12 @@ void FrontPanel::displayImageCV(Image &img) ////DEPRECATED : see displayImageGL(
     {
         tempImg.hsv2rgb();
         displayImageCV(tempImg);
-        initialFormat = HSV;
+        initialFrontFormat = HSV;
     }
 
-    if (initialFormat != HSV) //avoid displaying twice an HSV format image
+    if (initialFrontFormat != HSV) //avoid displaying twice an HSV format image
     {
-        std::stringstream ss;
-        ss << m_DisplayId;
-        std::string displayId = ss.str();
-
-        std::string name = "Window " + displayId;
+        std::string name = "Front panel";
 
         cv::namedWindow(name, CV_WINDOW_NORMAL);
         cv::resizeWindow(name, img.width(), img.height());
@@ -80,12 +77,6 @@ void FrontPanel::displayImageGL(Image const &img)
     m_GlWidget->move(screenGeo.topLeft());
 }
 
-void FrontPanel::updateImageGL(Image const &img)
-{
-    m_GlWidget->loadImage(img);
-    m_GlWidget->updateTexture();
-}
-
 Eigen::Vector4f FrontPanel::processPixel(Eigen::Vector4f pixel)
 {
     float r = pixel(0);
@@ -95,9 +86,3 @@ Eigen::Vector4f FrontPanel::processPixel(Eigen::Vector4f pixel)
     Eigen::Vector4f outPixel(sqrt(r), sqrt(g), sqrt(b), 1.f);
     return outPixel;
 }
-
-void FrontPanel::computeShaderParameters(Image const &img)
-{
-
-}
-

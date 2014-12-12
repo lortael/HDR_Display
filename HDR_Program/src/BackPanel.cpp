@@ -14,15 +14,15 @@ BackPanel::BackPanel()
 
 }
 
-void BackPanel::displayImageCV(Image &img) ////DEPRECATED : see displayImageGL()
+void BackPanel::displayImageCV(Image const &img) ////DEPRECATED : see displayImageGL()
 {
-    Image grayImg(img);
-    Mat imgMat;
+    Image grayImg(img);    
     if (grayImg.format() != GRAY)
         grayImg.color2gray();
 
     grayImg = CPUprocess(grayImg);
 
+    Mat imgMat;
     Mat grayMatImg(grayImg.height(), grayImg.width(), DataType<Vec3f>::type);
     for (int y = 0 ; y < grayImg.height() ; ++y)
     {
@@ -36,11 +36,7 @@ void BackPanel::displayImageCV(Image &img) ////DEPRECATED : see displayImageGL()
     cvtColor(grayMatImg, bgrImg, CV_RGB2BGR);
     imgMat = bgrImg;
 
-    std::stringstream ss;
-    ss << m_DisplayId;
-    std::string displayId = ss.str();
-
-    std::string name = "Window " + displayId;
+    std::string name = "Back panel";
 
     cv::namedWindow(name, CV_WINDOW_NORMAL);
     cv::resizeWindow(name, img.width(), img.height());
@@ -74,12 +70,6 @@ void BackPanel::displayImageGL(Image const &img)
     m_GlWidget->move(screenGeo.topLeft());
 }
 
-void BackPanel::updateImageGL(Image const &img)
-{
-    m_GlWidget->loadImage(img);
-    m_GlWidget->updateTexture();
-}
-
 Eigen::Vector4f BackPanel::processPixel(Eigen::Vector4f pixel)
 {
     float r = pixel(0);
@@ -88,11 +78,6 @@ Eigen::Vector4f BackPanel::processPixel(Eigen::Vector4f pixel)
 
     Eigen::Vector4f outPixel(sqrt(r), sqrt(g), sqrt(b), 1.f);
     return outPixel;
-}
-
-void BackPanel::computeShaderParameters(Image const &img)
-{
-
 }
 
 Image BackPanel::computePSFImage(Image const &img, unsigned int psfSize)

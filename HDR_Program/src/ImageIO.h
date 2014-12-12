@@ -20,17 +20,16 @@ public :
 
     ~ImageIO();
 
-    //Save an image according to the desired format (.ppm, .pgm, .png)
+    //Save an image in png format (see savePng).
     void imgSave(Image const &src, const std::string filename);
 
+    //Load an image (.hdr or .png format).
     void imgLoad(Image& img, QString filename);
 
+    //Load a png image using the lodepng lib (Copyright (C) Lode Vandevenne, see extern folder for details).
     void loadPng(Image& png_img, const std::string filename);
 
     void savePng(Image const & img, const std::string filename);
-
-    //CPU tone-mapping in order to save an image
-    void toneMapping(Image &src);
 
 private:
 

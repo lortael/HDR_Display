@@ -70,18 +70,18 @@ void Image::rgb2hsv()
             for (unsigned int x = 0 ; x < m_Width ; ++x)
             {
                 Vec3f rgb = Vec3f(m_Pixel[x + m_Width*y](0), m_Pixel[x + m_Width*y](1), m_Pixel[x + m_Width*y](2));
-                rgbImg.at<Vec3f>(y, x) = rgb; //Inversion of x and y, as opencv deals with image this way.
+                rgbImg.at<Vec3f>(y, x) = rgb; //Inversion of x and y, as opencv deals with image that way.
             }
         }
 
-        Mat hsvImg(m_Height, m_Width, DataType<Vec3f>::type), nrgbImg(m_Height, m_Width, DataType<Vec3f>::type);
+        Mat hsvImg(m_Height, m_Width, DataType<Vec3f>::type);
         cvtColor(rgbImg, hsvImg, CV_RGB2HSV);
 
         for (unsigned int y = 0 ; y < m_Height ; ++y)
         {
             for (unsigned int x = 0 ; x < m_Width ; ++x)
             {
-                float h = hsvImg.at<Vec3f>(y, x)(0);
+                float h = hsvImg.at<Vec3f>(y, x)(0); //Inversion of x and y, as opencv deals with image that way.
                 float s = hsvImg.at<Vec3f>(y, x)(1);
                 float v = hsvImg.at<Vec3f>(y, x)(2);
                 m_Pixel[x + m_Width*y] = Eigen::Vector4f(h, s, v, 1.f);
@@ -102,7 +102,7 @@ void Image::hsv2rgb()
             for (unsigned int x = 0 ; x < m_Width ; ++x)
             {
                 Vec3f hsv = Vec3f(m_Pixel[x + m_Width*y](0), m_Pixel[x + m_Width*y](1), m_Pixel[x + m_Width*y](2));
-                hsvImg.at<Vec3f>(y, x) = hsv;
+                hsvImg.at<Vec3f>(y, x) = hsv; //Inversion of x and y, as opencv deals with image that way.
             }
         }
         Mat rgbImg;
@@ -112,7 +112,7 @@ void Image::hsv2rgb()
         {
             for (unsigned int x = 0 ; x < m_Width ; ++x)
             {
-                float r = rgbImg.at<Vec3f>(y, x)(0);
+                float r = rgbImg.at<Vec3f>(y, x)(0); //Inversion of x and y, as opencv deals with image that way.
                 float g = rgbImg.at<Vec3f>(y, x)(1);
                 float b = rgbImg.at<Vec3f>(y, x)(2);
                 m_Pixel[x + m_Width*y] = Eigen::Vector4f(r, g, b, 1.f);
@@ -169,8 +169,30 @@ void Image::normalize()
         {
             for (unsigned int z = 0; z < 3; ++z)
             {
-//                m_Pixel[x + m_Width*y](z) = m_Pixel[x + m_Width*y](z)/m_Max;
+                m_Pixel[x + m_Width*y](z) = m_Pixel[x + m_Width*y](z)/m_Max;
             }
         }
     }
+}
+
+void Image::toneMapping()
+{
+    for (int y = 0; y < m_Height; ++y)
+        for (int x = 0; x < m_Width; ++x)
+        {
+            float r = m_Pixel[x + m_Width*y](0);
+            float g = m_Pixel[x + m_Width*y](1);
+            float b = m_Pixel[x + m_Width*y](2);
+
+            r = (r - m_Min)/(m_Max - m_Min);
+            r = (r < 0.f)? 0.f : (r > 1.f )? 1.f : r;
+
+            g = (g - m_Min)/(m_Max - m_Min);
+            g = (g < 0.f)? 0.f : (g > 1.f )? 1.f : g;
+
+            b = (b - m_Min)/(m_Max - m_Min);
+            b = (b < 0.f)? 0.f : (b > 1.f )? 1.f : b;
+
+            m_Pixel[x + m_Width*y] = Eigen::Vector4f(r, g, b, 1.f);
+        }
 }

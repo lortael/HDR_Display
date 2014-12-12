@@ -1,6 +1,6 @@
 /* Copyright (C) 2014 David Murray <david.murray@institutoptique.fr>
  *
- *
+ * Class to handle HDR images (based on float data points). *
  * */
 
 #ifndef IMAGE_H_INCLUDED
@@ -49,7 +49,10 @@ public :
     void hsv2rgb();
     void color2gray();
 
-    //Call this function when an image is loaded.
+    //CPU tone-mapping, to be used only with CPU-based displaying process.
+    void toneMapping();
+
+    //Call this function when an image is loaded (already done in ImageIO).
     void changeNULLStatus(bool status) {imageIsNULL = status;}
     bool isNULL() {return imageIsNULL;}
 

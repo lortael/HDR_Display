@@ -54,15 +54,6 @@ void Linearisation::computeCurve()
 
 float Linearisation::getValue(float x)
 {
-    /** Function getValue (12/11/2014, Vincent Marie)
-     *
-     * arg in : x (float value 0<=x<=255 at which the poly should be evaled
-     * arg out : sum (float value : curve evaluated at x point
-     *
-     * Evaluates the curve at a given point. The value of this point should
-     * be between 0 and 255 (non-normalized value). The returned value is a
-     * normalized value (between 0 and 1). */
-
     float sum = 0;
 
     // Cas où coefficients non renseignés
@@ -83,13 +74,6 @@ float Linearisation::getValue(float x)
 
 float Linearisation::dichotomie(float value)
 {
-    /** Function dichotomie (2014, David Murray)
-     *
-     * arg in : value (float for which the dichotomic search should be done)
-     * arg out : float value (containing the result of dichotomic search
-     *
-     * Dichotomic search for a value on a given curve. */
-
     if(value < 0. || value > 1.)
     {
         std::cout << "Erreur : la valeur doit etre comprise entre 0 et 1." << std::endl;

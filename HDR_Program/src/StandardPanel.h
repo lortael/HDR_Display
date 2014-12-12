@@ -16,11 +16,9 @@ public :
 
     StandardPanel();
 
-    void displayImageCV(Image &img);
+    void displayImageCV(Image const &img);
 
     void displayImageGL(Image const &img);
-
-    void updateImageGL(Image const &img);
 
     Eigen::Vector4f processPixel(Eigen::Vector4f pixel);
 
@@ -28,11 +26,6 @@ private:
 
 protected:
 
-    void computeShaderParameters(Image const &img);
-
-    Image computePSFImage(Image const &img, unsigned int psfSize);
-
-    float convolutionKernel(unsigned int x, unsigned int y, Image const &img, unsigned int psfSize);
 };
 
 #endif //STANDARDPANEL_H_INCLUDED

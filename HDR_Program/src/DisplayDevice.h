@@ -32,11 +32,11 @@ public :
     void setHeight(unsigned int height) {m_Height = height;}
     void setWidth(unsigned int width) {m_Width = width;}
 
-    virtual void displayImageCV(Image &img) = 0;
+    virtual void displayImageCV(Image const &img) = 0;
 
     virtual void displayImageGL(Image const &img) = 0;
 
-    virtual void updateImageGL(Image const &img) = 0;
+    void updateImageGL(Image const &img);
 
     void setId(unsigned int id) {m_DisplayId = id;}
     unsigned int id() {return m_DisplayId;}

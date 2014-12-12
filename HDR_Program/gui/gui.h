@@ -28,12 +28,15 @@ private slots:
     void loadNextImg_triggered();
     void loadLake();
     void loadMeadow();
+    void loadReno();
+    void loadChurch();
     void startDiaporama_clicked();
     void endDiaporama_clicked();
     void closeProgram_clicked();
 
     void fsIsChecked(bool checked);
     void tmIsChecked(bool checked);
+    void renderIsChecked(bool checked);
 private:
 
     void addObject(QAbstractButton* object);

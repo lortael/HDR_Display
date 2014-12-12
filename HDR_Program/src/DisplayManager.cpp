@@ -83,7 +83,6 @@ void DisplayManager::multipleDisplay()
     {
         for (unsigned int i = 0; i < m_DisplayList.size(); ++i)
             m_DisplayList[i]->displayImageCV(m_Image);
-        cv::waitKey(0);
     }
     else
         for (unsigned int i = 0; i < m_DisplayList.size(); ++i)
@@ -97,9 +96,9 @@ void DisplayManager::updateDisplay()
 {
     if (m_CurrentMode == CV)
     {
+        cv::destroyAllWindows();
         for (unsigned int i = 0; i < m_DisplayList.size(); ++i)
             m_DisplayList[i]->displayImageCV(m_Image);
-        cv::waitKey(0);
     }
     else
         for (unsigned int i = 0; i < m_DisplayList.size(); ++i)
