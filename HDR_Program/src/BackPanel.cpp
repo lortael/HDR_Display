@@ -22,14 +22,15 @@ void BackPanel::displayImageCV(Image const &img) ////DEPRECATED : see displayIma
 
     grayImg = CPUprocess(grayImg);
 
+    //Converting Image to mat for use with OpenCV.
     Mat imgMat;
     Mat grayMatImg(grayImg.height(), grayImg.width(), DataType<Vec3f>::type);
     for (int y = 0 ; y < grayImg.height() ; ++y)
     {
         for (int x = 0 ; x < grayImg.width() ; ++x)
         {
-            Vec3f grayscale = Vec3f(grayImg.pixel(x, y)(0), grayImg.pixel(x, y)(1), grayImg.pixel(x, y)(2));
-            grayMatImg.at<Vec3f>(y, x) = grayscale;
+            float grayscale = grayImg.pixel(x, y)(0);
+            grayMatImg.at<Vec3f>(y, x) = Vec3f(grayscale, grayscale, grayscale);
         }
     }
     Mat bgrImg;
@@ -60,6 +61,10 @@ void BackPanel::displayImageGL(Image const &img)
     m_GlWidget->loadCurve(m_Linearisation);
     m_GlWidget->loadImage(cpyImg);
     m_GlWidget->loadShaders(HDR_DIR"/shaders/backPanel.vert", HDR_DIR"/shaders/backPanel.frag");
+
+    computeShaderParameters(cpyImg);
+    m_GlWidget->setToneMappingParameters(m_Parameters);
+
     if (m_CurrentMode == FULLSCREEN)
         m_GlWidget->showFullScreen();
     else
@@ -68,16 +73,36 @@ void BackPanel::displayImageGL(Image const &img)
         m_GlWidget->show();
     }
     m_GlWidget->move(screenGeo.topLeft());
+
+    if (m_ToneMapped)
+        m_GlWidget->toggleToneMapping();
+    else
+        m_GlWidget->toggleHDRDisplay();
 }
 
-Eigen::Vector4f BackPanel::processPixel(Eigen::Vector4f pixel)
+Image BackPanel::CPUprocess(Image const &img)
 {
-    float r = pixel(0);
-    float g = pixel(1);
-    float b = pixel(2);
+    Image temp(img);
 
-    Eigen::Vector4f outPixel(sqrt(r), sqrt(g), sqrt(b), 1.f);
-    return outPixel;
+    if (m_ToneMapped)
+        for (int y = 0; y < img.height(); ++y)
+            for (int x = 0; x < img.width(); ++x)
+            {
+                temp.setPixel(x, y, Eigen::Vector4f(0.f, 0.f, 0.f, 1.f));
+            }
+    else
+    {
+        temp.normalizeRGB();
+        for (int y = 0; y < img.height(); ++y)
+            for (int x = 0; x < img.width(); ++x)
+            {
+                float r = img.pixel(x, y)(0);
+                r = sqrt(r);
+                temp.setPixel(x, y, Eigen::Vector4f(1.f-r, 1.f-r, 1.f-r, 1.f));
+            }
+    }
+
+    return temp;
 }
 
 Image BackPanel::computePSFImage(Image const &img, unsigned int psfSize)

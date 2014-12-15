@@ -20,12 +20,11 @@ public :
 
     void displayImageGL(Image const &img);
 
-    Eigen::Vector4f processPixel(Eigen::Vector4f pixel);
-
 private:
 
 protected:
 
+    Image CPUprocess(Image const &img);
 };
 
 #endif //STANDARDPANEL_H_INCLUDED

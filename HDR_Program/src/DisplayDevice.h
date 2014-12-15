@@ -1,6 +1,8 @@
 /* Copyright (C) 2014 David Murray <david.murray@institutoptique.fr>
  *
- *
+ * Class representing a display device (monitor, projector...).
+ * As such, it contains an Id associated with the hardware Id of the device.
+ * Rendering for functions to display images are implemented in this class.
  * */
 
 #ifndef DISPLAYDEVICE_H_INCLUDED
@@ -22,40 +24,51 @@ public :
 
     virtual ~DisplayDevice();
 
+    /**
+     * @brief : initializes the device by initializing the RenderingWidget.
+     * */
     void initDevice();
 
-    unsigned int height() const {return m_Height;}
-    unsigned int width() const {return m_Width;}
-
-    void resize(unsigned int height, unsigned int width);
-
-    void setHeight(unsigned int height) {m_Height = height;}
-    void setWidth(unsigned int width) {m_Width = width;}
-
+    /**
+     * @brief : displays an image on target screen using openCV (more details in inherited classes).
+     * @param : the Image to be displayed
+     * */
     virtual void displayImageCV(Image const &img) = 0;
 
+    /**
+     * @brief : displays an image on target screen using OpenGL (more details in inherited classes).
+     * @param : the Image to be displayed
+     * */
     virtual void displayImageGL(Image const &img) = 0;
 
+    /**
+     * @brief : changes the displayed image in the OpenGL renderer.
+     * @param : the new Image to be displayed
+     * */
     void updateImageGL(Image const &img);
+
+    /**
+     * @brief : close the current OpenGL window and context.
+     * */
+    void closeGlWindow();
 
     void setId(unsigned int id) {m_DisplayId = id;}
     unsigned int id() {return m_DisplayId;}
 
     void setName(QString name) {m_DisplayName = name;}
 
-    void closeGlWindow();
-
     void toggleFullscreen() {m_CurrentMode = FULLSCREEN;}
     void toggleWindow() {m_CurrentMode = WINDOW;}
 
     RenderingWidget* glWidget() {return m_GlWidget;}
 
+    void changeTM(bool tm) {m_ToneMapped = tm;}
+
 private:
 
 protected:
 
-    unsigned int m_Height;
-    unsigned int m_Width;
+    bool m_ToneMapped;
 
     unsigned int m_DisplayId;
     QString m_DisplayName;

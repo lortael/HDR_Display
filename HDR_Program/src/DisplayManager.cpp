@@ -117,3 +117,9 @@ void DisplayManager::endDisplay()
     else
         cv::destroyAllWindows();
 }
+
+void DisplayManager::changeToneMapping(bool tm)
+{
+        for (unsigned int i = 0; i < m_DisplayList.size(); ++i)
+            m_DisplayList[i]->changeTM(tm);
+}

@@ -12,15 +12,18 @@ class HDRProcess
 {
 public :
 
-    Image CPUprocess(Image const &img);
-
-    virtual Eigen::Vector4f processPixel(Eigen::Vector4f pixel) = 0;
+    virtual Image CPUprocess(Image const &img) = 0;
 
     virtual void GPUprocess(Image const &img);
 
 private:
 
 protected:
+
+    std::vector<float> m_Parameters;
+
+    void computeShaderParameters(Image const &img);
+
 };
 
 #endif //HDRPROCESS_H_INCLUDED

@@ -14,8 +14,10 @@ Image::Image()
       m_Height(0),
       m_currentFormat(RGB),
       imageIsNULL(true),
-      m_Max(0.f),
-      m_Min(250.f)
+      m_MaxRGB(0.f),
+      m_MaxHSL(0.f),
+      m_MinRGB(250.f),
+      m_MinHSL(250.f)
 {
 }
 
@@ -23,8 +25,10 @@ Image::Image(Image const &img)
 {
     m_Width = img.m_Width;
     m_Height = img.m_Height;
-    m_Min = img.m_Min;
-    m_Max = img.m_Max;
+    m_MinRGB = img.m_MinRGB;
+    m_MaxRGB = img.m_MaxRGB;
+    m_MinHSL = img.m_MinHSL;
+    m_MaxHSL = img.m_MaxHSL;
     m_currentFormat = img.m_currentFormat;
     imageIsNULL = img.imageIsNULL;
 
@@ -40,8 +44,10 @@ Image& Image::operator=(Image const & img)
 {
     m_Width = img.m_Width;
     m_Height = img.m_Height;
-    m_Min = img.m_Min;
-    m_Max = img.m_Max;
+    m_MinRGB = img.m_MinRGB;
+    m_MaxRGB = img.m_MaxRGB;
+    m_MinHSL = img.m_MinHSL;
+    m_MaxHSL = img.m_MaxHSL;
     m_currentFormat = img.m_currentFormat;
     imageIsNULL = img.imageIsNULL;
 
@@ -145,7 +151,7 @@ void Image::color2gray()
     }
 }
 
-void Image::computeMinMax()
+void Image::computeAbsoluteMinMax()
 {
     for (unsigned int y = 0 ; y < m_Height ; ++y)
     {
@@ -154,14 +160,35 @@ void Image::computeMinMax()
             for (unsigned int z = 0; z < 3; ++z)
             {
                 float pixel = m_Pixel[x + m_Width*y](z);
-                m_Max = (pixel > m_Max)? pixel : m_Max;
-                m_Min = (pixel < m_Min)? pixel : m_Min;
+                m_MaxRGB = (pixel > m_MaxRGB)? pixel : m_MaxRGB;
+                m_MinRGB = (pixel < m_MinRGB)? pixel : m_MinRGB;
             }
         }
     }
 }
 
-void Image::normalize()
+void Image::computeMinMax()
+{
+    computeHSLMinMax();
+    computeAbsoluteMinMax();
+}
+
+void Image::computeHSLMinMax()
+{
+    rgb2hsv();
+    for (unsigned int y = 0 ; y < m_Height ; ++y)
+    {
+        for (unsigned int x = 0 ; x < m_Width ; ++x)
+        {
+            float pixel = m_Pixel[x + m_Width*y](2);
+            m_MaxHSL = (pixel > m_MaxHSL)? pixel : m_MaxHSL;
+            m_MinHSL = (pixel < m_MinHSL)? pixel : m_MinHSL;
+        }
+    }
+    hsv2rgb();
+}
+
+void Image::normalizeRGB()
 {
     for (unsigned int y = 0 ; y < m_Height ; ++y)
     {
@@ -169,7 +196,7 @@ void Image::normalize()
         {
             for (unsigned int z = 0; z < 3; ++z)
             {
-                m_Pixel[x + m_Width*y](z) = m_Pixel[x + m_Width*y](z)/m_Max;
+                m_Pixel[x + m_Width*y](z) = m_Pixel[x + m_Width*y](z)/m_MaxRGB;
             }
         }
     }
@@ -177,22 +204,50 @@ void Image::normalize()
 
 void Image::toneMapping()
 {
+    using namespace Eigen;
+    float fp(-5.f), fparam, k, m, Lmean(0.f), c(0.5f), a(0.5f);
+
+    fparam = exp(-fp);
+
+    float max(0.f), min(1000.f);
+    Vector3f channelAv(0.f, 0.f, 0.f);
     for (int y = 0; y < m_Height; ++y)
         for (int x = 0; x < m_Width; ++x)
         {
-            float r = m_Pixel[x + m_Width*y](0);
-            float g = m_Pixel[x + m_Width*y](1);
-            float b = m_Pixel[x + m_Width*y](2);
+            float r = 100*m_Pixel[x + m_Width*y](0);
+            float g = 100*m_Pixel[x + m_Width*y](1);
+            float b = 100*m_Pixel[x + m_Width*y](2);
 
-            r = (r - m_Min)/(m_Max - m_Min);
-            r = (r < 0.f)? 0.f : (r > 1.f )? 1.f : r;
+            float l = 0.2125*r + 0.7154*g + 0.0721*b;
 
-            g = (g - m_Min)/(m_Max - m_Min);
-            g = (g < 0.f)? 0.f : (g > 1.f )? 1.f : g;
+            max = (l > max)? l : max;
+            min = (l < min)? l : min;
 
-            b = (b - m_Min)/(m_Max - m_Min);
-            b = (b < 0.f)? 0.f : (b > 1.f )? 1.f : b;
+            channelAv = channelAv + Vector3f(r/(m_Height*m_Width), g/(m_Height*m_Width), b/(m_Height*m_Width));
+        }
 
-            m_Pixel[x + m_Width*y] = Eigen::Vector4f(r, g, b, 1.f);
+    Lmean = 0.2125*channelAv(0) + 0.7154*channelAv(1) + 0.0721*channelAv(2);
+    float logMean = log(Lmean);
+    float logMax = log(max);
+    float logMin = log((min < 0.01f) ? 0.01f : min);
+
+    k = (logMax - logMean)/(logMax - logMin);
+    m = 0.3f + 0.7f*pow(k, 1.4);
+
+    for (int y = 0; y < m_Height; ++y)
+        for (int x = 0; x < m_Width; ++x)
+        {
+            Vector3f color(100*m_Pixel[x + m_Width*y](0), 100*m_Pixel[x + m_Width*y](1), 100*m_Pixel[x + m_Width*y](2));
+
+            float l = 0.2125*color(0) + 0.7154*color(1) + 0.0721*color(2);
+
+            for (int k = 0; k < 3; ++k)
+            {
+                float ILocal = c*color(k) + (1.f - c)*l;
+                float IGlobal = c*channelAv(k) + (1.f - c)*Lmean;
+                float Ia = a*ILocal + (1.f - a)*IGlobal;
+                color(k) /= color(k) + pow(fparam * Ia, m);
+            }
+            m_Pixel[x + m_Width*y] = Vector4f(color(0), color(1), color(2), 1.f);
         }
 }

@@ -32,7 +32,7 @@ void Gui::init()
 {
     m_CurrentImage = 0;
     m_Manager = new DisplayManager;
-    m_Manager->initManager(m_ImgPath[m_CurrentImage], 3);
+    m_Manager->initManager(m_ImgPath[m_CurrentImage]);
 
     setWindowFlags(Qt::WindowStaysOnTopHint);
 
@@ -76,7 +76,7 @@ void Gui::init()
     connect(endDiaporama, SIGNAL(clicked()), this, SLOT(endDiaporama_clicked()));
     addObject(endDiaporama);
 
-    QPushButton* closeProgram = new QPushButton("Close Program", this);
+    QPushButton* closeProgram = new QPushButton("Close windows", this);
     connect(closeProgram, SIGNAL(clicked()), this, SLOT(closeProgram_clicked()));
     addObject(closeProgram);
 
@@ -180,14 +180,23 @@ void Gui::fsIsChecked(bool checked)
 
 void Gui::tmIsChecked(bool checked)
 {
+    m_Manager->changeToneMapping(checked);
     if (m_Running == true)
     {
-        if (checked)
+        if (m_Manager->mode() == GL)
+        {
+            if (checked)
             for (unsigned int i = 0; i < m_Manager->nbDevice(); ++i)
                 m_Manager->accessDevice(i)->glWidget()->toggleToneMapping();
         else
             for (unsigned int i = 0; i < m_Manager->nbDevice(); ++i)
                 m_Manager->accessDevice(i)->glWidget()->toggleHDRDisplay();
+        }
+        else if (m_Manager->mode() == CV)
+        {
+            m_Manager->endDisplay();
+            m_Manager->multipleDisplay();
+        }
     }
 }
 

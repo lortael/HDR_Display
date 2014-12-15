@@ -43,6 +43,7 @@ class RenderingWidget : public QGLWidget
   Shader mProgram;
   std::string mVertFilePath;
   std::string mFragFilePath;
+  std::vector<float> mParameters;
 
   QPoint mLastMousePos;
   QTimer* mTimer;
@@ -82,24 +83,29 @@ protected:
   /** Internal function to setup the 3D scene */
   virtual void createScene();
 
-  void updateParameters();
-
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
   // default constructor
   RenderingWidget();
   ~RenderingWidget();
+
+  /*******************************************/
+  /*All below
+   *
+   * */
   void loadImage(Image const &image) {mImage = image;}
   void loadCurve(Linearisation const &curve) {mCurve = curve;}
   void loadShaders(const std::string& fileV, const std::string& fileF) {mVertFilePath = fileV; mFragFilePath = fileF;}
 
-  void toggleToneMapping() {mIsToneMapped = true; updateParameters();}
-  void toggleHDRDisplay() {mIsToneMapped = false; updateParameters();}
+  void toggleToneMapping() {mIsToneMapped = true;}
+  void toggleHDRDisplay() {mIsToneMapped = false;}
 
   void isBackPanel() {mIsBackPanel = true;}
 
   void updateTexture();
+
+  void setToneMappingParameters(std::vector<float> param) {mParameters = param;}
 };
 
 #endif // RENDERINGWIDGET_H

@@ -16,9 +16,10 @@ StandardPanel::StandardPanel()
 IMG_FORMAT initialStandardFormat;
 void StandardPanel::displayImageCV(Image const &img) ////DEPRECATED : see displayImageGL()
 {
-    Image tempImg(img);
-    tempImg.toneMapping();
+    Image tempImg;
+    tempImg = CPUprocess(img);
 
+    //Converting Image to mat for use with OpenCV.
     Mat imgMat;
     initialStandardFormat = tempImg.format();
     if (tempImg.format() != GRAY && tempImg.format() == RGB)
@@ -67,6 +68,9 @@ void StandardPanel::displayImageGL(Image const &img)
 
     m_GlWidget->loadImage(cpyImg);
     m_GlWidget->loadShaders(HDR_DIR"/shaders/standardPanel.vert", HDR_DIR"/shaders/standardPanel.frag");
+    computeShaderParameters(img);
+    m_GlWidget->setToneMappingParameters(m_Parameters);
+
     if (m_CurrentMode == FULLSCREEN)
         m_GlWidget->showFullScreen();
     else
@@ -75,10 +79,17 @@ void StandardPanel::displayImageGL(Image const &img)
         m_GlWidget->show();
     }
     m_GlWidget->move(screenGeo.topLeft());
+
+    if (m_ToneMapped)
+        m_GlWidget->toggleToneMapping();
+    else
+        m_GlWidget->toggleHDRDisplay();
 }
 
-Eigen::Vector4f StandardPanel::processPixel(Eigen::Vector4f pixel)
+Image StandardPanel::CPUprocess(const Image &img)
 {
-    return pixel;
+    Image temp(img);
+    temp.toneMapping();
+    return temp;
 }
 

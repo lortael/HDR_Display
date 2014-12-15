@@ -54,6 +54,12 @@ void RenderingWidget::paintGL()
     GLint formatLoc = glGetUniformLocation(mProgram.id(), "tonemap");
     glUniform1i(formatLoc, int(mIsToneMapped));
 
+    if (mParameters.size() > 0)
+    {
+        GLint paramLoc = glGetUniformLocation(mProgram.id(), "parameters");
+        glUniform1fv(paramLoc, mParameters.size(), &mParameters[0]);
+    }
+
     // draw every objects
 //    for(ObjectList::const_iterator obj=mObjectList.begin(); obj!=mObjectList.end(); ++obj) {
 //        (*obj)->draw(mCamera);
@@ -185,12 +191,6 @@ void RenderingWidget::mouseMoveEvent(QMouseEvent * e) {
 void RenderingWidget::wheelEvent(QWheelEvent * e) {
     mCamDist *= (e->delta()>0)? 1./1.1: 1.1;
     e->accept();
-}
-
-void RenderingWidget::updateParameters()
-{
-    GLint formatLoc = glGetUniformLocation(mProgram.id(), "tonemap");
-    glUniform1i(formatLoc, mIsToneMapped);
 }
 
 void RenderingWidget::updateTexture()

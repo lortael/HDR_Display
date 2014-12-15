@@ -18,6 +18,8 @@ void FrontPanel::displayImageCV(Image const &img) ////DEPRECATED : see displayIm
 {
     Image tempImg;
     tempImg = CPUprocess(img);
+
+    //Converting Image to mat for use with OpenCV.
     Mat imgMat;
     initialFrontFormat = tempImg.format();
     if (tempImg.format() != GRAY && tempImg.format() == RGB)
@@ -44,7 +46,7 @@ void FrontPanel::displayImageCV(Image const &img) ////DEPRECATED : see displayIm
         initialFrontFormat = HSV;
     }
 
-    if (initialFrontFormat != HSV) //avoid displaying twice an HSV format image
+    if (initialFrontFormat != HSV) //Avoid displaying twice an HSV format image
     {
         std::string name = "Front panel";
 
@@ -64,6 +66,7 @@ void FrontPanel::displayImageGL(Image const &img)
 
     m_GlWidget->loadImage(img);
     m_GlWidget->loadShaders(HDR_DIR"/shaders/frontPanel.vert", HDR_DIR"/shaders/frontPanel.frag");
+
     if (m_CurrentMode == FULLSCREEN)
     {
         m_GlWidget->showFullScreen();
@@ -75,14 +78,33 @@ void FrontPanel::displayImageGL(Image const &img)
         m_GlWidget->show();
     }
     m_GlWidget->move(screenGeo.topLeft());
+
+    if (m_ToneMapped)
+        m_GlWidget->toggleToneMapping();
+    else
+        m_GlWidget->toggleHDRDisplay();
+
+    computeShaderParameters(img);
+    m_GlWidget->setToneMappingParameters(m_Parameters);
 }
 
-Eigen::Vector4f FrontPanel::processPixel(Eigen::Vector4f pixel)
+Image FrontPanel::CPUprocess(const Image &img)
 {
-    float r = pixel(0);
-    float g = pixel(1);
-    float b = pixel(2);
+    Image temp(img);
+    if (m_ToneMapped)
+        temp.toneMapping();
+    else
+        for (int y = 0; y < img.height(); ++y)
+            for (int x = 0; x < img.width(); ++x)
+            {
+                float r = img.pixel(x, y)(0);
+                r = sqrt(r);
+                float g = img.pixel(x, y)(1);
+                g = sqrt(g);
+                float b = img.pixel(x, y)(2);
+                b = sqrt(b);
+                temp.setPixel(x, y, Eigen::Vector4f(r, g, b, 1.f));
+            }
 
-    Eigen::Vector4f outPixel(sqrt(r), sqrt(g), sqrt(b), 1.f);
-    return outPixel;
+    return temp;
 }

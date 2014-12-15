@@ -20,13 +20,13 @@ public :
 
     void displayImageGL(Image const &img);
 
-    Eigen::Vector4f processPixel(Eigen::Vector4f pixel);
-
 private:
 
     Linearisation m_Linearisation;
 
 protected:
+
+    Image CPUprocess(Image const &img);
 
     Image computePSFImage(Image const &img, unsigned int psfSize);
 

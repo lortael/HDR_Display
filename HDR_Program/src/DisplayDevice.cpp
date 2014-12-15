@@ -6,9 +6,8 @@
 #include "opencv2/highgui/highgui.hpp"
 
 DisplayDevice::DisplayDevice()
-    : m_Height(0),
-      m_Width(0),
-      m_DisplayId(0),
+    : m_DisplayId(0),
+      m_ToneMapped(false),
       m_GlWidget(NULL),
       m_CurrentMode(WINDOW)
 {
@@ -24,12 +23,6 @@ DisplayDevice::~DisplayDevice()
 void DisplayDevice::initDevice()
 {
     m_GlWidget = new RenderingWidget();
-}
-
-void DisplayDevice::resize(unsigned int height, unsigned int width)
-{
-    m_Height = height;
-    m_Width = width;
 }
 
 void DisplayDevice::closeGlWindow()
