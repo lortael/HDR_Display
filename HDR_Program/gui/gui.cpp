@@ -32,7 +32,7 @@ void Gui::init()
 {
     m_CurrentImage = 0;
     m_Manager = new DisplayManager;
-    m_Manager->initManager(m_ImgPath[m_CurrentImage]);
+    m_Manager->initManager(m_Images[m_CurrentImage]);
 
     setWindowFlags(Qt::WindowStaysOnTopHint);
 

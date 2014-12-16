@@ -1,6 +1,6 @@
 /* Copyright (C) 2014 David Murray <david.murray@institutoptique.fr>
  *
- *
+ * Class to manage the back LCD panel, which will display a grayscale image to serve as backlighting.
  * */
 
 #ifndef BACKPANEL_H_INCLUDED
@@ -16,8 +16,16 @@ public :
 
     BackPanel();
 
+    /**
+     * @brief : displays an image on target screen using openCV (more details in inherited classes).
+     * @param : the Image to be displayed
+     * */
     void displayImageCV(Image const &img);
 
+    /**
+     * @brief : displays an image on target screen using openCV (more details in inherited classes).
+     * @param : the Image to be displayed
+     * */
     void displayImageGL(Image const &img);
 
 private:
@@ -28,9 +36,6 @@ protected:
 
     Image CPUprocess(Image const &img);
 
-    Image computePSFImage(Image const &img, unsigned int psfSize);
-
-    float convolutionKernel(unsigned int x, unsigned int y, Image const &img, unsigned int psfSize);
 };
 
 #endif //BACKPANEL_H_INCLUDED

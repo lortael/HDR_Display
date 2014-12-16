@@ -21,6 +21,7 @@ void BackPanel::displayImageCV(Image const &img) ////DEPRECATED : see displayIma
         grayImg.color2gray();
 
     grayImg = CPUprocess(grayImg);
+    computePSFImage(grayImg);
 
     //Converting Image to mat for use with OpenCV.
     Mat imgMat;
@@ -49,6 +50,7 @@ void BackPanel::displayImageGL(Image const &img)
 {
     Image cpyImg(img);
     cpyImg.setFormat(GRAY);
+    computePSFImage(cpyImg);
     m_GlWidget->setWindowTitle("Back Panel");
 
     QDesktopWidget *backDesktop = QApplication::desktop();
@@ -105,40 +107,33 @@ Image BackPanel::CPUprocess(Image const &img)
     return temp;
 }
 
-Image BackPanel::computePSFImage(Image const &img, unsigned int psfSize)
+void BackPanel::computePSFImage(Image &img)
 {
-//    Image temp(img);
+    Eigen::Matrix3i coeffs3;
+    coeffs3 << 1, 4, 1,
+              4, 16, 4,
+              1, 4, 1;
 
+    std::cout << img.pixel(500, 500) << std::endl;
+    for (int y = 1 ; y < img.height()-1 ; ++y)
+        for (int x = 1 ; x < img.width()-1 ; ++x)
+            img.setPixel(x, y, convolutionKernel(x, y, img, coeffs3));
 
-
-//    for (int y = 0 ; y < temp.height() ; ++y)
-//    {
-//        for (int x = 0 ; x < temp.width() ; ++x)
-//        {
-
-//        }
-//    }
+    std::cout << img.pixel(500, 500) << std::endl;
 }
 
-float BackPanel::convolutionKernel(unsigned int x, unsigned int y, Image const &img, unsigned int psfSize)
+Eigen::Vector4f BackPanel::convolutionKernel(unsigned int x, unsigned int y, Image const &img, Eigen::Matrix3i coeffs)
 {
-//    unsigned int topY;
-//    topY = (y > img.height() - psfSize) ? img.height() - y : psfSize;
-//    unsigned int botY;
-//    botY = (y < psfSize) ? psfSize - y : psfSize;
-//    unsigned int leftX;
-//    leftX = (x < psfSize) ? psfSize - x : psfSize;
-//    unsigned int rightX;
-//    rightX = (x > img.width() - psfSize) ? img.width() - x : psfSize;
+    Eigen::Vector4f sum(0.f, 0.f, 0.f, 1.f);
 
-//    float sum(0);
-//    int coeff(1);
-//    Eigen::Matrix<unsigned int, psfSize, psfSize> coeffs;
-//    for (unsigned int i = - botY; i < topY; ++i)
-//        for (unsigned int j = -leftX; j < rightX; ++j)
-//        {
-//            sum += coeff
-//        }
-
-//    return value;
+    for (unsigned int i = 0; i < 3; ++i)
+        for (unsigned int j = 0; j < 3; ++j)
+        {
+            Eigen::Vector4f pix = img.pixel(x + i - 1, y + j - 1);
+            float coeff = coeffs(i, j)/36.f;
+            sum(0) += coeff*pix(0);
+            sum(1) += coeff*pix(1);
+            sum(2) += coeff*pix(2);
+        }
+    return sum;
 }

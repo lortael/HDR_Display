@@ -19,12 +19,6 @@ int main(int argc, char *argv[])
     gl_profile.setProfile(QGLFormat::CompatibilityProfile);
     QGLFormat::setDefaultFormat(gl_profile);
 
-//    DisplayManager multipleMonitor;
-
-//    multipleMonitor.initManager(HDR_DIR"/data/Lake.hdr");
-
-//    multipleMonitor.multipleDisplay();
-
     Gui controlWindow;
     controlWindow.show();
 

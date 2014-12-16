@@ -24,8 +24,6 @@ protected:
 
     Image CPUprocess(Image const &img);
 
-    Eigen::Vector4f processPixel(Eigen::Vector4f pixel);
-
 };
 
 #endif //FRONTPANEL_H_INCLUDED

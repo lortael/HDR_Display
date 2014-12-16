@@ -29,6 +29,10 @@ public:
 
 protected:
 
+    void computePSFImage(Image &img);
+
+    Eigen::Vector4f convolutionKernel(unsigned int x, unsigned int y, Image const &img, Eigen::Matrix3i coeffs);
+
     struct Texture{
         GLuint textureId;
         std::string textureName;
