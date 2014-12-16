@@ -22,7 +22,10 @@ RenderingWidget::RenderingWidget()
       mTimer(new QTimer(this)),
       mMove(DISABLED),
       mIsToneMapped(false),
-      mIsBackPanel(false)
+      mIsBackPanel(false),
+      mCorrection(NULL),
+      mTexture(NULL),
+      mTexturePSF(NULL)
 {
 
 }
@@ -31,6 +34,11 @@ RenderingWidget::~RenderingWidget()
 {
     delete mObject;
     delete mMesh;
+    delete mTexture;
+    if (mTexturePSF != NULL)
+        delete mTexturePSF;
+    if (mCorrection != NULL)
+        delete mCorrection;
 }
 
 void RenderingWidget::paintGL()
@@ -112,20 +120,28 @@ void RenderingWidget::createScene()
     mMesh->makeUnitary();
     mMesh->initBuffers();
 
+    mTexture = new TextureImage();
+
     GL_TEST_ERR;
 
     mObject = new Object();
     mObject->attachShader(&mProgram);
-    mObject->attachMesh(mMesh);
+    mObject->attachMesh(mMesh);    
+
     if(mIsBackPanel == false)
     {
-//        mObject->loadImgTexture(mImagePSF, "imgTexPSF");
-        mObject->loadImgTexture(mImage, "imgTexFront");
+        mTexture->loadImgTexture(mImage, "imgTexFront");
+        mObject->attachTexture(mTexture);
     }
     else
-    {
-        mObject->loadImgTexture(mImage, "imgTexBack");
-        mObject->loadCurveTexture(mCurve);
+    {        
+        mTexture->loadImgTexture(mImage, "imgTexBack");
+        mObject->attachTexture(mTexture);
+
+        mCorrection = new TextureCorrection();
+        mCorrection->loadCurveTexture(mCurve);
+        mObject->attachTexture(mTexture);
+
     }
     mObject->setTransformation(Matrix4f::Identity());
 

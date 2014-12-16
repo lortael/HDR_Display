@@ -36,6 +36,9 @@ class RenderingWidget : public QGLWidget
   ObjectList mObjectList;
   Object* mObject;
   Mesh* mMesh;
+  TextureImage* mTexture;
+  TextureImage* mTexturePSF;
+  TextureCorrection* mCorrection;
   Image mImage;
   Linearisation mCurve;
 
