@@ -1,6 +1,7 @@
 #version 130
 
 uniform sampler2D imgTexFront;
+uniform sampler2D imgPSFFront;
 uniform int tonemap;
 uniform float parameters[7];
 
@@ -20,7 +21,6 @@ float processTM(float val, float l, int channel)
     float IGlobal = c*parameters[channel] + (1.f - c)*parameters[4];
     float Ia = a*ILocal + (1.f - a)*IGlobal;
     val /= val + pow(parameters[5] * Ia, parameters[6]);
-//    val *= max;
 
     return val;
 }
@@ -46,15 +46,22 @@ void main()
     vec4 color;
     color = texture(imgTexFront, texcoord);
 
+
+
     if (tonemap == 1)
         color = toneMapping(color);
     else
     {
-        float r = clamp(sqrt(color.r), 0.0, 1.0);
-        float g = clamp(sqrt(color.g), 0.0, 1.0);
-        float b = clamp(sqrt(color.b), 0.0, 1.0);
+        vec4 colorPSF;
+        colorPSF = texture(imgPSFFront, texcoord);
+
+        float r = clamp(color.r/colorPSF.r, 0.0, 1.0);
+        float g = clamp(color.g/colorPSF.r, 0.0, 1.0);
+        float b = clamp(color.b/colorPSF.r, 0.0, 1.0);
         color = vec4(r, g, b, 1.0);
     }
+
+
 
     out_color = color;
 }

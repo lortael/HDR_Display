@@ -22,11 +22,13 @@ void DisplayManager::initManager(Image const& img, unsigned int nbDevices)
         DisplayDevice* main = new StandardPanel();
         addDisplay(main);
 
+        DisplayDevice* back = new BackPanel();
+        addDisplay(back);
+
         DisplayDevice* front = new FrontPanel();
         addDisplay(front);
 
-        DisplayDevice* back = new BackPanel();
-        addDisplay(back);
+
     }
     else
     {

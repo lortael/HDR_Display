@@ -61,8 +61,6 @@ void BackPanel::displayImageGL(Image const &img)
     m_GlWidget->loadCurve(m_Linearisation);
     m_GlWidget->loadImage(cpyImg);
     m_GlWidget->loadShaders(HDR_DIR"/shaders/backPanel.vert", HDR_DIR"/shaders/backPanel.frag");
-
-    computeShaderParameters(cpyImg);
     m_GlWidget->setToneMappingParameters(m_Parameters);
 
     if (m_CurrentMode == FULLSCREEN)

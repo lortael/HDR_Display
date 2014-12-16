@@ -1,3 +1,8 @@
+/* Copyright (C) 2014 David Murray <david.murray@institutoptique.fr>
+ *
+ * Classes to manage texture for images and correction.
+ * */
+
 #ifndef HDR_TEXTURE_H
 #define HDR_TEXTURE_H
 
@@ -14,8 +19,17 @@ public:
     virtual std::string name() const {return mTexName;}
     virtual void setName(std::string name){mTexName = name;}
 
+    /**
+     * @brief loads an image into a texture, given its name.
+     * @param image, the Image to be sent as texture.
+     * @param texName, the uniform that will be sent into GLSL.
+     * */
     virtual void loadTexture(Image const& image, std::string texName) = 0;
 
+    /**
+     * @brief changes the image stored in the current texture.
+     * @param image, the new image to store.
+     * */
     virtual void updateTexture(Image const& image) const = 0;
 
 private:
@@ -43,8 +57,16 @@ private:
 
 protected:
 
+    /**
+     * @brief applies a convolution mask on an image. Default mask is gaussian 3*3.
+     * @param the Image to be displayed.
+     * */
     void computePSFImage(Image &img) const;
 
+    /**
+     * @brief apply HDR process on GPU. Unused for the moment.
+     * @param the Image to be displayed.
+     * */
     Eigen::Vector4f convolutionKernel(unsigned int x, unsigned int y, Image const &img, Eigen::Matrix3i coeffs) const;
 
 };

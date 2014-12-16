@@ -132,6 +132,10 @@ void RenderingWidget::createScene()
     {
         mTexture->loadTexture(mImage, "imgTexFront");
         mObject->attachTexture(mTexture);
+
+        mTexturePSF = new TextureImage();
+        mTexturePSF->loadTexture(mImage, "imgPSFFront");
+        mObject->attachTexture(mTexturePSF);
     }
     else
     {

@@ -26,11 +26,25 @@ void TextureImage::loadTexture(Image const& image, std::string texName)
     mTexName = texName;
 
     Image temp(image);
-//    if (mTexName == "imgTexBack")
-//        computePSFImage(temp);
-
     int dimY = temp.height();
     int dimX = temp.width();
+
+    if (mTexName == "imgTexBack")
+        computePSFImage(temp);
+    else if (mTexName == "imgPSFFront")
+    {
+        for (int y = 0 ; y < dimY ; ++y)
+        {
+            for (int x = 0 ; x < dimX ; ++x)
+            {
+                float r = temp.pixel(x, y)(0);
+                float g = temp.pixel(x, y)(1);
+                float b = temp.pixel(x, y)(2);
+                temp.setPixel(x, y, Eigen::Vector4f(sqrt(r), sqrt(g), sqrt(b), 1.f));
+            }
+        }
+        computePSFImage(temp);
+    }
 
     float* img;
     img = new float[dimX*dimY*4];
