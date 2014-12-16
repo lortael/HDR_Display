@@ -21,7 +21,6 @@ void BackPanel::displayImageCV(Image const &img) ////DEPRECATED : see displayIma
         grayImg.color2gray();
 
     grayImg = CPUprocess(grayImg);
-    computePSFImage(grayImg);
 
     //Converting Image to mat for use with OpenCV.
     Mat imgMat;
@@ -50,7 +49,6 @@ void BackPanel::displayImageGL(Image const &img)
 {
     Image cpyImg(img);
     cpyImg.setFormat(GRAY);
-    computePSFImage(cpyImg);
     m_GlWidget->setWindowTitle("Back Panel");
 
     QDesktopWidget *backDesktop = QApplication::desktop();
@@ -105,35 +103,4 @@ Image BackPanel::CPUprocess(Image const &img)
     }
 
     return temp;
-}
-
-void BackPanel::computePSFImage(Image &img)
-{
-    Eigen::Matrix3i coeffs3;
-    coeffs3 << 1, 4, 1,
-              4, 16, 4,
-              1, 4, 1;
-
-    std::cout << img.pixel(500, 500) << std::endl;
-    for (int y = 1 ; y < img.height()-1 ; ++y)
-        for (int x = 1 ; x < img.width()-1 ; ++x)
-            img.setPixel(x, y, convolutionKernel(x, y, img, coeffs3));
-
-    std::cout << img.pixel(500, 500) << std::endl;
-}
-
-Eigen::Vector4f BackPanel::convolutionKernel(unsigned int x, unsigned int y, Image const &img, Eigen::Matrix3i coeffs)
-{
-    Eigen::Vector4f sum(0.f, 0.f, 0.f, 1.f);
-
-    for (unsigned int i = 0; i < 3; ++i)
-        for (unsigned int j = 0; j < 3; ++j)
-        {
-            Eigen::Vector4f pix = img.pixel(x + i - 1, y + j - 1);
-            float coeff = coeffs(i, j)/36.f;
-            sum(0) += coeff*pix(0);
-            sum(1) += coeff*pix(1);
-            sum(2) += coeff*pix(2);
-        }
-    return sum;
 }

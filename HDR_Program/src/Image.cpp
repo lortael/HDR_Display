@@ -35,6 +35,13 @@ Image::Image(Image const &img)
     m_Pixel = img.m_Pixel;
 }
 
+Image::Image(unsigned int height, unsigned int width)
+{
+    m_Width = width;
+    m_Height = height;
+    m_Pixel.resize(m_Height*m_Width);
+}
+
 Image::~Image()
 {
 

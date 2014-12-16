@@ -28,6 +28,8 @@ public:
 
     void loadCurveTexture(const Linearisation &curve);
 
+    void updateTargetTexture(Image const& image, std::string texName);
+
 protected:
 
     const Shader* mShader;

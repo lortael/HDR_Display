@@ -130,17 +130,17 @@ void RenderingWidget::createScene()
 
     if(mIsBackPanel == false)
     {
-        mTexture->loadImgTexture(mImage, "imgTexFront");
+        mTexture->loadTexture(mImage, "imgTexFront");
         mObject->attachTexture(mTexture);
     }
     else
-    {        
-        mTexture->loadImgTexture(mImage, "imgTexBack");
+    {
+        mTexture->loadTexture(mImage, "imgTexBack");
         mObject->attachTexture(mTexture);
 
         mCorrection = new TextureCorrection();
-        mCorrection->loadCurveTexture(mCurve);
-        mObject->attachTexture(mTexture);
+        mCorrection->loadTexture(mCurve.toImg(), "corTex");
+        mObject->attachTexture(mCorrection);
 
     }
     mObject->setTransformation(Matrix4f::Identity());
@@ -209,17 +209,16 @@ void RenderingWidget::wheelEvent(QWheelEvent * e) {
     e->accept();
 }
 
-void RenderingWidget::updateTexture()
+void RenderingWidget::updateTextures()
 {
     makeCurrent();
     if(mIsBackPanel == false)
     {
-//        mObject->loadImgTexture(mImagePSF, "imgTexPSF");
-        mObject->updateTexture(mImage, "imgTexFront");
+        mObject->updateTargetTexture(mImage, "imgTexFront");
     }
     else
     {
-        mObject->updateTexture(mImage, "imgTexBack");
+        mObject->updateTargetTexture(mImage, "imgTexBack");
     }
 }
 

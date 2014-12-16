@@ -36,9 +36,9 @@ class RenderingWidget : public QGLWidget
   ObjectList mObjectList;
   Object* mObject;
   Mesh* mMesh;
-  TextureImage* mTexture;
-  TextureImage* mTexturePSF;
-  TextureCorrection* mCorrection;
+  Texture* mTexture;
+  Texture* mTexturePSF;
+  Texture* mCorrection;
   Image mImage;
   Linearisation mCurve;
 
@@ -106,7 +106,7 @@ public:
 
   void isBackPanel() {mIsBackPanel = true;}
 
-  void updateTexture();
+  void updateTextures();
 
   void setToneMappingParameters(std::vector<float> param) {mParameters = param;}
 };

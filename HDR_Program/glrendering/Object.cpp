@@ -56,3 +56,12 @@ void Object::draw(const Camera &camera)
 
     mGeometry->drawGeometry(mShader->id());
 }
+
+void Object::updateTargetTexture(Image const& image, std::string texName)
+{
+    for (unsigned int i = 0; i < mTextures.size(); ++i)
+    {
+        if (mTextures[i]->name() == texName)
+            mTextures[i]->updateTexture(image);
+    }
+}

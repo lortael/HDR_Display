@@ -102,3 +102,13 @@ float Linearisation::dichotomie(float value)
         return(1.0*(fin + db)/(2.*255.));
     }
 }
+
+Image& Linearisation::toImg()
+{
+    Image curve(1, m_Curve.size());
+
+    for (unsigned int i = 0; i < m_Curve.size(); ++i)
+        curve.setPixel(i, 0, Eigen::Vector4f(m_Curve[i], m_Curve[i], m_Curve[i], 1.f));
+
+    return curve;
+}

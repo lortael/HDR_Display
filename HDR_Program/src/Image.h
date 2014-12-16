@@ -17,6 +17,7 @@ public :
 
     Image();
     Image(Image const &img);
+    Image(unsigned int height, unsigned int width);
     ~Image();
     Image& operator=(Image const &img);
 

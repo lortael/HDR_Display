@@ -14,6 +14,10 @@ public:
     virtual std::string name() const {return mTexName;}
     virtual void setName(std::string name){mTexName = name;}
 
+    virtual void loadTexture(Image const& image, std::string texName) = 0;
+
+    virtual void updateTexture(Image const& image) const = 0;
+
 private:
 
 protected:
@@ -31,17 +35,17 @@ public:
 
     ~TextureImage();
 
-    void loadImgTexture(Image const& image, std::string texName);
+    void loadTexture(Image const& image, std::string texName);
 
-    void updateTexture(Image const& image);
+    void updateTexture(Image const& image) const;
 
 private:
 
 protected:
 
-    void computePSFImage(Image &img);
+    void computePSFImage(Image &img) const;
 
-    Eigen::Vector4f convolutionKernel(unsigned int x, unsigned int y, Image const &img, Eigen::Matrix3i coeffs);
+    Eigen::Vector4f convolutionKernel(unsigned int x, unsigned int y, Image const &img, Eigen::Matrix3i coeffs) const;
 
 };
 
@@ -53,7 +57,9 @@ public:
 
     ~TextureCorrection();
 
-    void loadCurveTexture(const Linearisation &curve);
+    void loadTexture(Image const& image, std::string texName);
+
+    void updateTexture(Image const& image) const;
 
 private:
 

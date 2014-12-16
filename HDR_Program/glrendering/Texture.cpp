@@ -21,12 +21,16 @@ TextureCorrection::~TextureCorrection()
     glDeleteTextures(1, &mTexId);
 }
 
-void TextureImage::loadImgTexture(Image const& image, std::string texName)
+void TextureImage::loadTexture(Image const& image, std::string texName)
 {
     mTexName = texName;
 
-    int dimY = image.height();
-    int dimX = image.width();
+    Image temp(image);
+//    if (mTexName == "imgTexBack")
+//        computePSFImage(temp);
+
+    int dimY = temp.height();
+    int dimX = temp.width();
 
     float* img;
     img = new float[dimX*dimY*4];
@@ -36,7 +40,7 @@ void TextureImage::loadImgTexture(Image const& image, std::string texName)
     {
         for (int x = 0 ; x < dimX ; ++x)
         {
-            Eigen::Vector4f rgba = image.pixel(x, y);
+            Eigen::Vector4f rgba = temp.pixel(x, y);
             for (int z = 0; z < 4; ++z)
             {
                 img[i] = rgba(z);
@@ -61,17 +65,17 @@ void TextureImage::loadImgTexture(Image const& image, std::string texName)
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void TextureCorrection::loadCurveTexture(const Linearisation &curve)
+void TextureCorrection::loadTexture(Image const& image, std::string texName)
 {
-    mTexName = "corTex";
+    mTexName = texName;
 
     float* curveTex;
-    curveTex = new float[256*4];
+    curveTex = new float[image.width()*4];
 
     for (unsigned int i = 0; i < 256; ++i)
     {
         for (unsigned int j = 0; j < 3; ++j)
-            curveTex[i*4 + j] = curve.getCoeff(i);
+            curveTex[i*4 + j] = image.pixel(i, 0)(j);
         curveTex[i*4 + 3] = 1.f;
     }
 
@@ -92,24 +96,28 @@ void TextureCorrection::loadCurveTexture(const Linearisation &curve)
 
 }
 
-void TextureImage::updateTexture(Image const& image)
+void TextureImage::updateTexture(Image const& image) const
 {
-    unsigned int dimY = image.height();
-    unsigned int dimX = image.width();
+    Image temp(image);
+    if (mTexName == "imgTexBack")
+        computePSFImage(temp);
+
+    int dimY = temp.height();
+    int dimX = temp.width();
 
     float* img;
     img = new float[dimX*dimY*4];
 
-    int j(0);
+    int i(0);
     for (int y = 0 ; y < dimY ; ++y)
     {
         for (int x = 0 ; x < dimX ; ++x)
         {
-            Eigen::Vector4f rgba = image.pixel(x, y);
+            Eigen::Vector4f rgba = temp.pixel(x, y);
             for (int z = 0; z < 4; ++z)
             {
-                img[j] = rgba(z);
-                ++j;
+                img[i] = rgba(z);
+                ++i;
             }
         }
     }
@@ -120,17 +128,15 @@ void TextureImage::updateTexture(Image const& image)
     delete img;
 
     glGenerateMipmap(GL_TEXTURE_2D);
-
-//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_BORDER);
-
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+void TextureCorrection::updateTexture(Image const& image) const
+{
 
-void TextureImage::computePSFImage(Image &img)
+}
+
+void TextureImage::computePSFImage(Image &img) const
 {
     Eigen::Matrix3i coeffs3;
     coeffs3 << 1, 4, 1,
@@ -142,7 +148,7 @@ void TextureImage::computePSFImage(Image &img)
             img.setPixel(x, y, convolutionKernel(x, y, img, coeffs3));
 }
 
-Eigen::Vector4f TextureImage::convolutionKernel(unsigned int x, unsigned int y, Image const &img, Eigen::Matrix3i coeffs)
+Eigen::Vector4f TextureImage::convolutionKernel(unsigned int x, unsigned int y, Image const &img, Eigen::Matrix3i coeffs) const
 {
     Eigen::Vector4f sum(0.f, 0.f, 0.f, 1.f);
 

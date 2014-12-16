@@ -1,8 +1,7 @@
 #ifndef LINEARISATION_H
 #define LINEARISATION_H
 
-#include "Correction.h"
-#include "courbe.h"
+#include "Image.h"
 #include <vector>
 #include <Eigen/Core>
 
@@ -17,6 +16,7 @@ public:
 
     void computeCurve();
 
+    Image &toImg();
 
 private:
     std::vector<float> m_coeffs;
