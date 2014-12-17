@@ -94,8 +94,14 @@ public:
   ~RenderingWidget();
 
   /*******************************************/
-  /*All below
-   *
+  /* All below function are copyrighted.
+   * Copyright (C) 2014 David Murray <david.murray@institutoptique.fr>
+   * */
+
+  /**
+   * @brief loads an image (or an array stored in an image) into a texture, given its name.
+   * @param image, the Image to be sent as texture.
+   * @param texName, the uniform that will be sent into GLSL.
    * */
   void loadImage(Image const &image) {mImage = image;}
   void loadCurve(Linearisation const &curve) {mCurve = curve;}

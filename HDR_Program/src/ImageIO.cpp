@@ -36,11 +36,12 @@ void ImageIO::imgLoad(Image& img, QString filename)
             exit(EXIT_FAILURE);
         }
 
-        // Read image data
+        // Read image data.
         RGBE_ReadHeader(f, &width, &height, 0);
         pixels = new float[sizeof(float)*3*height*width];        
         RGBE_ReadPixels_RLE(f, reinterpret_cast<float*>(pixels), width, height);
 
+        //Image initialization.
         img.setHeight(height);
         img.setWidth(width);
         img.initImage();
@@ -57,7 +58,7 @@ void ImageIO::imgLoad(Image& img, QString filename)
         }
 
         img.computeMinMax();
-//        img.normalize();
+        img.normalizeRGB();
 
         cout << "HDR image loaded" << endl;
         img.changeNULLStatus(false);
@@ -66,6 +67,7 @@ void ImageIO::imgLoad(Image& img, QString filename)
     {
         loadPng(img, filename.toStdString());
         cout << "png image loaded" << endl;
+        img.changeNULLStatus(false);
     }
     else
     {
@@ -90,6 +92,13 @@ void ImageIO::loadPng(Image& png_img, const string filename)
     {
         cout << "decoder error " << error << ": " << lodepng_error_text(error) << endl;
         exit (EXIT_FAILURE);
+    }
+
+    if (png_img.isNULL() == true)
+    {
+        png_img.setHeight(height);
+        png_img.setWidth(width);
+        png_img.initImage();
     }
 
     vector<unsigned int> rgb_pixel;
@@ -118,18 +127,13 @@ void ImageIO::loadPng(Image& png_img, const string filename)
             float rgb[3];
             for (int col = 0; col < 3; col++)
             {
-                rgb[col] = rgb_pixel[(x+y*width)*3 + col]/255.f;
+                rgb[col] = (alpha_value[x+y*width] == 0)? 1.f : rgb_pixel[(x+y*width)*3 + col]/255.f;
             }
             png_img.setPixel(x, y, Eigen::Vector4f(rgb[0], rgb[1], rgb[2], 1.f*alpha_value[x+y*width]/255.f));
         }
     }
     rgb_pixel.clear();
     alpha_value.clear();
-}
-
-void ImageIO::imgSave(Image const & src, const std::string filename)
-{
-    savePng(src, filename);
 }
 
 void ImageIO::savePng(Image const & img, const std::string filename)

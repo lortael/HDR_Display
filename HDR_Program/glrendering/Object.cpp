@@ -18,7 +18,7 @@ void Object::attachShader(const Shader* shader)
     mShader = shader;
 }
 
-void Object::attachTexture(const Texture* texture)
+void Object::attachTexture(Texture* texture)
 {
     mTextures.push_back(texture);
 }

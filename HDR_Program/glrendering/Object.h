@@ -16,11 +16,15 @@ public:
     ~Object();
 
     void attachMesh(Mesh *mesh);
-    void attachShader(const Shader* shader);
-    void attachTexture(const Texture* texture);
+    void attachShader(const Shader* shader);    
     void setTransformation(const Eigen::Matrix4f& mat);
-
     void draw(const Camera& camera);
+
+    /*******************************************/
+    /* All below function are copyrighted.
+     * Copyright (C) 2014 David Murray <david.murray@institutoptique.fr>
+     * */
+    void attachTexture(Texture *texture);
 
     void loadImgTexture(Image const& image, std::string texName);
 
@@ -36,7 +40,7 @@ protected:
     const Mesh* mGeometry;
     Eigen::Matrix4f mTransformation;
 
-    std::vector<const Texture*> mTextures;
+    std::vector<Texture*> mTextures;
 };
 
 #endif

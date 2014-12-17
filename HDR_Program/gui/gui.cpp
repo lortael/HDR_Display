@@ -6,15 +6,23 @@
 #include "ImageIO.h"
 #include"Image.h"
 
+#define IMAGE_DIR HDR_DIR"/data/hdr_images"
+
 Gui::Gui()
     : m_Running(false),
       m_Timer(new QTimer(this)),
       m_Diaporama(false)
 {
-    m_ImgPath.push_back(HDR_DIR"/data/Lake.hdr");
-    m_ImgPath.push_back(HDR_DIR"/data/meadow.hdr");
-    m_ImgPath.push_back(HDR_DIR"/data/reno.hdr");
-    m_ImgPath.push_back(HDR_DIR"/data/church.hdr");
+    m_ImgPath.push_back(IMAGE_DIR"/lake.hdr");
+    m_ImgPath.push_back(IMAGE_DIR"/meadow.hdr");
+    m_ImgPath.push_back(IMAGE_DIR"/reno.hdr");
+    m_ImgPath.push_back(IMAGE_DIR"/church.hdr");
+//    m_ImgPath.push_back(IMAGE_DIR"/../PhiGrid.png");
+    m_ImgPath.push_back(IMAGE_DIR"/eiffel.hdr");
+//    m_ImgPath.push_back(IMAGE_DIR"/memorial.hdr");
+//    m_ImgPath.push_back(IMAGE_DIR"/nave.hdr");
+    m_ImgPath.push_back(IMAGE_DIR"/vinesunset.hdr");
+//    m_ImgPath.push_back(IMAGE_DIR"/rosette.hdr");
 
     ImageIO loader;
 
@@ -50,6 +58,8 @@ void Gui::init()
     connect(loadReno, SIGNAL(triggered()), this, SLOT(loadReno()));
     QAction* loadChurch = imgMenu->addAction("Load church");
     connect(loadChurch, SIGNAL(triggered()), this, SLOT(loadChurch()));
+    QAction* loadEiffel = imgMenu->addAction("Load eiffel");
+    connect(loadEiffel, SIGNAL(triggered()), this, SLOT(loadEiffel()));
 
     QPushButton* loadImg = new QPushButton("Load image", this);
     loadImg->setMenu(imgMenu);
@@ -108,57 +118,31 @@ void Gui::initProgram_clicked()
 void Gui::loadLake()
 {
     m_CurrentImage = 0;
-
-    m_Manager->loadImg(m_Images[m_CurrentImage]);
-    if (m_Running == true)
-        m_Manager->updateDisplay();
-    else
-    {
-        m_Manager->multipleDisplay();
-        m_Running = true;
-    }
+    loadImg();
 }
 
 void Gui::loadMeadow()
 {
     m_CurrentImage = 1;
-
-    m_Manager->loadImg(m_Images[m_CurrentImage]);
-    if (m_Running == true)
-        m_Manager->updateDisplay();
-    else
-    {
-        m_Manager->multipleDisplay();
-        m_Running = true;
-    }
+    loadImg();
 }
 
 void Gui::loadReno()
 {
     m_CurrentImage = 2;
-
-    m_Manager->loadImg(m_Images[m_CurrentImage]);
-    if (m_Running == true)
-        m_Manager->updateDisplay();
-    else
-    {
-        m_Manager->multipleDisplay();
-        m_Running = true;
-    }
+    loadImg();
 }
 
 void Gui::loadChurch()
 {
     m_CurrentImage = 3;
+    loadImg();
+}
 
-    m_Manager->loadImg(m_Images[m_CurrentImage]);
-    if (m_Running == true)
-        m_Manager->updateDisplay();
-    else
-    {
-        m_Manager->multipleDisplay();
-        m_Running = true;
-    }
+void Gui::loadEiffel()
+{
+    m_CurrentImage = 4;
+    loadImg();
 }
 
 void Gui::fsIsChecked(bool checked)
@@ -223,7 +207,7 @@ void Gui::startDiaporama_clicked()
     if (m_Diaporama == false)
     {
         connect(m_Timer, SIGNAL(timeout()), this, SLOT(loadNextImg_triggered()));
-        m_Timer->start(3000);
+        m_Timer->start(10000);
         m_Diaporama = true;
     }
 }
@@ -240,7 +224,11 @@ void Gui::endDiaporama_clicked()
 void Gui::loadNextImg_triggered()
 {
     m_CurrentImage = (m_CurrentImage + 1 > m_ImgPath.size() - 1)? 0 : m_CurrentImage + 1;
+    loadImg();
+}
 
+void Gui::loadImg()
+{
     m_Manager->loadImg(m_Images[m_CurrentImage]);
     if (m_Running == true)
         m_Manager->updateDisplay();

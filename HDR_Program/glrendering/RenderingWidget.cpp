@@ -219,6 +219,7 @@ void RenderingWidget::updateTextures()
     if(mIsBackPanel == false)
     {
         mObject->updateTargetTexture(mImage, "imgTexFront");
+        mObject->updateTargetTexture(mImage, "imgPSFFront");
     }
     else
     {

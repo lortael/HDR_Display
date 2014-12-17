@@ -14,9 +14,9 @@ void HDRProcess::computeShaderParameters(const Image &img)
     for (int y = 0; y < img.height(); ++y)
         for (int x = 0; x < img.width(); ++x)
         {
-            float r = 100*img.pixel(x, y)(0);
-            float g = 100*img.pixel(x, y)(1);
-            float b = 100*img.pixel(x, y)(2);
+            float r = 255*img.pixel(x, y)(0);
+            float g = 255*img.pixel(x, y)(1);
+            float b = 255*img.pixel(x, y)(2);
 
             float l = 0.2125*r + 0.7154*g + 0.0721*b;
 

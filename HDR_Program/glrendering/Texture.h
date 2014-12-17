@@ -20,7 +20,7 @@ public:
     virtual void setName(std::string name){mTexName = name;}
 
     /**
-     * @brief loads an image into a texture, given its name.
+     * @brief loads an image (or an array stored in an image) into a texture, given its name.
      * @param image, the Image to be sent as texture.
      * @param texName, the uniform that will be sent into GLSL.
      * */
@@ -64,10 +64,13 @@ protected:
     void computePSFImage(Image &img) const;
 
     /**
-     * @brief apply HDR process on GPU. Unused for the moment.
-     * @param the Image to be displayed.
+     * @brief convolution kernel to apply as the convolution mask (two versions).
+     * @param x and y, the central pixel coordinates.
+     * @param img, the source image.
+     * @param coeffs, the convolution mask (either 3x3 or 5x5).
      * */
     Eigen::Vector4f convolutionKernel(unsigned int x, unsigned int y, Image const &img, Eigen::Matrix3i coeffs) const;
+    Eigen::Vector4f convolutionKernel(unsigned int x, unsigned int y, Image const &img, Eigen::Matrix<float, 5, 5> coeffs) const;
 
 };
 

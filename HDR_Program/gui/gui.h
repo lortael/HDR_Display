@@ -1,6 +1,6 @@
 /* Copyright (C) 2014 David Murray <david.murray@institutoptique.fr>
  *
- *
+ * This class handles the GUI to manage the displays.
  * */
 
 #ifndef MAINWINDOW_H
@@ -30,6 +30,8 @@ private slots:
     void loadMeadow();
     void loadReno();
     void loadChurch();
+    void loadEiffel();
+
     void startDiaporama_clicked();
     void endDiaporama_clicked();
     void closeProgram_clicked();
@@ -39,8 +41,11 @@ private slots:
     void renderIsChecked(bool checked);
 private:
 
+    void loadImg();
+
     void addObject(QAbstractButton* object);
 
+    //Attributes
     std::vector<QAbstractButton*> m_ButtonList;
 
     DisplayManager* m_Manager;

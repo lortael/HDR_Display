@@ -1,6 +1,6 @@
 /* Copyright (C) 2014 David Murray <david.murray@institutoptique.fr>
  *
- *
+ * Class to manage the front LCD panel, which will display a sharpened image to serve as backlighting.
  * */
 
 #ifndef FRONTPANEL_H_INCLUDED

@@ -54,7 +54,7 @@ void BackPanel::displayImageGL(Image const &img)
     QDesktopWidget *backDesktop = QApplication::desktop();
     QRect screenGeo = backDesktop->availableGeometry(m_DisplayId);
 
-    m_Linearisation.loadCoeffFromFile(HDR_DIR"/data/fitcurve_standard.cfg");
+    m_Linearisation.loadCoeffFromFile(HDR_DIR"/data/correction_curve/fitcurve_projector.cfg");
     m_Linearisation.computeCurve();
 
     m_GlWidget->isBackPanel();

@@ -30,11 +30,15 @@ vec4 toneMapping(vec4 color)
     vec4 tm;
 
     float l = 0.2125*color.r + 0.7154*color.g + 0.0721*color.b;
-    l *= 100.0;
+    l *= 255.0;
 
-    tm.r = processTM(100.0*color.r, l, 0);
-    tm.g = processTM(100.0*color.g, l, 1);
-    tm.b = processTM(100.0*color.b, l, 2);
+    tm.r = processTM(255.0*color.r, l, 0);
+    tm.g = processTM(255.0*color.g, l, 1);
+    tm.b = processTM(255.0*color.b, l, 2);
+
+    tm.r = clamp(tm.r, 0.0, 1.0);
+    tm.g = clamp(tm.g, 0.0, 1.0);
+    tm.b = clamp(tm.b, 0.0, 1.0);
 
     tm.a = 1.0;
 
@@ -46,9 +50,7 @@ void main()
     vec4 color;
     color = texture(imgTexFront, texcoord);
 
-
-
-    if (tonemap == 1)
+    if (tonemap == 2)
         color = toneMapping(color);
     else
     {
@@ -60,8 +62,6 @@ void main()
         float b = clamp(color.b/colorPSF.r, 0.0, 1.0);
         color = vec4(r, g, b, 1.0);
     }
-
-
 
     out_color = color;
 }

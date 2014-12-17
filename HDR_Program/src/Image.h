@@ -9,7 +9,7 @@
 #include <vector>
 #include <Eigen/Core>
 
-enum IMG_FORMAT {RGB = 1, HSV = 2, GRAY = 0};
+enum IMG_FORMAT {RGB = 1, HSV = 2, XYZ = 3, GRAY = 0};
 
 class Image
 {
@@ -30,16 +30,16 @@ public :
     unsigned int width() const {return m_Width;}
     float minRGB() const {return m_MinRGB;}
     float maxRGB() const {return m_MaxRGB;}
-    float minHSL() const {return m_MinHSL;}
-    float maxHSL() const {return m_MaxHSL;}
+    float minXYZ() const {return m_MinXYZ;}
+    float maxXYZ() const {return m_MaxXYZ;}
 
     void setPixel(unsigned int x, unsigned int y, Eigen::Vector4f pixel) {m_Pixel[x + m_Width*y] = pixel;}
     void setHeight(int height) {m_Height = height;}
     void setWidth(int width) {m_Width = width;}
     void setMaxRGB(float max) {m_MaxRGB = max;}
     void setMinRGB(float min) {m_MinRGB = min;}
-    void setMaxHSL(float max) {m_MaxHSL = max;}
-    void setMinHSL(float min) {m_MinHSL = min;}
+    void setMaxXYZ(float max) {m_MaxXYZ = max;}
+    void setMinXYZ(float min) {m_MinXYZ = min;}
     void setFormat(IMG_FORMAT format) {m_currentFormat = format;}
 
     //Call the two private functions (computeAbsoluteMinMax, computeHSLMinMax) to compute all min/max.
@@ -49,9 +49,13 @@ public :
     //computeMinMax() must be called before calling normalize().
     void normalizeRGB();
 
+//    void normalizeXYZ();
+
     //Format conversion functions (using cv toolkit).
     void rgb2hsv();
     void hsv2rgb();
+    void rgb2xyz();
+    void xyz2rgb();
     void color2gray();
 
     //CPU tone-mapping, to be used only with CPU-based displaying process.
@@ -66,9 +70,9 @@ public :
 private:
 
     //Compute the min and max value based on the highest and lowest of the RGB channels.
-    void computeAbsoluteMinMax();
+    void computeRGBMinMax();
     //Compute the min and max value based on the highest and lowest value for the V channel in HSV format.
-    void computeHSLMinMax();
+    void computeXYZMinMax();
 
     IMG_FORMAT m_currentFormat;
     std::vector<Eigen::Vector4f> m_Pixel;
@@ -76,8 +80,8 @@ private:
     unsigned int m_Width;
     float m_MinRGB;
     float m_MaxRGB;
-    float m_MinHSL;
-    float m_MaxHSL;
+    float m_MinXYZ;
+    float m_MaxXYZ;
 
     //Initialized to true in constructor
     bool imageIsNULL;

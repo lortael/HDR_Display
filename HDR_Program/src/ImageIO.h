@@ -18,10 +18,7 @@ public :
 
     ImageIO();
 
-    ~ImageIO();
-
-    //Save an image in png format (see savePng).
-    void imgSave(Image const &src, const std::string filename);
+    ~ImageIO();    
 
     //Load an image (.hdr or .png format).
     void imgLoad(Image& img, QString filename);
@@ -29,6 +26,7 @@ public :
     //Load a png image using the lodepng lib (Copyright (C) Lode Vandevenne, see extern folder for details).
     void loadPng(Image& png_img, const std::string filename);
 
+    //Save an image in png format using lodepng lib.
     void savePng(Image const & img, const std::string filename);
 
 private:

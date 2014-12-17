@@ -16,19 +16,18 @@ DisplayManager::DisplayManager()
 
 void DisplayManager::initManager(Image const& img, unsigned int nbDevices)
 {
-    m_Image = img;
+    m_Image = img;    
+    m_nbDevice = nbDevices;
     if (nbDevices != 2)
     {
         DisplayDevice* main = new StandardPanel();
         addDisplay(main);
 
-        DisplayDevice* back = new BackPanel();
-        addDisplay(back);
-
         DisplayDevice* front = new FrontPanel();
         addDisplay(front);
 
-
+        DisplayDevice* back = new BackPanel();
+        addDisplay(back);
     }
     else
     {
@@ -38,7 +37,6 @@ void DisplayManager::initManager(Image const& img, unsigned int nbDevices)
         DisplayDevice* back = new BackPanel();
         addDisplay(back);
     }
-    m_nbDevice = m_DisplayList.size();
 }
 
 void DisplayManager::initManager(QString filepath, unsigned int nbDevices)
@@ -47,6 +45,7 @@ void DisplayManager::initManager(QString filepath, unsigned int nbDevices)
     ImageIO testIO;
     testIO.imgLoad(img, filepath);
     m_Image = img;
+    m_nbDevice = nbDevices;
     if (nbDevices != 2)
     {
         DisplayDevice* main = new StandardPanel();
@@ -66,7 +65,6 @@ void DisplayManager::initManager(QString filepath, unsigned int nbDevices)
         DisplayDevice* back = new BackPanel();
         addDisplay(back);
     }
-    m_nbDevice = m_DisplayList.size();
 }
 
 
@@ -76,7 +74,7 @@ void DisplayManager::addDisplay(DisplayDevice* device)
 
     size_t deviceIndex = m_DisplayList.size() - 1;
 
-    m_DisplayList[deviceIndex]->setId(QApplication::desktop()->primaryScreen() + deviceIndex);
+    m_DisplayList[deviceIndex]->setId(m_nbDevice - (QApplication::desktop()->primaryScreen() + deviceIndex));
 }
 
 void DisplayManager::multipleDisplay()

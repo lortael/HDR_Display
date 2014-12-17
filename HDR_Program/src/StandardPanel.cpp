@@ -60,7 +60,6 @@ void StandardPanel::displayImageCV(Image const &img) ////DEPRECATED : see displa
 void StandardPanel::displayImageGL(Image const &img)
 {
     Image cpyImg(img);
-    cpyImg.setFormat(GRAY);
     m_GlWidget->setWindowTitle("Main Panel");
 
     QDesktopWidget *backDesktop = QApplication::desktop();
