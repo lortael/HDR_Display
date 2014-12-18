@@ -14,14 +14,29 @@ public :
 
     FrontPanel();
 
+    /**
+     * @brief displays an image on target screen using openCV after applying the CPUprocess.
+     * @param img, the Image to be displayed.
+     * @see CPUprocess()
+     * */
     void displayImageCV(Image const &img);
 
+    /**
+     * @brief displays an image on target screen using openGL, by setting all the necessary attributes in the RenderingWidget.
+     * @param img, the Image to be displayed.
+     * @see RenderingWidget
+     * */
     void displayImageGL(Image const &img);
 
 private:
 
 protected:
 
+    /**
+     * @brief applies the square-root process on an image.
+     * @param img, the Image to be displayed.
+     * @return the processed image.
+     * */
     Image CPUprocess(Image const &img);
 
 };

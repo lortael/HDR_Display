@@ -19,10 +19,7 @@ Gui::Gui()
     m_ImgPath.push_back(IMAGE_DIR"/church.hdr");
 //    m_ImgPath.push_back(IMAGE_DIR"/../PhiGrid.png");
     m_ImgPath.push_back(IMAGE_DIR"/eiffel.hdr");
-//    m_ImgPath.push_back(IMAGE_DIR"/memorial.hdr");
-//    m_ImgPath.push_back(IMAGE_DIR"/nave.hdr");
     m_ImgPath.push_back(IMAGE_DIR"/vinesunset.hdr");
-//    m_ImgPath.push_back(IMAGE_DIR"/rosette.hdr");
 
     ImageIO loader;
 
@@ -207,16 +204,23 @@ void Gui::startDiaporama_clicked()
     if (m_Diaporama == false)
     {
         connect(m_Timer, SIGNAL(timeout()), this, SLOT(loadNextImg_triggered()));
-        m_Timer->start(10000);
+        m_Timer->start(5000);
         m_Diaporama = true;
+
+        if (m_Running == false)
+        {
+            m_Manager->multipleDisplay();
+            m_Running = true;
+        }
     }
+
 }
 
 void Gui::endDiaporama_clicked()
 {
     if(m_Diaporama == true)
     {
-        m_Timer->start(10000000);
+        m_Timer->disconnect(SIGNAL(timeout()));
         m_Diaporama = false;
     }
 }
@@ -244,6 +248,7 @@ void Gui::closeProgram_clicked()
 {
     if (m_Running == true)
     {
+        endDiaporama_clicked();
         m_Manager->endDisplay();
         m_Running = false;
     }

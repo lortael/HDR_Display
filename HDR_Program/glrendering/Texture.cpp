@@ -31,23 +31,23 @@ void TextureImage::loadTexture(Image const& image, std::string texName)
 
     if (mTexName == "imgTexBack")
     {
-        for (int y = 0 ; y < dimY ; ++y)
+        for (unsigned int y = 0 ; y < dimY ; ++y)
         {
-            for (int x = 0 ; x < dimX ; ++x)
+            for (unsigned int x = 0 ; x < dimX ; ++x)
             {
                 float l = temp.pixel(x, y)(0);
                 l = sqrt(l);
                 temp.setPixel(x, y, Eigen::Vector4f(l, l, l, 1.f));
             }
         }
-        computePSFImage(temp);
+        temp.computePSFImage();
     }
     else if (mTexName == "imgPSFFront")
     {
         temp.rgb2hsv();
-        for (int y = 0 ; y < dimY ; ++y)
+        for (unsigned int y = 0 ; y < dimY ; ++y)
         {
-            for (int x = 0 ; x < dimX ; ++x)
+            for (unsigned int x = 0 ; x < dimX ; ++x)
             {
                 float r = temp.pixel(x, y)(0);
                 float g = temp.pixel(x, y)(1);
@@ -56,16 +56,16 @@ void TextureImage::loadTexture(Image const& image, std::string texName)
             }
         }
         temp.hsv2rgb();
-        computePSFImage(temp);
+        temp.computePSFImage();
     }
 
     float* img;
     img = new float[dimX*dimY*4];
 
     int i(0);
-    for (int y = 0 ; y < dimY ; ++y)
+    for (unsigned int y = 0 ; y < dimY ; ++y)
     {
-        for (int x = 0 ; x < dimX ; ++x)
+        for (unsigned int x = 0 ; x < dimX ; ++x)
         {
             Eigen::Vector4f rgba = temp.pixel(x, y);
             for (int z = 0; z < 4; ++z)
@@ -114,8 +114,8 @@ void TextureCorrection::loadTexture(Image const& image, std::string texName)
 
     glGenerateMipmap(GL_TEXTURE_2D);
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
@@ -131,23 +131,23 @@ void TextureImage::updateTexture(Image const& image) const
 
     if (mTexName == "imgTexBack")
     {
-        for (int y = 0 ; y < dimY ; ++y)
+        for (unsigned int y = 0 ; y < dimY ; ++y)
         {
-            for (int x = 0 ; x < dimX ; ++x)
+            for (unsigned int x = 0 ; x < dimX ; ++x)
             {
                 float l = temp.pixel(x, y)(0);
                 l = sqrt(l);
                 temp.setPixel(x, y, Eigen::Vector4f(l, l, l, 1.f));
             }
         }
-        computePSFImage(temp);
+        temp.computePSFImage();
     }
     else if (mTexName == "imgPSFFront")
     {
         temp.rgb2hsv();
-        for (int y = 0 ; y < dimY ; ++y)
+        for (unsigned int y = 0 ; y < dimY ; ++y)
         {
-            for (int x = 0 ; x < dimX ; ++x)
+            for (unsigned int x = 0 ; x < dimX ; ++x)
             {
                 float r = temp.pixel(x, y)(0);
                 float g = temp.pixel(x, y)(1);
@@ -156,16 +156,16 @@ void TextureImage::updateTexture(Image const& image) const
             }
         }
         temp.hsv2rgb();
-        computePSFImage(temp);
+        temp.computePSFImage();
     }
 
     float* img;
     img = new float[dimX*dimY*4];
 
     int i(0);
-    for (int y = 0 ; y < dimY ; ++y)
+    for (unsigned int y = 0 ; y < dimY ; ++y)
     {
-        for (int x = 0 ; x < dimX ; ++x)
+        for (unsigned int x = 0 ; x < dimX ; ++x)
         {
             Eigen::Vector4f rgba = temp.pixel(x, y);
             for (int z = 0; z < 4; ++z)
@@ -188,55 +188,4 @@ void TextureImage::updateTexture(Image const& image) const
 void TextureCorrection::updateTexture(Image const& image) const
 {
 
-}
-
-void TextureImage::computePSFImage(Image &img) const
-{
-    Eigen::Matrix3i coeffs3;
-    coeffs3 << 1, 4, 1,
-              4, 16, 4,
-              1, 4, 1;
-
-    Eigen::Matrix<float, 5 ,5> coeffs5;
-    coeffs5 << 1, 4, 6, 4, 1,
-            4, 16, 24, 16, 4,
-            6, 24, 36, 24, 6,
-            4, 16, 24, 16, 4,
-            1, 4, 6, 4, 1;
-
-    for (int y = 2 ; y < img.height()-2 ; ++y)
-        for (int x = 2 ; x < img.width()-2 ; ++x)
-            img.setPixel(x, y, convolutionKernel(x, y, img, coeffs5));
-}
-
-Eigen::Vector4f TextureImage::convolutionKernel(unsigned int x, unsigned int y, Image const &img, Eigen::Matrix3i coeffs) const
-{
-    Eigen::Vector4f sum(0.f, 0.f, 0.f, 1.f);
-
-    for (unsigned int i = 0; i < 3; ++i)
-        for (unsigned int j = 0; j < 3; ++j)
-        {
-            Eigen::Vector4f pix = img.pixel(x + i - 1, y + j - 1);
-            float coeff = coeffs(i, j)/36.f;
-            sum(0) += coeff*pix(0);
-            sum(1) += coeff*pix(1);
-            sum(2) += coeff*pix(2);
-        }
-    return sum;
-}
-
-Eigen::Vector4f TextureImage::convolutionKernel(unsigned int x, unsigned int y, Image const &img, Eigen::Matrix<float, 5, 5> coeffs) const
-{
-    Eigen::Vector4f sum(0.f, 0.f, 0.f, 1.f);
-
-    for (unsigned int i = 0; i < 5; ++i)
-        for (unsigned int j = 0; j < 5; ++j)
-        {
-            Eigen::Vector4f pix = img.pixel(x + i - 2, y + j - 2);
-            float coeff = coeffs(i, j)/256.f;
-            sum(0) += coeff*pix(0);
-            sum(1) += coeff*pix(1);
-            sum(2) += coeff*pix(2);
-        }
-    return sum;
 }

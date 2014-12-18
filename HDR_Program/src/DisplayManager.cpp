@@ -20,6 +20,7 @@ void DisplayManager::initManager(Image const& img, unsigned int nbDevices)
     m_nbDevice = nbDevices;
     if (nbDevices != 2)
     {
+        //Re-order devices allocation according to your device installation.
         DisplayDevice* main = new StandardPanel();
         addDisplay(main);
 
@@ -31,6 +32,7 @@ void DisplayManager::initManager(Image const& img, unsigned int nbDevices)
     }
     else
     {
+        //Re-order devices allocation according to your device installation.
         DisplayDevice* front = new FrontPanel();
         addDisplay(front);
 
@@ -48,6 +50,7 @@ void DisplayManager::initManager(QString filepath, unsigned int nbDevices)
     m_nbDevice = nbDevices;
     if (nbDevices != 2)
     {
+        //Re-order devices allocation according to your device installation.
         DisplayDevice* main = new StandardPanel();
         addDisplay(main);
 
@@ -59,6 +62,7 @@ void DisplayManager::initManager(QString filepath, unsigned int nbDevices)
     }
     else
     {
+        //Re-order devices allocation according to your device installation.
         DisplayDevice* front = new FrontPanel();
         addDisplay(front);
 

@@ -68,11 +68,6 @@ void RenderingWidget::paintGL()
         glUniform1fv(paramLoc, mParameters.size(), &mParameters[0]);
     }
 
-    // draw every objects
-//    for(ObjectList::const_iterator obj=mObjectList.begin(); obj!=mObjectList.end(); ++obj) {
-//        (*obj)->draw(mCamera);
-//    }
-
     mObject->draw(mCamera);
 
     GL_TEST_ERR;
@@ -148,8 +143,6 @@ void RenderingWidget::createScene()
 
     }
     mObject->setTransformation(Matrix4f::Identity());
-
-//    mObjectList.push_back(mObject);
 
     GL_TEST_ERR;
 }

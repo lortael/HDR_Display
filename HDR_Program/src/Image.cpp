@@ -15,9 +15,7 @@ Image::Image()
       m_currentFormat(RGB),
       imageIsNULL(true),
       m_MaxRGB(0.f),
-      m_MaxXYZ(0.f),
-      m_MinRGB(250.f),
-      m_MinXYZ(250.f)
+      m_MinRGB(250.f)
 {
 }
 
@@ -27,8 +25,6 @@ Image::Image(Image const &img)
     m_Height = img.m_Height;
     m_MinRGB = img.m_MinRGB;
     m_MaxRGB = img.m_MaxRGB;
-    m_MinXYZ = img.m_MinXYZ;
-    m_MaxXYZ = img.m_MaxXYZ;
     m_currentFormat = img.m_currentFormat;
     imageIsNULL = img.imageIsNULL;
 
@@ -53,8 +49,6 @@ Image& Image::operator=(Image const & img)
     m_Height = img.m_Height;
     m_MinRGB = img.m_MinRGB;
     m_MaxRGB = img.m_MaxRGB;
-    m_MinXYZ = img.m_MinXYZ;
-    m_MaxXYZ = img.m_MaxXYZ;
     m_currentFormat = img.m_currentFormat;
     imageIsNULL = img.imageIsNULL;
 
@@ -241,27 +235,6 @@ void Image::computeRGBMinMax()
     }
 }
 
-void Image::computeMinMax()
-{
-    computeXYZMinMax();
-    computeRGBMinMax();
-}
-
-void Image::computeXYZMinMax()
-{
-    rgb2xyz();
-    for (unsigned int y = 0 ; y < m_Height ; ++y)
-    {
-        for (unsigned int x = 0 ; x < m_Width ; ++x)
-        {
-            Eigen::Vector3f pixel = Eigen::Vector3f(m_Pixel[x + m_Width*y](0), m_Pixel[x + m_Width*y](1), m_Pixel[x + m_Width*y](2));
-            m_MaxXYZ = (pixel(1) > m_MaxXYZ)? pixel(1) : m_MaxXYZ;
-            m_MinXYZ = (pixel(1) < m_MinXYZ)? pixel(1) : m_MinXYZ;
-        }
-    }
-    xyz2rgb();
-}
-
 void Image::normalizeRGB()
 {
     for (unsigned int y = 0 ; y < m_Height ; ++y)
@@ -324,4 +297,110 @@ void Image::toneMapping()
             }
             m_Pixel[x + m_Width*y] = Vector4f(color(0), color(1), color(2), 1.f);
         }
+}
+
+void Image::computePSFImage()
+{
+    Eigen::Matrix3i coeffs3;
+    coeffs3 << 1, 4, 1,
+              4, 16, 4,
+              1, 4, 1;
+
+    Eigen::Matrix<float, 5 ,5> coeffs5;
+    coeffs5 << 1, 4, 6, 4, 1,
+            4, 16, 24, 16, 4,
+            6, 24, 36, 24, 6,
+            4, 16, 24, 16, 4,
+            1, 4, 6, 4, 1;
+
+    for (int y = 2 ; y < m_Height-2 ; ++y)
+        for (int x = 2 ; x < m_Width-2 ; ++x)
+            m_Pixel[x + m_Width*y] = convolutionKernel(x, y, coeffs3);
+}
+
+Eigen::Vector4f Image::convolutionKernel(unsigned int x, unsigned int y, Eigen::Matrix3i coeffs) const
+{
+    Eigen::Vector4f sum(0.f, 0.f, 0.f, 1.f);
+
+    for (unsigned int i = 0; i < 3; ++i)
+        for (unsigned int j = 0; j < 3; ++j)
+        {
+            Eigen::Vector4f pix = m_Pixel[(x + i - 1) + m_Width*(y + j - 1)];
+            float coeff = coeffs(i, j)/36.f;
+            sum(0) += coeff*pix(0);
+            sum(1) += coeff*pix(1);
+            sum(2) += coeff*pix(2);
+        }
+    return sum;
+}
+
+Eigen::Vector4f Image::convolutionKernel(unsigned int x, unsigned int y, Eigen::Matrix<float, 5, 5> coeffs) const
+{
+    Eigen::Vector4f sum(0.f, 0.f, 0.f, 1.f);
+
+    for (unsigned int i = 0; i < 5; ++i)
+        for (unsigned int j = 0; j < 5; ++j)
+        {
+            Eigen::Vector4f pix = m_Pixel[(x + i - 1) + m_Width*(y + j - 1)];
+            float coeff = coeffs(i, j)/256.f;
+            sum(0) += coeff*pix(0);
+            sum(1) += coeff*pix(1);
+            sum(2) += coeff*pix(2);
+        }
+    return sum;
+}
+
+Eigen::Vector4f Image::pixel(float x, float y) const
+{
+    assert(x <= m_Width && x >=0 && y <= m_Height && y>=0);
+    unsigned int ox = x;
+    unsigned int oy = y;
+
+    if (ox == m_Width - 1 || oy == m_Height - 1)
+    {
+        return pixel(ox, oy);
+    }
+    float dx = x - ox;
+    float dy = y - oy;
+    float odx = 1 - dx;
+    float ody = 1 - dy;
+
+    Eigen::Vector4f p = m_Pixel[ox + m_Width*oy];
+    Eigen::Vector4f px = m_Pixel[ox+1 + m_Width*oy];
+    Eigen::Vector4f py = m_Pixel[ox + m_Width*(oy+1)];
+    Eigen::Vector4f pxy = m_Pixel[ox+1 + m_Width*(oy+1)];
+
+    Eigen::Vector4f returnVal;
+
+    returnVal(0) = (odx*ody*p(0) + dx*ody*px(0) + odx*dy*py(0) + dx*dy*pxy(0)) / (odx*ody + dx*ody + odx*dy + dx*dy);
+    returnVal(1) = (odx*ody*p(1) + dx*ody*px(1) + odx*dy*py(1) + dx*dy*pxy(1)) / (odx*ody + dx*ody + odx*dy + dx*dy);
+    returnVal(2) = (odx*ody*p(2) + dx*ody*px(2) + odx*dy*py(2) + dx*dy*pxy(2)) / (odx*ody + dx*ody + odx*dy + dx*dy);
+    returnVal(3) = 1.f;
+
+    return returnVal;
+}
+
+Eigen::Vector4f Image::scalingProcess(int x, int y, float ratioW, float ratioH)
+{
+    return pixel(x/ratioW, y/ratioH);
+}
+
+
+void Image::rescaleImage()
+{
+    float ratioW = 1280.f/m_Width;
+    std::cout << ratioW << std::endl;
+    float ratioH = 720.f/m_Height;
+    std::cout << ratioH << std::endl;
+    m_Height = 720;
+    m_Width = 1280;
+
+    std::vector<Eigen::Vector4f> tempPix;
+    tempPix.resize(m_Height*m_Width);
+
+    for (int y = 0; y < m_Height; ++y)
+        for (int x = 0; x < m_Width; ++x)
+            tempPix[x + m_Width*y] = scalingProcess(x, y, ratioW, ratioH);
+
+    m_Pixel = tempPix;
 }

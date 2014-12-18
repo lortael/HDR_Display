@@ -20,13 +20,25 @@ public :
 
     ~ImageIO();    
 
-    //Load an image (.hdr or .png format).
+    /**
+     * @brief displays an image on target screen using openCV after applying the CPUprocess (no correction of response curve).
+     * @param img, the Image to be displayed.
+     * @see CPUprocess()
+     * */
     void imgLoad(Image& img, QString filename);
 
-    //Load a png image using the lodepng lib (Copyright (C) Lode Vandevenne, see extern folder for details).
+    /**
+     * @brief loads an png image using its filename with the lodepng lib.
+     * @param img, the destination image.
+     * @param filename, the file path of the image to be loaded.
+     * */
     void loadPng(Image& png_img, const std::string filename);
 
-    //Save an image in png format using lodepng lib.
+    /**
+     * @brief saves an png image using its filename with the lodepng lib. If source image is HDR, it must be tone-mapped before saving in png.
+     * @param img, the destination image.
+     * @param filename, the file path of the image to be loaded.
+     * */
     void savePng(Image const & img, const std::string filename);
 
 private:

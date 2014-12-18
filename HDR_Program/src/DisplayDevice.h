@@ -33,6 +33,8 @@ public :
      * @brief : displays an image on target screen using openCV (more details in inherited classes).
      * @param : the Image to be displayed
      * */
+    /// /!\ Deprecated, should be used only if no GPU are available, or OpenGL version is below 3.0.
+    /// @see displayImageGL()
     virtual void displayImageCV(Image const &img) = 0;
 
     /**

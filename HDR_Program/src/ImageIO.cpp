@@ -26,7 +26,7 @@ void ImageIO::imgLoad(Image& img, QString filename)
     float* pixels;
     int height, width;
 
-    if (filename.endsWith(".hdr"))
+    if (filename.endsWith(".hdr") || filename.endsWith(".pic"))
     {
         FILE* f = fopen(filename.toStdString().c_str(), "rb");
 
@@ -57,7 +57,7 @@ void ImageIO::imgLoad(Image& img, QString filename)
             }
         }
 
-        img.computeMinMax();
+        img.computeRGBMinMax();
         img.normalizeRGB();
 
         cout << "HDR image loaded" << endl;
@@ -120,9 +120,9 @@ void ImageIO::loadPng(Image& png_img, const string filename)
     }//conversion en int et copie dans l'image 3 canaux + canal alpha
     raw_data.clear();
 
-    for (int y = 0; y < height; y++)
+    for (unsigned int y = 0; y < height; y++)
     {
-        for (int x = 0; x < width; x++)
+        for (unsigned int x = 0; x < width; x++)
         {
             float rgb[3];
             for (int col = 0; col < 3; col++)
@@ -150,9 +150,9 @@ void ImageIO::savePng(Image const & img, const std::string filename)
     {
         raw_png.push_back(0);
     }
-    for (int y = 0; y < height; ++y)
+    for (unsigned int y = 0; y < height; ++y)
     {
-        for (int x = 0; x < width; ++x)
+        for (unsigned int x = 0; x < width; ++x)
         {
             for (int col = 0; col < 3; ++col)
             {

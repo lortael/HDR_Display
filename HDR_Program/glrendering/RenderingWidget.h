@@ -33,7 +33,6 @@ class RenderingWidget : public QGLWidget
   Eigen::Vector3f mCamLookAt;
   float mCamFov;
 
-  ObjectList mObjectList;
   Object* mObject;
   Mesh* mMesh;
   Texture* mTexture;

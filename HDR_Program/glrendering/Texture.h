@@ -55,22 +55,7 @@ public:
 
 private:
 
-protected:
-
-    /**
-     * @brief applies a convolution mask on an image. Default mask is gaussian 3*3.
-     * @param the Image to be displayed.
-     * */
-    void computePSFImage(Image &img) const;
-
-    /**
-     * @brief convolution kernel to apply as the convolution mask (two versions).
-     * @param x and y, the central pixel coordinates.
-     * @param img, the source image.
-     * @param coeffs, the convolution mask (either 3x3 or 5x5).
-     * */
-    Eigen::Vector4f convolutionKernel(unsigned int x, unsigned int y, Image const &img, Eigen::Matrix3i coeffs) const;
-    Eigen::Vector4f convolutionKernel(unsigned int x, unsigned int y, Image const &img, Eigen::Matrix<float, 5, 5> coeffs) const;
+protected:    
 
 };
 

@@ -26,30 +26,26 @@ public :
 
     std::vector<Eigen::Vector4f> pixels() {return m_Pixel;}
     Eigen::Vector4f pixel(unsigned int x, unsigned int y) const {return m_Pixel[x + m_Width*y];}
+    //Overloaded function for scaling purpose.
+    Eigen::Vector4f pixel(float x, float y) const;
     unsigned int height() const {return m_Height;}
     unsigned int width() const {return m_Width;}
     float minRGB() const {return m_MinRGB;}
     float maxRGB() const {return m_MaxRGB;}
-    float minXYZ() const {return m_MinXYZ;}
-    float maxXYZ() const {return m_MaxXYZ;}
 
     void setPixel(unsigned int x, unsigned int y, Eigen::Vector4f pixel) {m_Pixel[x + m_Width*y] = pixel;}
     void setHeight(int height) {m_Height = height;}
     void setWidth(int width) {m_Width = width;}
     void setMaxRGB(float max) {m_MaxRGB = max;}
     void setMinRGB(float min) {m_MinRGB = min;}
-    void setMaxXYZ(float max) {m_MaxXYZ = max;}
-    void setMinXYZ(float min) {m_MinXYZ = min;}
     void setFormat(IMG_FORMAT format) {m_currentFormat = format;}
 
-    //Call the two private functions (computeAbsoluteMinMax, computeHSLMinMax) to compute all min/max.
-    void computeMinMax();
+    //Compute the min and max value based on the highest and lowest of the RGB channels.
+    void computeRGBMinMax();
 
     //Normalize the RGB image pixels using m_MaxRGB.
     //computeMinMax() must be called before calling normalize().
     void normalizeRGB();
-
-//    void normalizeXYZ();
 
     //Format conversion functions (using cv toolkit).
     void rgb2hsv();
@@ -58,7 +54,7 @@ public :
     void xyz2rgb();
     void color2gray();
 
-    //CPU tone-mapping, to be used only with CPU-based displaying process.
+    //CPU tone-mapping (Reinhard model), to be used only with CPU-based displaying process.
     void toneMapping();
 
     //Call this function when an image is loaded (already done in ImageIO).
@@ -67,12 +63,21 @@ public :
 
     IMG_FORMAT format() const {return m_currentFormat;}
 
-private:
+    // Applies a convolution mask on an image. Default mask is gaussian 5*5.
+    void computePSFImage();
 
-    //Compute the min and max value based on the highest and lowest of the RGB channels.
-    void computeRGBMinMax();
-    //Compute the min and max value based on the highest and lowest value for the V channel in HSV format.
-    void computeXYZMinMax();
+    /**
+     * @brief convolution kernel to apply as the convolution mask (two versions).
+     * @param x and y, the central pixel coordinates.
+     * @param coeffs, the convolution mask (either 3x3 or 5x5).
+     * */
+    Eigen::Vector4f convolutionKernel(unsigned int x, unsigned int y, Eigen::Matrix3i coeffs) const;
+    Eigen::Vector4f convolutionKernel(unsigned int x, unsigned int y, Eigen::Matrix<float, 5, 5> coeffs) const;
+
+    void rescaleImage();
+    Eigen::Vector4f scalingProcess(int x, int y, float ratioW, float ratioH);
+
+private:
 
     IMG_FORMAT m_currentFormat;
     std::vector<Eigen::Vector4f> m_Pixel;
@@ -80,8 +85,6 @@ private:
     unsigned int m_Width;
     float m_MinRGB;
     float m_MaxRGB;
-    float m_MinXYZ;
-    float m_MaxXYZ;
 
     //Initialized to true in constructor
     bool imageIsNULL;

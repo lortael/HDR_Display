@@ -12,10 +12,20 @@ public:
 
     float getCoeff(unsigned int index) const {return m_Curve[index];}
 
+    /**
+     * @brief loads the coefficients of the parametric response curve.
+     * @param filename, the filename of the curve.
+     * */
     void loadCoeffFromFile(std::string filename);
 
+    /**
+     * @brief computes the response curve array from the parametric coefficients.
+     * */
     void computeCurve();
 
+    /**
+     * @brief converts an array to an image.
+     * */
     Image &toImg();
 
 private:

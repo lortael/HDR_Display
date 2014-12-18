@@ -11,8 +11,8 @@ void HDRProcess::computeShaderParameters(const Image &img)
 
     float max(0.f), min(1000.f), Lmean(0.f);
     Vector3f channelAv(0.f, 0.f, 0.f);
-    for (int y = 0; y < img.height(); ++y)
-        for (int x = 0; x < img.width(); ++x)
+    for (unsigned int y = 0; y < img.height(); ++y)
+        for (unsigned int x = 0; x < img.width(); ++x)
         {
             float r = 255*img.pixel(x, y)(0);
             float g = 255*img.pixel(x, y)(1);

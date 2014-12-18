@@ -77,6 +77,7 @@ private:
 
 protected:
 
+    //CV or GL display mode, default is GL.
     DISPLAYMODE m_CurrentMode;
 
     std::vector<DisplayDevice*> m_DisplayList;

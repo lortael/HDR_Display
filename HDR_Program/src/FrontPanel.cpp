@@ -26,9 +26,9 @@ void FrontPanel::displayImageCV(Image const &img) ////DEPRECATED : see displayIm
     {
         Mat colorImg(tempImg.height(), tempImg.width(), DataType<Vec3f>::type);
 
-        for (int y = 0 ; y < tempImg.height() ; ++y)
+        for (unsigned int y = 0 ; y < tempImg.height() ; ++y)
         {
-            for (int x = 0 ; x < tempImg.width() ; ++x)
+            for (unsigned int x = 0 ; x < tempImg.width() ; ++x)
             {
                 Vec3f rgb = Vec3f(tempImg.pixel(x, y)(0), tempImg.pixel(x, y)(1), tempImg.pixel(x, y)(2));
                 colorImg.at<Vec3f>(y, x) = rgb;
@@ -59,24 +59,22 @@ void FrontPanel::displayImageCV(Image const &img) ////DEPRECATED : see displayIm
 
 void FrontPanel::displayImageGL(Image const &img)
 {
-    m_GlWidget->setWindowTitle("Front Panel");
+    m_GlWidget->setWindowTitle("Front Panel");    
+
+    Image cpyImg(img);
+    m_GlWidget->loadImage(cpyImg);
+    m_GlWidget->loadShaders(HDR_DIR"/shaders/frontPanel.vert", HDR_DIR"/shaders/frontPanel.frag");
 
     QDesktopWidget *backDesktop = QApplication::desktop();
     QRect screenGeo = backDesktop->availableGeometry(m_DisplayId);
-
-    m_GlWidget->loadImage(img);
-    m_GlWidget->loadShaders(HDR_DIR"/shaders/frontPanel.vert", HDR_DIR"/shaders/frontPanel.frag");
-
     if (m_CurrentMode == FULLSCREEN)
-    {
         m_GlWidget->showFullScreen();
-        m_GlWidget->move(screenGeo.topLeft());
-    }
     else
     {
-        m_GlWidget->resize(1920,1080);
+        m_GlWidget->resize(screenGeo.size());
         m_GlWidget->show();
     }
+    //Move the window to the target device.
     m_GlWidget->move(screenGeo.topLeft());
 
     if (m_ToneMapped)
@@ -84,7 +82,8 @@ void FrontPanel::displayImageGL(Image const &img)
     else
         m_GlWidget->toggleHDRDisplay();
 
-    computeShaderParameters(img);
+    //Compute and set tone-mapping parameters.
+    computeShaderParameters(cpyImg);
     m_GlWidget->setToneMappingParameters(m_Parameters);
 }
 
@@ -94,8 +93,8 @@ Image FrontPanel::CPUprocess(const Image &img)
     if (m_ToneMapped)
         temp.toneMapping();
     else
-        for (int y = 0; y < img.height(); ++y)
-            for (int x = 0; x < img.width(); ++x)
+        for (unsigned int y = 0; y < img.height(); ++y)
+            for (unsigned int x = 0; x < img.width(); ++x)
             {
                 float r = img.pixel(x, y)(0);
                 r = sqrt(r);

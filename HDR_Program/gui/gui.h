@@ -52,7 +52,9 @@ private:
 
     QTimer* m_Timer;
 
+    //Vector of filepath if images are loaded on the fly.
     std::vector<QString> m_ImgPath;
+    //Vector of loaded images
     std::vector<Image> m_Images;
 
     unsigned int m_CurrentImage;

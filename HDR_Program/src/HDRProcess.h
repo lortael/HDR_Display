@@ -14,13 +14,15 @@ public :
 
     /**
      * @brief apply HDR process on CPU. See inherited class.
-     * @param the Image to be displayed.
+     * @param img, the Image to be treated.
      * */
+    /// /!\ Deprecated, should be used only if no GPU are available, or OpenGL version is below 3.0.
+    /// @see displayImageGL()
     virtual Image CPUprocess(Image const &img) = 0;
 
     /**
-     * @brief apply HDR process on GPU. Unused for the moment.
-     * @param the Image to be displayed.
+     * @brief apply HDR process on GPU. Unused for the moment. To complete for further GPU processing than tone-mapping shader parameters.
+     * @param img, the Image to be treated.
      * */
     virtual void GPUprocess(Image const &img);
 
@@ -33,7 +35,7 @@ protected:
 
     /**
      * @brief computes all the necessary shader parameters, used mainly for tone-mapping.
-     * @param the Image on which parameters are computed.
+     * @param img,the Image on which parameters are computed.
      * */
     void computeShaderParameters(Image const &img);
 

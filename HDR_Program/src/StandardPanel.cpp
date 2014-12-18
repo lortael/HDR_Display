@@ -26,9 +26,9 @@ void StandardPanel::displayImageCV(Image const &img) ////DEPRECATED : see displa
     {
         Mat colorImg(tempImg.height(), tempImg.width(), DataType<Vec3f>::type);
 
-        for (int y = 0 ; y < tempImg.height() ; ++y)
+        for (unsigned int y = 0 ; y < tempImg.height() ; ++y)
         {
-            for (int x = 0 ; x < tempImg.width() ; ++x)
+            for (unsigned int x = 0 ; x < tempImg.width() ; ++x)
             {
                 Vec3f rgb = Vec3f(tempImg.pixel(x, y)(0), tempImg.pixel(x, y)(1), tempImg.pixel(x, y)(2));
                 colorImg.at<Vec3f>(y, x) = rgb;
@@ -62,21 +62,22 @@ void StandardPanel::displayImageGL(Image const &img)
     Image cpyImg(img);
     m_GlWidget->setWindowTitle("Main Panel");
 
-    QDesktopWidget *backDesktop = QApplication::desktop();
-    QRect screenGeo = backDesktop->availableGeometry(m_DisplayId);
-
     m_GlWidget->loadImage(cpyImg);
     m_GlWidget->loadShaders(HDR_DIR"/shaders/standardPanel.vert", HDR_DIR"/shaders/standardPanel.frag");
     computeShaderParameters(img);
     m_GlWidget->setToneMappingParameters(m_Parameters);
 
+    QDesktopWidget *backDesktop = QApplication::desktop();
+    QRect screenGeo = backDesktop->availableGeometry(m_DisplayId);
+
     if (m_CurrentMode == FULLSCREEN)
         m_GlWidget->showFullScreen();
     else
     {
-        m_GlWidget->resize(1920,1080);
+        m_GlWidget->resize(screenGeo.size());
         m_GlWidget->show();
     }
+
     m_GlWidget->move(screenGeo.topLeft());
 
     if (m_ToneMapped)
